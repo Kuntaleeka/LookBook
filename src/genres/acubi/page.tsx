@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NAV_BACK } from "@/components/page-transitions";
 import { Lightbox, OpenOutfit } from "../lightbox";
 import type { GenrePageProps } from "../types";
 import { lookTitle, pad3 } from "../utils";
@@ -47,7 +48,7 @@ export function AcubiPage({ category, outfits }: GenrePageProps) {
         <div className={s.content}>
           <nav className={s.topbar}>
             <span aria-hidden="true">fashionops ▸ archive ▸ {category.slug}</span>
-            <Link href="/" className={s.back}>
+            <Link href="/" className={s.back} transitionTypes={NAV_BACK}>
               ← index
             </Link>
           </nav>

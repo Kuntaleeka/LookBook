@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NAV_BACK } from "@/components/page-transitions";
 import { Lightbox, OpenOutfit } from "../lightbox";
 import type { GenrePageProps } from "../types";
 import { lookTitle, splitLastWord } from "../utils";
@@ -23,7 +24,7 @@ export function OfficeSirenPage({ category, outfits }: GenrePageProps) {
       <div className={s.memo}>
         <div className={`${s.memoTop} ${s.smallcaps}`}>
           <span>Internal memo</span>
-          <Link href="/" className={s.back}>
+          <Link href="/" className={s.back} transitionTypes={NAV_BACK}>
             ← Return to directory
           </Link>
         </div>

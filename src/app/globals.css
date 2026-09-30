@@ -23,3 +23,80 @@ body {
   color: var(--fg);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
+
+/* ─── Page transitions (see components/page-transitions.tsx) ─────────────── */
+
+/* A dark void behind the animating pages, and clicks pass through. */
+::view-transition {
+  background: #070506;
+  pointer-events: none;
+}
+/* Only our page animations run; no default whole-page crossfade on top. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* home → genre: the carousel rushes past you and blurs away… */
+::view-transition-old(.home-out) {
+  animation: 520ms cubic-bezier(0.7, 0, 0.84, 0) both vt-rush-past;
+}
+/* …while the genre opens up through a circle from where the card sat. */
+::view-transition-new(.genre-in) {
+  animation: 760ms cubic-bezier(0.65, 0, 0.35, 1) 120ms both vt-portal-open;
+}
+
+/* genre → home: the genre closes back into a circle… */
+::view-transition-old(.genre-out) {
+  z-index: 2;
+  animation: 560ms cubic-bezier(0.65, 0, 0.35, 1) both vt-portal-close;
+}
+/* …and the carousel settles back into place behind it. */
+::view-transition-new(.home-in) {
+  animation: 700ms cubic-bezier(0.16, 1, 0.3, 1) 180ms both vt-settle-in;
+}
+
+@keyframes vt-rush-past {
+  to {
+    transform: scale(1.35);
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+@keyframes vt-portal-open {
+  from {
+    clip-path: circle(0% at 50% 45%);
+    transform: scale(1.08);
+    filter: brightness(1.6);
+  }
+  to {
+    clip-path: circle(150% at 50% 45%);
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+@keyframes vt-portal-close {
+  from {
+    clip-path: circle(150% at 50% 45%);
+  }
+  to {
+    clip-path: circle(0% at 50% 45%);
+    transform: scale(0.94);
+  }
+}
+@keyframes vt-settle-in {
+  from {
+    transform: scale(1.18);
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

@@ -277,9 +277,9 @@
   margin: 0 auto;
   padding: 0 1.25rem 5rem;
 }
-/* the candlelit table, top of the photo, flames flickering */
+/* the candlelit table under the collection, flames flickering */
 .candleBand {
-  margin: 0 -1.25rem;
+  margin: 4rem -1.25rem -3rem;
 }
 .candlePhoto {
   position: relative;
@@ -305,7 +305,7 @@
 }
 .sectionTitle {
   position: relative;
-  margin: -5rem 0 3rem;
+  margin: 1rem 0 3rem;
   text-align: center;
   font-family: var(--script);
   font-weight: 400;

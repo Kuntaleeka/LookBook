@@ -1,3 +1,4 @@
+import { HomeTransition } from "@/components/page-transitions";
 import { ThemeFonts } from "@/components/theme/theme-fonts";
 import { GENRE_DESIGNS } from "@/genres/registry";
 import { getGenreSummaries } from "@/lib/lookbook";
@@ -26,13 +27,15 @@ export default async function Home() {
   const fonts = [...new Set(genres.flatMap((g) => GENRE_DESIGNS[g.slug]?.fonts ?? []))];
 
   return (
-    <main className={s.page}>
-      <ThemeFonts families={fonts} />
-      <header className={s.header}>
-        <p className={s.brand}>FashionOps</p>
-        <h1 className={s.headline}>Pick your aesthetic.</h1>
-      </header>
-      <HomeCarousel genres={genres} />
-    </main>
+    <HomeTransition>
+      <main className={s.page}>
+        <ThemeFonts families={fonts} />
+        <header className={s.header}>
+          <p className={s.brand}>FashionOps</p>
+          <h1 className={s.headline}>Pick your aesthetic.</h1>
+        </header>
+        <HomeCarousel genres={genres} />
+      </main>
+    </HomeTransition>
   );
 }

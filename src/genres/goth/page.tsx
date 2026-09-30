@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- local mood photos and uploads, already sized */
 import Link from "next/link";
+import { NAV_BACK } from "@/components/page-transitions";
 import { Lightbox, OpenOutfit } from "../lightbox";
 import type { GenrePageProps } from "../types";
 import { lookTitle, toRoman } from "../utils";
@@ -41,7 +42,7 @@ export function GothPage({ category, outfits }: GenrePageProps) {
       <div className={`${s.fog} ${s.fogSlow}`} aria-hidden="true" />
 
       <nav className={s.topbar}>
-        <Link href="/" className={s.back}>
+        <Link href="/" className={s.back} transitionTypes={NAV_BACK}>
           ‹ return to all aesthetics
         </Link>
       </nav>
@@ -88,19 +89,6 @@ export function GothPage({ category, outfits }: GenrePageProps) {
       </header>
 
       <main className={s.gallery}>
-        {/* candlelit table, with the flames flickering */}
-        <div className={s.candleBand} aria-hidden="true">
-          <div className={s.candlePhoto}>
-            <img src={PHOTOS.candles} alt="" />
-            {FLAMES.map(([x, y, size], i) => (
-              <span
-                key={i}
-                className={s.flicker}
-                style={{ left: `${x}%`, top: `${y}%`, width: `${size}%`, animationDelay: `${(i * 0.37) % 1.6}s` }}
-              />
-            ))}
-          </div>
-        </div>
         <h2 className={s.sectionTitle}>The Collection</h2>
 
         {outfits.length === 0 ? (
@@ -141,6 +129,20 @@ export function GothPage({ category, outfits }: GenrePageProps) {
             </div>
           </Lightbox>
         )}
+
+        {/* under the collection: a candlelit table, with the flames flickering */}
+        <div className={s.candleBand} aria-hidden="true">
+          <div className={s.candlePhoto}>
+            <img src={PHOTOS.candles} alt="" />
+            {FLAMES.map(([x, y, size], i) => (
+              <span
+                key={i}
+                className={s.flicker}
+                style={{ left: `${x}%`, top: `${y}%`, width: `${size}%`, animationDelay: `${(i * 0.37) % 1.6}s` }}
+              />
+            ))}
+          </div>
+        </div>
       </main>
 
       <footer className={s.footer}>

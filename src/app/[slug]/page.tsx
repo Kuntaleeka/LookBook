@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
+import { GenreTransition } from "@/components/page-transitions";
 import { ThemeFonts } from "@/components/theme/theme-fonts";
 import { getDesign } from "@/genres/registry";
 import { getGenre } from "@/lib/lookbook";
@@ -34,9 +35,11 @@ export default async function GenrePage({ params }: PageProps<"/[slug]">) {
 
   const { Page } = design;
   return (
-    <>
-      <ThemeFonts families={design.fonts} />
-      <Page category={genre.category} outfits={genre.outfits} />
-    </>
+    <GenreTransition>
+      <div>
+        <ThemeFonts families={design.fonts} />
+        <Page category={genre.category} outfits={genre.outfits} />
+      </div>
+    </GenreTransition>
   );
 }

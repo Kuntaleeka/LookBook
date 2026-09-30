@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NAV_BACK } from "@/components/page-transitions";
 import { Lightbox, OpenOutfit } from "../lightbox";
 import type { GenrePageProps } from "../types";
 import { jitter, lookTitle } from "../utils";
@@ -19,7 +20,7 @@ export function CoquettePage({ category, outfits }: GenrePageProps) {
   return (
     <div className={s.root}>
       <nav className={s.topbar}>
-        <Link href="/" className={s.back}>
+        <Link href="/" className={s.back} transitionTypes={NAV_BACK}>
           ‹ back to all the aesthetics
         </Link>
       </nav>

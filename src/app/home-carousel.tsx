@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { OPEN_GENRE } from "@/components/page-transitions";
 import s from "./home.module.css";
 
 export type CarouselGenre = {
@@ -22,6 +23,13 @@ const VISIBLE = 2.6; // cards further than this from the front fade out
 const IDLE_MS = 3500; // resume gliding this long after the last interaction
 const TILT_Y = 16; // max degrees the front card turns toward the cursor, left/right
 const TILT_X = 11; // …and up/down
+const FLICK_MS = 260; // a released swipe carries on as if dragged this much longer
+const FLICK_MAX = 2; // …but by no more than this many cards
+
+/** Ease `amount` (per 60fps frame) at any frame rate. */
+function ease(amount: number, dt: number) {
+  return 1 - Math.pow(1 - amount, dt / (1000 / 60));
+}
 
 /** Signed distance from `pos` to card `i` on a ring of `n`, in (-n/2, n/2]. */
 function ringOffset(i: number, pos: number, n: number) {
@@ -48,6 +56,10 @@ export function HomeCarousel({ genres }: { genres: CarouselGenre[] }) {
     hover: false,
     dragX: null as number | null,
     dragged: false,
+    // swipe speed in cards per ms (smoothed), for flicks
+    velocity: 0,
+    lastMove: 0,
+    cardW: 280,
     // cursor position over the front card, -1…1 (0 = centre), and the eased tilt
     aimX: 0,
     aimY: 0,
@@ -77,22 +89,34 @@ export function HomeCarousel({ genres }: { genres: CarouselGenre[] }) {
     const m = motion.current;
     let frame = 0;
     let shown = -1;
+    let last = performance.now();
+
+    // Measure the card width only when it changes; reading it every frame
+    // would force a layout per frame (the main source of jank on phones).
+    const measure = () => (m.cardW = cardRefs.current[0]?.offsetWidth || m.cardW);
+    measure();
+    const resize = new ResizeObserver(measure);
+    if (cardRefs.current[0]) resize.observe(cardRefs.current[0]);
 
     const tick = (now: number) => {
+      const dt = Math.min(64, now - last);
+      last = now;
       const idle = now - m.lastInput > IDLE_MS && !m.hover && m.dragX === null;
       // Glide left to right: the ring turns so cards travel rightward.
-      if (idle && !reduced) m.target -= AUTO_SPEED;
-      else if (m.dragX === null && now - m.lastInput > 250) m.target += (Math.round(m.target) - m.target) * 0.12;
+      if (idle && !reduced) m.target -= AUTO_SPEED * (dt / (1000 / 60));
+      else if (m.dragX === null && now - m.lastInput > 450) m.target += (Math.round(m.target) - m.target) * ease(0.12, dt);
 
-      m.pos += (m.target - m.pos) * (reduced ? 1 : 0.09);
+      // While a finger is down the ring follows it 1:1; otherwise it eases.
+      if (reduced || m.dragX !== null) m.pos = m.target;
+      else m.pos += (m.target - m.pos) * ease(0.085, dt);
       // Ease the front card's tilt toward the cursor (back to flat when it leaves).
       const aimX = reduced ? 0 : m.aimX;
       const aimY = reduced ? 0 : m.aimY;
-      m.tiltX += (aimY * -TILT_X - m.tiltX) * 0.1;
-      m.tiltY += (aimX * TILT_Y - m.tiltY) * 0.1;
+      m.tiltX += (aimY * -TILT_X - m.tiltX) * ease(0.1, dt);
+      m.tiltY += (aimX * TILT_Y - m.tiltY) * ease(0.1, dt);
 
       const stage = stageRef.current;
-      const cardW = cardRefs.current[0]?.offsetWidth ?? 280;
+      const cardW = m.cardW;
       const step = STEP_DEG;
       // A wide, shallow arc: neighbours sit side by side with a small gap.
       const radius = (cardW * 1.12) / (2 * Math.tan((step * Math.PI) / 360));
@@ -129,7 +153,10 @@ export function HomeCarousel({ genres }: { genres: CarouselGenre[] }) {
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+      resize.disconnect();
+    };
   }, [n]);
 
   // Sideways scrolling (trackpad, shift+wheel, or a plain wheel over the ring).
@@ -165,7 +192,7 @@ export function HomeCarousel({ genres }: { genres: CarouselGenre[] }) {
           if (e.key === "ArrowRight") nudge(1);
           if (e.key === "ArrowLeft") nudge(-1);
         }}
-        onPointerEnter={() => (motion.current.hover = true)}
+        onPointerEnter={(e) => (motion.current.hover = e.pointerType === "mouse")}
         onPointerLeave={() => {
           const m = motion.current;
           m.hover = false;
@@ -176,36 +203,56 @@ export function HomeCarousel({ genres }: { genres: CarouselGenre[] }) {
           const m = motion.current;
           m.dragX = e.clientX;
           m.dragged = false;
-          m.lastInput = performance.now();
+          m.velocity = 0;
+          m.lastMove = performance.now();
+          m.target = m.pos; // catch the ring where it is
+          m.lastInput = m.lastMove;
         }}
         onPointerMove={(e) => {
           const m = motion.current;
-          // Aim the front card's tilt at the cursor.
-          const front = cardRefs.current[active]?.getBoundingClientRect();
-          if (front) {
-            m.aimX = Math.max(-1, Math.min(1, ((e.clientX - front.left) / front.width) * 2 - 1));
-            m.aimY = Math.max(-1, Math.min(1, ((e.clientY - front.top) / front.height) * 2 - 1));
+          // Aim the front card's tilt at the cursor (mouse only: on touch it
+          // would just jolt the card under your finger).
+          if (e.pointerType === "mouse") {
+            const front = cardRefs.current[active]?.getBoundingClientRect();
+            if (front) {
+              m.aimX = Math.max(-1, Math.min(1, ((e.clientX - front.left) / front.width) * 2 - 1));
+              m.aimY = Math.max(-1, Math.min(1, ((e.clientY - front.top) / front.height) * 2 - 1));
+            }
           }
           if (m.dragX === null) return;
+          const now = performance.now();
           const dx = e.clientX - m.dragX;
           if (Math.abs(dx) > 6) m.dragged = true;
           m.dragX = e.clientX;
-          m.target -= dx / ((cardRefs.current[0]?.offsetWidth ?? 280) * 1.1);
-          m.lastInput = performance.now();
+          const moved = -dx / (m.cardW * 1.1);
+          m.target += moved;
+          const dt = Math.max(1, now - m.lastMove);
+          m.velocity = m.velocity * 0.6 + (moved / dt) * 0.4;
+          m.lastMove = now;
+          m.lastInput = now;
         }}
         onPointerUp={() => {
           const m = motion.current;
           m.dragX = null;
-          m.target = Math.round(m.target);
-          m.lastInput = performance.now();
+          const now = performance.now();
+          // A flick carries on to a further card; a slow release settles on the nearest.
+          const fresh = now - m.lastMove < 80 ? m.velocity : 0;
+          const carry = Math.max(-FLICK_MAX, Math.min(FLICK_MAX, fresh * FLICK_MS));
+          m.target = Math.round(m.target + carry);
+          m.lastInput = now;
         }}
-        onPointerCancel={() => (motion.current.dragX = null)}
+        onPointerCancel={() => {
+          const m = motion.current;
+          m.dragX = null;
+          m.target = Math.round(m.target);
+        }}
       >
         <div className={s.ring}>
           {genres.map((g, i) => (
             <Link
               key={g.slug}
               href={`/${g.slug}`}
+              transitionTypes={OPEN_GENRE}
               ref={(el) => {
                 cardRefs.current[i] = el;
               }}
@@ -272,7 +319,7 @@ export function HomeCarousel({ genres }: { genres: CarouselGenre[] }) {
         <p className={s.detailsMeta}>
           {current.count ? `${current.count} ${current.count === 1 ? "look" : "looks"}` : "coming soon"}
         </p>
-        <Link href={`/${current.slug}`} className={s.enter}>
+        <Link href={`/${current.slug}`} className={s.enter} transitionTypes={OPEN_GENRE}>
           Enter {current.name} →
         </Link>
       </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NAV_BACK } from "@/components/page-transitions";
 import { Lightbox, OpenOutfit } from "../lightbox";
 import type { GenrePageProps } from "../types";
 import { jitter, lookTitle, pad3 } from "../utils";
@@ -123,7 +124,7 @@ export function GrungePage({ category, outfits }: GenrePageProps) {
 
       <div className={s.content}>
         <nav className={s.topbar}>
-          <Link href="/" className={s.back}>
+          <Link href="/" className={s.back} transitionTypes={NAV_BACK}>
             &lt;&lt; back to everything
           </Link>
           <span aria-hidden="true">side A · {outfits.length} {outfits.length === 1 ? "track" : "tracks"}</span>

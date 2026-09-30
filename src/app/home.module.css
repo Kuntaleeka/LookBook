@@ -61,7 +61,6 @@
    the layers; the backdrop plane clips itself instead.) */
 .card {
   --dim: 0;
-  --depth-shade: brightness(calc(1 - var(--dim)));
   position: absolute;
   left: 0;
   top: 0;
@@ -80,7 +79,18 @@
   border-radius: 18px;
   transform: translateZ(-60px) scale(1.04);
   box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
-  filter: var(--depth-shade);
+}
+/* Cards further from the front are shaded with a black veil. (An overlay's
+   opacity is far cheaper to animate every frame than a filter, on phones.) */
+.bgPlane::after,
+.portraitFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #000;
+  opacity: var(--dim);
+  pointer-events: none;
 }
 .card[aria-current="true"] .bgPlane {
   box-shadow: 0 40px 80px -24px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.25);
@@ -114,7 +124,6 @@
   overflow: hidden;
   transform: translate3d(var(--portrait-x, 0), 0, 45px);
   box-shadow: 0 26px 40px -14px rgba(0, 0, 0, 0.85), 0 8px 16px -8px rgba(0, 0, 0, 0.6);
-  filter: var(--depth-shade);
 }
 /* light sliding across the print as the card leans */
 .glare {
@@ -152,7 +161,7 @@
   /* closest layer */
   transform: translateZ(60px);
   text-shadow: 0 6px 14px rgba(0, 0, 0, 0.55);
-  filter: var(--depth-shade);
+  opacity: calc(1 - var(--dim));
 }
 /* ─── Each genre's set background ─────────────────────── */
 .g_grunge .bg {
@@ -292,6 +301,12 @@
 }
 .enter:hover { transform: translateY(-2px); }
 .emptyRing { padding: 6rem 1rem; text-align: center; color: #8f8884; }
+
+/* touch screens: no cursor to follow, so drop the glare (a costly blend) */
+@media (hover: none) {
+  .glare { display: none; }
+  .card { -webkit-tap-highlight-color: transparent; }
+}
 
 @media (max-width: 640px) {
   .stage { --card-w: 58vw; perspective: 1000px; }

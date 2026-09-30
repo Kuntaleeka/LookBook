@@ -2,17 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { signOut } from "./actions";
+import { NavLinks } from "./nav-links";
 
 export const metadata: Metadata = {
   title: "Studio · FashionOps",
   robots: { index: false, follow: false },
 };
-
-const NAV = [
-  { href: "/studio", label: "Inbox", ready: true },
-  { href: "#", label: "Categories", ready: false },
-  { href: "#", label: "Sorted outfits", ready: false },
-];
 
 export default async function StudioLayout({ children }: LayoutProps<"/studio">) {
   const { email } = await requireAdmin();
@@ -24,27 +19,7 @@ export default async function StudioLayout({ children }: LayoutProps<"/studio">)
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500">FashionOps</p>
           <p className="text-lg font-semibold">Studio</p>
         </div>
-        <nav className="flex gap-1 overflow-x-auto md:flex-col">
-          {NAV.map((item) =>
-            item.ready ? (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap hover:bg-stone-100"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <span
-                key={item.label}
-                title="Coming in a later phase"
-                className="rounded-lg px-3 py-2 text-sm whitespace-nowrap text-stone-400"
-              >
-                {item.label}
-              </span>
-            ),
-          )}
-        </nav>
+        <NavLinks />
         <div className="mt-auto hidden flex-col gap-2 text-xs text-stone-500 md:flex">
           <Link href="/" className="hover:text-stone-900">
             View lookbook ↗

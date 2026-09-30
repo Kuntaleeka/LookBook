@@ -1,0 +1,619 @@
+.root {
+  --black: #0a0909;
+  --soot: #141213;
+  --blood: #7a0f14;
+  --blood-bright: #a4161a;
+  --paper: #ecebe7;
+  --bone: #e6e1da;
+  --ash: #9a9290;
+  --silver: #c9c9cc;
+  --gothic: "Metal Mania", serif;
+  --type: "Special Elite", monospace;
+  --fell: "IM Fell English", serif;
+  --fell-heavy: "IM Fell Double Pica", serif;
+  --mono: "IBM Plex Mono", monospace;
+
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: clip;
+  color: var(--bone);
+  font-family: var(--type);
+  background: var(--black);
+  isolation: isolate;
+}
+
+/* black → dark red gradient, with crumpled satin (inspo: the pendant photo)
+   laid over it as a faint sheen */
+.root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='1400'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0045 .008' numOctaves='4' seed='7'/%3E%3CfeDiffuseLighting lighting-color='%23808080' surfaceScale='11'%3E%3CfeDistantLight azimuth='235' elevation='38'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E") center / cover,
+    linear-gradient(165deg, #000 0%, #070102 22%, #26040a 48%, #520811 74%, #6e0a15 100%);
+  background-blend-mode: soft-light, normal;
+}
+/* film grain over everything */
+.root::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Chain of crosses, behind the title; scrolls with it ─ */
+.chainBehind {
+  position: absolute;
+  top: 6.5rem;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  height: 320px;
+  pointer-events: none;
+}
+.chainLayer {
+  display: block;
+  width: 100%;
+  height: 320px;
+  overflow: visible;
+  opacity: 0.9;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.75));
+  will-change: transform;
+}
+/* phones: draw the chain smaller so more of it (and its crosses) fits */
+@media (max-width: 760px) {
+  .chainBehind { top: 6rem; height: 190px; }
+  .chainLayer { height: 190px; }
+}
+
+/* ─── Top bar ─────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 1.1rem 1.25rem;
+  font-size: 0.85rem;
+  color: var(--ash);
+}
+.back { color: var(--bone); text-decoration: none; }
+.back:hover { color: var(--blood-bright); text-decoration: line-through; }
+
+/* ─── Hero ────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 3.5rem;
+}
+/* white paint specks, like the distressed poster */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.16;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.11' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 18 0 0 0 -12.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E");
+  mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+.issue {
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+.titleWrap {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+.title {
+  font-family: var(--gothic);
+  font-weight: 400;
+  font-size: clamp(5rem, 19vw, 15rem);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  color: var(--bone);
+  text-shadow: 0 0 34px rgba(164, 22, 26, 0.35);
+  /* eaten-away edges */
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='e'%3E%3CfeTurbulence baseFrequency='.7' numOctaves='2' seed='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -3 2.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23e)'/%3E%3C/svg%3E");
+}
+.drip {
+  position: absolute;
+  top: 82%;
+  width: var(--dw, 3px);
+  height: var(--dl, 60px);
+  border-radius: 0 0 99px 99px;
+  background: linear-gradient(var(--blood-bright), var(--blood));
+  animation: drip 3.2s cubic-bezier(0.5, 0, 0.3, 1) both;
+  animation-delay: var(--dd, 0s);
+  transform-origin: top;
+}
+.drip::after {
+  /* the bead at the end */
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -3px;
+  width: calc(var(--dw, 3px) * 2.3);
+  aspect-ratio: 0.8;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  translate: -50% 0;
+  background: var(--blood-bright);
+}
+
+/* ransom-note tagline: small, right under the title (inspo: the poster) */
+.ransom {
+  position: relative;
+  z-index: 1; /* sits in front of the title's drips */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+  font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+  line-height: 1;
+}
+.ransomLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.word {
+  display: inline-flex;
+  gap: 0.06em;
+  padding: 0.25em 0.3em;
+  border: 1px dashed rgba(236, 235, 231, 0.4);
+}
+.ch {
+  display: inline-block;
+  padding: 0.06em 0.12em 0.02em;
+  rotate: var(--r, 0deg);
+  translate: 0 var(--y, 0);
+  clip-path: polygon(3% 6%, 97% 0, 100% 92%, 58% 100%, 2% 97%);
+}
+.c0 { background: var(--paper); color: #0d0d0d; font-family: var(--fell); }
+.c1 { background: var(--paper); color: #0d0d0d; font-family: var(--fell-heavy); }
+.c2 { background: #0d0d0d; color: var(--paper); font-family: var(--fell); box-shadow: inset 0 0 0 2px var(--paper); }
+.c3 { background: var(--blood); color: var(--paper); font-family: var(--fell-heavy); }
+.c4 { background: #d8d5cf; color: #0d0d0d; font-family: var(--fell); font-style: italic; }
+
+.heroTop {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+@media (min-width: 1000px) {
+  .heroTop { grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); }
+}
+.notes {
+  margin-top: 3.5rem;
+}
+.lede {
+  position: relative;
+  max-width: 34rem;
+  padding: 1.25rem 1.4rem;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--bone);
+  background: rgba(10, 9, 9, 0.55);
+}
+.ledeLabel {
+  position: absolute;
+  top: -0.7rem;
+  left: 1rem;
+  padding: 0 0.4rem;
+  font-family: var(--type);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blood-bright);
+  background: var(--black);
+}
+.quote {
+  font-family: var(--type);
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  line-height: 1.6;
+}
+
+/* cropped strips of the latest fits, like the stacked eyeliner photos */
+.strips {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 30rem;
+  justify-self: end;
+  rotate: 1.5deg;
+}
+.strip {
+  height: clamp(52px, 6vw, 70px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 2px solid #050505;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+  filter: grayscale(1) contrast(1.35) brightness(0.92);
+  translate: var(--sx, 0) 0;
+}
+.strip:nth-child(even) { filter: grayscale(0.6) contrast(1.3) sepia(0.25) hue-rotate(-25deg) saturate(1.6); }
+
+/* red label-maker tape */
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.5rem;
+  margin-top: 2.5rem;
+}
+.label {
+  padding: 0.32rem 0.7rem 0.26rem;
+  background: linear-gradient(180deg, #9b1219, #6d0b10);
+  color: #f7f3f0;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 1px 2px 0 rgba(0, 0, 0, 0.55);
+  rotate: var(--r, 0deg);
+}
+
+/* studded leather belt divider */
+.belt {
+  position: relative;
+  height: 44px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 40%, rgba(0, 0, 0, 0.4)),
+    #111010;
+  border-block: 1px solid #000;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+.belt::before,
+.belt::after {
+  /* stitching */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.16);
+}
+.belt::before { top: 5px; }
+.belt::after { bottom: 5px; }
+.studs {
+  /* four-faced pyramid studs, 20px each with a 14px gap */
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: conic-gradient(from 45deg at 10px 50%, #f4f4f4 0 25%, #8d8d90 0 50%, #3c3c3f 0 75%, #cfcfd2 0) 7px 0 / 34px 20px repeat-x;
+  mask: linear-gradient(90deg, #000 0 20px, transparent 20px) 7px 0 / 34px 20px repeat-x;
+  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.8));
+}
+
+/* ─── Gallery: the album wall ─────────────────────────── */
+.wall {
+  padding: 4rem 1.25rem 5rem;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(122, 15, 20, 0.28), transparent 70%);
+}
+.wallInner { max-width: 76rem; margin: 0 auto; }
+/* "the fits": same spiky face as the title, with a red marker underline */
+.fitsHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.25rem 3rem;
+  margin-bottom: 3.5rem;
+}
+.fitsTitle {
+  position: relative;
+  font-family: var(--gothic);
+  font-weight: 400;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  line-height: 0.9;
+  color: var(--bone);
+  text-shadow: 0 0 26px rgba(164, 22, 26, 0.35);
+}
+.fitsUnderline {
+  position: absolute;
+  left: -3%;
+  bottom: -0.32em;
+  width: 106%;
+  height: 0.34em;
+  fill: none;
+  stroke: var(--blood-bright);
+  stroke-width: 4;
+  stroke-linecap: round;
+  overflow: visible;
+}
+/* scrawled note with an arrow down at the photos */
+.hint {
+  position: relative;
+  max-width: 17rem;
+  margin-bottom: 0.2rem;
+  padding-right: 2.8rem;
+  font-family: "Rock Salt", cursive;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #d9ccc7;
+  rotate: -4deg;
+}
+.hintArrow {
+  position: absolute;
+  right: 0;
+  top: 0.9rem;
+  width: 2.2rem;
+  height: 3.2rem;
+  fill: none;
+  stroke: var(--blood-bright);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.grid {
+  columns: 2;
+  column-gap: 12px;
+}
+@media (min-width: 760px) { .grid { columns: 3; column-gap: 14px; } }
+@media (min-width: 1200px) { .grid { columns: 4; } }
+
+.print {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0 0 14px;
+  break-inside: avoid;
+  padding: 7px 7px 0;
+  background: #f1efea;
+  color: #111;
+  text-align: left;
+  rotate: var(--r, 0deg);
+  box-shadow: 0 14px 24px -8px rgba(0, 0, 0, 0.85);
+  transition: rotate 0.3s, scale 0.3s, box-shadow 0.3s;
+  cursor: zoom-in;
+}
+.print:hover, .print:focus-visible {
+  z-index: 2;
+  rotate: 0deg;
+  scale: 1.04;
+  box-shadow: 0 24px 40px -10px rgba(0, 0, 0, 0.95), 0 0 0 2px var(--blood-bright);
+  outline: none;
+}
+.photo {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #000;
+}
+.photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(0.9) contrast(1.35) brightness(0.88);
+  transition: filter 0.45s;
+}
+.photo::after {
+  /* dark red wash; lifts on hover */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(122, 15, 20, 0.45), rgba(10, 9, 9, 0.25));
+  mix-blend-mode: multiply;
+  transition: opacity 0.45s;
+}
+.print:hover img, .print:focus-visible img { filter: none; }
+.print:hover .photo::after, .print:focus-visible .photo::after { opacity: 0; }
+.track {
+  position: absolute;
+  top: -6px;
+  left: -8px;
+  z-index: 1;
+  font-size: 0.66rem;
+  padding: 0.22rem 0.5rem 0.18rem;
+}
+.printCaption {
+  display: block;
+  padding: 0.45rem 0.1rem 0.55rem;
+  font-family: var(--type);
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+.empty {
+  display: inline-block;
+  max-width: 28rem;
+  padding: 1.5rem;
+  border: 1px dashed rgba(236, 235, 231, 0.45);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ash);
+}
+.empty strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--gothic);
+  font-weight: 400;
+  font-size: 2.2rem;
+  color: var(--bone);
+}
+
+.footer {
+  padding: 3rem 1.25rem 3.5rem;
+  text-align: center;
+}
+.footerTitle {
+  position: relative;
+  display: inline-block;
+  font-family: var(--gothic);
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  color: var(--bone);
+}
+.footer p {
+  margin-top: 2.5rem;
+  font-size: 0.8rem;
+  color: var(--ash);
+}
+
+/* ─── Tagged items: pixel speech-bubble stickers (inspo: 8-bit bubble
+   with guitar + star patches), with blood running off the bottom ───── */
+.tagsRoot {
+  --tp-line: #c21c24;
+  --tp-line-w: 1.8;
+  --tp-dash: 6 4;
+  --tp-pin: #b3141c;
+  --tp-pin-ring: #ecebe7;
+  --tp-pin-num: #fff;
+  --tp-gap: 44px; /* room for the tail and drips under each bubble */
+}
+.tagBubble {
+  --u: 5px; /* one "pixel" */
+  position: relative;
+  margin-bottom: 2.6rem; /* narrow screens: room for tail + drips */
+  padding: 0.05rem 0.35rem 0.15rem;
+  color: #111;
+  /* pixel frame: 9-slice, so stair-step corners at any size */
+  border: calc(var(--u) * 3) solid transparent;
+  border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E %3Cpath fill='%230b0b0b' d='M2 0H6V1H7V2H8V6H7V7H6V8H2V7H1V6H0V2H1V1H2Z'/%3E %3Cpath fill='%23f8f8f6' d='M2 1H6V2H7V6H6V7H2V6H1V2H2Z'/%3E%3C/svg%3E") 3 fill / calc(var(--u) * 3) stretch;
+  /* die-cut sticker: white margin, thin red edge, soft shadow */
+  filter:
+    drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
+    drop-shadow(1.3px 0 0 #d11a26) drop-shadow(-1.3px 0 0 #d11a26) drop-shadow(0 1.3px 0 #d11a26) drop-shadow(0 -1.3px 0 #d11a26)
+    drop-shadow(5px 7px 5px rgba(0, 0, 0, 0.5));
+}
+.tagName {
+  font-family: "VT323", monospace;
+  font-weight: 400;
+  font-size: 1.45rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.tagLink {
+  font-family: "VT323", monospace;
+  font-size: 1.2rem;
+  color: #a50d17;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.tagLink:hover { color: #d11a26; }
+/* little red label-maker tag: shop / insta / local / ??? */
+.tagSource {
+  justify-self: start;
+  width: fit-content;
+  margin-bottom: 0.2rem;
+  padding: 0.14rem 0.42rem 0.1rem;
+  background: linear-gradient(180deg, #9b1219, #6d0b10);
+  color: #f7f3f0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+  rotate: -2deg;
+}
+
+/* decorations; which ones show varies from bubble to bubble */
+.tagTail, .tagGuitar, .tagStars, .tagDrips {
+  position: absolute;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.tagTail {
+  left: 22%;
+  bottom: calc(var(--u) * -3 - var(--u) * 3);
+  width: calc(var(--u) * 5);
+  height: calc(var(--u) * 4);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='4' viewBox='0 0 5 4' shape-rendering='crispEdges'%3E %3Cpath fill='%230b0b0b' d='M0 0H1V3H2V4H0Z M4 0H5V1H4Z M3 1H4V2H3Z M2 2H3V3H2Z'/%3E %3Cpath fill='%23f8f8f6' d='M1 0H4V1H3V2H2V3H1Z'/%3E%3C/svg%3E");
+  image-rendering: pixelated;
+}
+.tagGuitar {
+  left: -2.1rem;
+  bottom: -1.6rem;
+  width: 2.2rem;
+  height: 4.6rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='84' viewBox='0 0 40 84'%3E %3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23e2323c'/%3E%3Cstop offset='.55' stop-color='%23a8111b'/%3E%3Cstop offset='1' stop-color='%235e060c'/%3E%3C/linearGradient%3E%3C/defs%3E %3Cpath d='M16 1h9l2 9-2 3h-8z' fill='%23efe7da' stroke='%232a2a2a' stroke-width='.8'/%3E %3Crect x='17.4' y='12' width='5.2' height='38' fill='%237a4524' stroke='%232a1206' stroke-width='.6'/%3E %3Cpath d='M17.4 18h5.2M17.4 23h5.2M17.4 28h5.2M17.4 33h5.2M17.4 38h5.2M17.4 43h5.2' stroke='%23d8d0c0' stroke-width='.5'/%3E %3Cpath d='M9 46c-4 0-6 4-5 8 1 5 0 8-2 12-3 7 2 16 11 16h13c9 0 14-8 11-15-2-4-3-7-2-12 1-4-1-9-5-9-3 0-4 3-6 3h-9c-2 0-3-3-6-3z' fill='url(%23b)' stroke='%232b0306' stroke-width='1'/%3E %3Cpath d='M13 52h11l4 11-3 9h-9l-4-9z' fill='%23f5f1ea' stroke='%239c948a' stroke-width='.5'/%3E %3Crect x='15' y='55' width='9' height='2' rx='1' fill='%231b1b1b'/%3E%3Crect x='15' y='60' width='9' height='2' rx='1' fill='%231b1b1b'/%3E%3Crect x='15' y='66' width='9' height='2' rx='1' fill='%231b1b1b'/%3E %3Crect x='14' y='72' width='12' height='2.4' fill='%23c9c9c9'/%3E %3Cpath d='M18.5 4v70M20 4v70M21.5 4v70' stroke='%23f2f2f2' stroke-width='.25' opacity='.8'/%3E %3Ccircle cx='31' cy='70' r='1.4' fill='%23eee'/%3E%3Ccircle cx='32' cy='75' r='1.4' fill='%23eee'/%3E%3C/svg%3E");
+  rotate: -28deg;
+  filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff);
+}
+.tagStars {
+  right: -1.5rem;
+  top: -1.4rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E %3Cdefs%3E%3CradialGradient id='s' cx='.4' cy='.35' r='.7'%3E%3Cstop offset='0' stop-color='%23b41a2c'/%3E%3Cstop offset='1' stop-color='%235c0714'/%3E%3C/radialGradient%3E%3C/defs%3E %3Cg transform='rotate(-8 22 22)'%3E%3Cpath d='M22 2l5.6 12.4 13.4 1.3-10 9.2 2.9 13.2L22 31.4 10.1 38.1 13 24.9 3 15.7l13.4-1.3z' fill='url(%23s)' stroke='%233d020b' stroke-width='1.2' stroke-linejoin='round'/%3E %3Cpath d='M22 6.5l4.3 9.5 10.3 1-7.7 7.1 2.2 10.1L22 29 12.9 34.2l2.2-10.1-7.7-7.1 10.3-1z' fill='none' stroke='%23e05a6c' stroke-width='.8' stroke-dasharray='1.6 1.3' opacity='.85'/%3E%3C/g%3E %3Cg transform='translate(26 28) rotate(14 17 17) scale(.8)'%3E%3Cpath d='M22 2l5.6 12.4 13.4 1.3-10 9.2 2.9 13.2L22 31.4 10.1 38.1 13 24.9 3 15.7l13.4-1.3z' fill='url(%23s)' stroke='%233d020b' stroke-width='1.4' stroke-linejoin='round'/%3E %3Cpath d='M22 6.5l4.3 9.5 10.3 1-7.7 7.1 2.2 10.1L22 29 12.9 34.2l2.2-10.1-7.7-7.1 10.3-1z' fill='none' stroke='%23e05a6c' stroke-width='1' stroke-dasharray='1.8 1.4' opacity='.85'/%3E%3C/g%3E%3C/svg%3E");
+}
+.tagDrips {
+  left: 52%;
+  top: calc(100% + var(--u) * 2);
+  width: 3.4rem;
+  height: 2.6rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='46' viewBox='0 0 60 46'%3E %3Cdefs%3E%3ClinearGradient id='d' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%236e0209'/%3E%3Cstop offset='.5' stop-color='%23a50d17'/%3E%3Cstop offset='1' stop-color='%237c050d'/%3E%3C/linearGradient%3E%3C/defs%3E %3Cpath d='M0 0H60V4C56 4 55 8 55 13C55 19 51 21 49 16C48 12 47 6 42 6C38 6 37 11 37 25C37 36 34 41 31 41C28 41 26 36 26 27C26 15 24 8 18 8C13 8 13 12 12 19C11 23 8 23 7 19C6 12 5 4 0 4Z' fill='url(%23d)'/%3E %3Cellipse cx='29.6' cy='34' rx='1.3' ry='3.2' fill='%23fff' opacity='.55'/%3E%3Cellipse cx='9' cy='17' rx='.8' ry='1.6' fill='%23fff' opacity='.45'/%3E%3C/svg%3E");
+  transform-origin: top;
+  animation: drip 2.6s cubic-bezier(0.5, 0, 0.3, 1) 0.3s both;
+}
+/* phones: keep the guitar inside the viewer's edge */
+@media (max-width: 899px) {
+  .tagGuitar { left: -0.9rem; }
+}
+/* vary the stickers so a photo with many items doesn't repeat */
+.tagBubble:nth-child(3n + 2) .tagGuitar { display: none; }
+.tagBubble:nth-child(3n) .tagStars { display: none; }
+.tagBubble:nth-child(even) .tagDrips { left: 64%; width: 2.8rem; animation-delay: 0.7s; }
+.tagBubble:nth-child(even) .tagTail { left: 30%; }
+@media (prefers-reduced-motion: reduce) {
+  .tagDrips { animation: none; }
+}
+
+/* ─── Lightbox ────────────────────────────────────────── */
+.lbDialog {
+  background: #0d0c0c;
+  color: #e6e1da;
+  border: 1px dashed rgba(236, 235, 231, 0.4);
+  border-radius: 0;
+  box-shadow: 0 0 80px -10px rgba(164, 22, 26, 0.55);
+}
+.lbImage { background: #000; }
+.lbCaption {
+  align-self: flex-start;
+  padding: 0.25rem 0.6rem;
+  background: linear-gradient(180deg, #9b1219, #6d0b10);
+  color: #f7f3f0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.lbTitle { font-family: "Metal Mania", serif; font-weight: 400; font-size: 2.6rem; line-height: 1.05; }
+.lbNotes { font-family: "Special Elite", monospace; line-height: 1.7; color: #b8b0ad; }
+.lbButton {
+  padding: 0.35rem 0.8rem;
+  border: 1px dashed rgba(236, 235, 231, 0.5);
+  font-family: "Special Elite", monospace;
+  font-size: 0.85rem;
+  color: #e6e1da;
+}
+.lbButton:hover { background: #7a0f14; border-style: solid; border-color: #a4161a; }
+
+@keyframes drip {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drip { animation: none; }
+  .print, .photo img, .photo::after { transition: none; }
+}

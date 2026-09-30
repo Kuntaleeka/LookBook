@@ -1,0 +1,299 @@
+/* Home: a dark stage with a 3D ring of genre cards. */
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  overflow-x: clip;
+  color: #f1ede9;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 42%, rgba(255, 255, 255, 0.07), transparent 70%),
+    #0b0a0b;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+.header {
+  padding: 2rem 1.25rem 0;
+  text-align: center;
+}
+.brand {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #9d9794;
+}
+.headline {
+  margin-top: 0.6rem;
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Carousel ────────────────────────────────────────── */
+.carousel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.stage {
+  --card-w: clamp(13rem, 24vw, 19rem);
+  position: relative;
+  height: calc(var(--card-w) * 1.45 + 4rem);
+  perspective: 1500px;
+  perspective-origin: 50% 45%;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  outline: none;
+}
+.stage:active { cursor: grabbing; }
+.stage:focus-visible { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.4); }
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-style: preserve-3d;
+  /* push the ring back so the front card sits at the screen plane */
+  transform: translateZ(calc(var(--radius, 400px) * -1));
+}
+/* Each card is a little 3D diorama: backdrop set back, portrait floating in
+   front of it, name closest. (No overflow clipping here: that would flatten
+   the layers; the backdrop plane clips itself instead.) */
+.card {
+  --dim: 0;
+  --depth-shade: brightness(calc(1 - var(--dim)));
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--card-w);
+  aspect-ratio: 3 / 4.25;
+  transform-style: preserve-3d;
+  color: #fff;
+  text-decoration: none;
+  will-change: transform;
+}
+.card > * { backface-visibility: hidden; }
+.bgPlane {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  transform: translateZ(-60px) scale(1.04);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  filter: var(--depth-shade);
+}
+.card[aria-current="true"] .bgPlane {
+  box-shadow: 0 40px 80px -24px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+/* background layer: much wider than the card, slides fast */
+.bg {
+  position: absolute;
+  inset: -4% -70%;
+  transform: translate3d(var(--bg-x, 0), 0, 0);
+}
+.bgWord {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  translate: 0 -50%;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1;
+  pointer-events: none;
+}
+/* portrait layer: slides slowly */
+/* front layer: floats ~45px in front of the card face */
+.portraitFrame {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  top: 9%;
+  bottom: 21%;
+  overflow: hidden;
+  transform: translate3d(var(--portrait-x, 0), 0, 45px);
+  box-shadow: 0 26px 40px -14px rgba(0, 0, 0, 0.85), 0 8px 16px -8px rgba(0, 0, 0, 0.6);
+  filter: var(--depth-shade);
+}
+/* light sliding across the print as the card leans */
+.glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 40%), rgba(255, 255, 255, 0.32), transparent 48%);
+  mix-blend-mode: screen;
+}
+.portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+.soon {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.75);
+}
+.cardName {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 7.5%;
+  text-align: center;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  line-height: 1;
+  /* closest layer */
+  transform: translateZ(60px);
+  text-shadow: 0 6px 14px rgba(0, 0, 0, 0.55);
+  filter: var(--depth-shade);
+}
+/* ─── Each genre's set background ─────────────────────── */
+.g_grunge .bg {
+  background:
+    radial-gradient(ellipse 40% 60% at 50% 60%, rgba(164, 22, 26, 0.35), transparent 70%),
+    linear-gradient(165deg, #000 0%, #26040a 50%, #6e0a15 100%);
+}
+.g_grunge .bgWord {
+  font-family: "Metal Mania", serif;
+  font-size: 9rem;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(236, 230, 212, 0.35);
+}
+.g_grunge .portraitFrame { border: 6px solid #f1efea; border-bottom-width: 22px; rotate: -2deg; }
+.g_grunge .cardName { font-family: "Metal Mania", serif; color: #ece6d4; }
+
+.g_goth .bg {
+  background:
+    radial-gradient(ellipse 45% 55% at 50% 40%, rgba(160, 20, 34, 0.35), transparent 70%),
+    linear-gradient(rgba(6, 4, 5, 0.45), rgba(6, 4, 5, 0.75)),
+    url("/genres/goth/angel-fog.jpg") center 30% / cover;
+  filter: grayscale(0.3);
+}
+.g_goth .bgWord {
+  font-family: "Pinyon Script", cursive;
+  font-size: 10rem;
+  color: rgba(220, 220, 226, 0.22);
+}
+.g_goth .portraitFrame { border-radius: 999px 999px 0 0; border: 1px solid rgba(195, 192, 196, 0.6); }
+.g_goth .cardName { font-family: "Pinyon Script", cursive; font-size: clamp(2rem, 3.4vw, 2.8rem); color: #efe6dc; }
+
+.g_acubi .bg {
+  background:
+    radial-gradient(#111 1px, transparent 1.3px) 0 0 / 8px 8px,
+    #f2f2f0;
+}
+.g_acubi .bgWord {
+  font-family: "Dela Gothic One", sans-serif;
+  font-size: 8rem;
+  color: rgba(17, 17, 17, 0.9);
+  -webkit-text-stroke: 0;
+}
+.g_acubi .portraitFrame { border: 4px solid #111; background: #fff; }
+.g_acubi .portrait { filter: grayscale(0.85) contrast(0.95) brightness(1.06); }
+.g_acubi .cardName {
+  bottom: 6.5%;
+  font-family: "Dela Gothic One", sans-serif;
+  text-transform: lowercase;
+  color: #111;
+}
+.g_acubi .cardName::after { content: "  アクビ"; font-size: 0.55em; letter-spacing: 0.1em; }
+
+.g_coquette .bg {
+  background:
+    radial-gradient(#f2b6c5 1.6px, transparent 2px) 0 0 / 22px 22px,
+    #fff4f6;
+}
+.g_coquette .bgWord {
+  font-family: "Pinyon Script", cursive;
+  font-size: 9rem;
+  color: rgba(201, 96, 127, 0.3);
+}
+.g_coquette .portraitFrame { border: 10px solid #fff; border-bottom-width: 26px; rotate: 2deg; }
+.g_coquette .cardName { font-family: "Playfair Display", serif; font-style: italic; color: #5b2b3a; }
+
+.g_office_siren .bg {
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 14px),
+    #1f1f23;
+}
+.g_office_siren .bgWord {
+  font-family: "Bodoni Moda", serif;
+  font-style: italic;
+  font-size: 8rem;
+  color: rgba(217, 138, 152, 0.25);
+}
+.g_office_siren .portraitFrame { border-bottom: 3px solid #6e1423; }
+.g_office_siren .cardName { font-family: "Bodoni Moda", serif; color: #f4f1ee; }
+
+.g_default .bg { background: linear-gradient(160deg, #2a2a2e, #111); }
+.g_default .bgWord { font-size: 8rem; font-weight: 700; color: rgba(255, 255, 255, 0.08); }
+
+/* ─── Controls + details ──────────────────────────────── */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.arrow {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #f1ede9;
+  transition: background 0.2s, border-color 0.2s;
+}
+.arrow:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.5); }
+.dots { display: flex; gap: 0.5rem; }
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  transition: width 0.3s, background 0.3s;
+}
+.dotActive { width: 1.6rem; background: #f1ede9; }
+.details {
+  max-width: 34rem;
+  margin: 1.5rem auto 0;
+  padding: 0 1.25rem 3rem;
+  text-align: center;
+}
+.detailsName { font-size: 1.5rem; font-weight: 600; }
+.detailsText { margin-top: 0.4rem; font-size: 0.95rem; line-height: 1.6; color: #b5aeaa; }
+.detailsMeta {
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #8f8884;
+}
+.enter {
+  display: inline-block;
+  margin-top: 1.1rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  background: #f1ede9;
+  color: #0b0a0b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+.enter:hover { transform: translateY(-2px); }
+.emptyRing { padding: 6rem 1rem; text-align: center; color: #8f8884; }
+
+@media (max-width: 640px) {
+  .stage { --card-w: 58vw; perspective: 1000px; }
+  .bgWord { font-size: 6rem !important; }
+}

@@ -1,14 +1,38 @@
-export default function Home() {
+import { ThemeFonts } from "@/components/theme/theme-fonts";
+import { GENRE_DESIGNS } from "@/genres/registry";
+import { getGenreSummaries } from "@/lib/lookbook";
+import { HomeCarousel, type CarouselGenre } from "./home-carousel";
+import s from "./home.module.css";
+
+// A fresh random portrait for each genre on every visit.
+export const dynamic = "force-dynamic";
+
+function pickRandom<T>(list: T[]): T | null {
+  return list.length ? list[Math.floor(Math.random() * list.length)] : null;
+}
+
+export default async function Home() {
+  const summaries = await getGenreSummaries();
+
+  const genres: CarouselGenre[] = summaries.map((g) => ({
+    slug: g.slug,
+    name: g.name,
+    description: g.description,
+    count: g.outfitCount,
+    portrait: pickRandom(g.images),
+  }));
+
+  // Every genre's fonts, so each card's backdrop is set in its own type.
+  const fonts = [...new Set(genres.flatMap((g) => GENRE_DESIGNS[g.slug]?.fonts ?? []))];
+
   return (
-    <main className="flex flex-1 flex-col items-center justify-center bg-[var(--bg)] px-4 py-24 text-center text-[var(--fg)]">
-      <p className="text-xs font-medium uppercase tracking-[0.3em] opacity-60">FashionOps</p>
-      <h1 className="mt-3 max-w-xl text-4xl font-semibold tracking-tight sm:text-5xl">
-        A lookbook, sorted by aesthetic.
-      </h1>
-      <p className="mt-4 max-w-md text-base opacity-70">
-        Coquette, grunge, goth, acubi, office siren and more — every fit broken down, with where
-        each piece came from. Opening soon.
-      </p>
+    <main className={s.page}>
+      <ThemeFonts families={fonts} />
+      <header className={s.header}>
+        <p className={s.brand}>FashionOps</p>
+        <h1 className={s.headline}>Pick your aesthetic.</h1>
+      </header>
+      <HomeCarousel genres={genres} />
     </main>
   );
 }

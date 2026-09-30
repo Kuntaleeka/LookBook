@@ -40,8 +40,45 @@ export async function deleteOutfit(id: string) {
   if (error) return { error: error.message };
 
   await supabase.storage.from(OUTFITS_BUCKET).remove([outfit.image_path]);
-  revalidatePath("/studio");
+  revalidateLookbook();
   return { ok: true };
+}
+
+/**
+ * Sorts an outfit into a genre, which publishes it on that genre's page.
+ * `categoryId: null` sends it back to the inbox and unpublishes it.
+ */
+export async function assignOutfit(id: string, categoryId: string | null) {
+  const { supabase } = await requireAdmin();
+
+  const { error } = await supabase
+    .from("outfits")
+    .update(
+      categoryId
+        ? { primary_category_id: categoryId, status: "sorted", is_published: true }
+        : { primary_category_id: null, status: "inbox", is_published: false },
+    )
+    .eq("id", id);
+  if (error) return { error: error.message };
+
+  revalidateLookbook();
+  return { ok: true };
+}
+
+export async function setOutfitTitle(id: string, title: string) {
+  const { supabase } = await requireAdmin();
+
+  const clean = title.trim().slice(0, 80) || null;
+  const { error } = await supabase.from("outfits").update({ title: clean }).eq("id", id);
+  if (error) return { error: error.message };
+
+  revalidateLookbook();
+  return { ok: true };
+}
+
+/** Refresh the studio and every public page, so changes show up immediately. */
+function revalidateLookbook() {
+  revalidatePath("/", "layout");
 }
 
 export async function signOut() {

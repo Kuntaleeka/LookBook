@@ -7,10 +7,11 @@ A public lookbook of outfits sorted into aesthetic categories (coquette, grunge,
 ## Status
 
 - [x] **Phase 1:** single admin login, locked `/studio`, photo upload into the Inbox
-- [ ] Phase 2: category manager and theme editor
-- [ ] Phase 3: sorting outfits into categories
-- [ ] Phase 4: public themed lookbook
-- [ ] Phase 5: item tagging and sources (shop / Instagram / local)
+- [x] **Phase 2:** category manager, 5 preset aesthetics
+- [x] **Phase 3:** sorting outfits into genres (picking a genre publishes)
+- [x] **Phase 4:** bespoke genre pages at `/coquette`, `/grunge`, `/goth`, `/acubi`, `/office-siren`
+- [x] **Phase 5:** item tagging: pins on the photo, lines out to bubbles with shop / Instagram / local-store links
+- [ ] Homepage genre picker
 
 ## Setup (one time)
 
@@ -23,8 +24,10 @@ A public lookbook of outfits sorted into aesthetic categories (coquette, grunge,
    ```
 
 ### 2. Create the database tables
-Open **SQL Editor** in Supabase, paste in the whole of
-`supabase/migrations/0001_phase1_admin_and_outfits.sql`, and click **Run**.
+Open **SQL Editor** in Supabase and run each file in `supabase/migrations/` **in order**: paste in the whole file and click **Run**.
+1. `0001_phase1_admin_and_outfits.sql`: admin, outfits, photo storage
+2. `0002_phase2_categories.sql`: categories, plus the 5 starter aesthetics
+3. `0003_items.sql`: tagged items (pin position, name, shop link / Instagram handle / local store)
 
 ### 3. Create your admin account and turn off sign-ups
 1. **Authentication → Users → Add user → Create new user**: enter your email and a strong password, and tick **Auto Confirm User**.

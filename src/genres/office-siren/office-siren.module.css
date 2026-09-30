@@ -1,0 +1,244 @@
+.root {
+  --paper: #f4f1ee;
+  --white: #ffffff;
+  --ink: #1a1a1d;
+  --graphite: #5e575b;
+  --rule: #d9d3cf;
+  --wine: #6e1423;
+  --suit: #1f1f23;
+  --bodoni: "Bodoni Moda", serif;
+  --sans: "Inter", sans-serif;
+
+  min-height: 100dvh;
+  color: var(--ink);
+  font-family: var(--sans);
+  background: var(--paper);
+}
+
+.smallcaps {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ─── Memo header ─────────────────────────────────────── */
+.memo {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 0;
+}
+.memoTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px double var(--ink);
+}
+.back { color: var(--ink); text-decoration: none; }
+.back:hover { color: var(--wine); }
+.memoFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--ink);
+}
+@media (min-width: 760px) { .memoFields { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.memoFields div {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.65rem 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--rule);
+}
+.memoFields dt { color: var(--graphite); }
+.memoFields dd { font-family: var(--bodoni); font-style: italic; }
+
+/* ─── Hero ────────────────────────────────────────────── */
+.hero {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem 3rem;
+}
+.title {
+  font-family: var(--bodoni);
+  font-weight: 400;
+  font-size: clamp(3.6rem, 12.5vw, 10.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+.title em {
+  font-style: italic;
+  color: var(--wine);
+}
+.titleRule {
+  width: 6rem;
+  height: 2px;
+  margin-top: 2rem;
+  background: var(--wine);
+}
+
+/* pinstripe suiting band */
+.pinstripe {
+  position: relative;
+  padding: 3rem 1.25rem;
+  color: #f1ede9;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 16px),
+    var(--suit);
+}
+.pinstripeInner {
+  display: grid;
+  gap: 2rem;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+@media (min-width: 900px) { .pinstripeInner { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
+.lede {
+  font-family: var(--bodoni);
+  font-style: italic;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  line-height: 1.35;
+}
+.dressCode ol {
+  counter-reset: item;
+  margin-top: 0.9rem;
+  border-top: 1px solid rgba(241, 237, 233, 0.35);
+}
+.dressCode li {
+  counter-increment: item;
+  display: flex;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(241, 237, 233, 0.18);
+  font-size: 0.95rem;
+  text-transform: capitalize;
+}
+.dressCode li::before {
+  content: counter(item, decimal-leading-zero);
+  font-family: var(--bodoni);
+  font-style: italic;
+  color: #d98a98;
+}
+
+/* ─── Gallery ─────────────────────────────────────────── */
+.gallery {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 4rem 1.25rem 5rem;
+}
+.galleryHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--ink);
+}
+.galleryHead h2 { font-family: var(--bodoni); font-weight: 400; font-size: 2.2rem; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.5rem 1.25rem;
+}
+@media (min-width: 900px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3.5rem 2rem; }
+  /* the lead look runs large, like a magazine opener */
+  .lead { grid-column: span 2; grid-row: span 2; }
+}
+.look {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  color: inherit;
+  cursor: zoom-in;
+}
+.frame {
+  flex: 1;
+  overflow: hidden;
+  background: var(--white);
+}
+.frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  transition: scale 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s;
+  filter: contrast(1.04);
+}
+.look:hover img, .look:focus-visible img { scale: 1.035; }
+.look:focus-visible { outline: none; }
+.look:focus-visible .frame { outline: 2px solid var(--wine); outline-offset: 3px; }
+.lookCaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-top: 0.7rem;
+  margin-top: 0.7rem;
+  border-top: 2px solid var(--wine);
+}
+.lookTitle { font-family: var(--bodoni); font-style: italic; font-size: 1.2rem; }
+.lead .lookTitle { font-size: 1.7rem; }
+.lookNo { color: var(--graphite); }
+
+.empty {
+  max-width: 30rem;
+  padding: 2rem;
+  background: var(--white);
+  border-left: 3px solid var(--wine);
+}
+.empty strong { display: block; font-family: var(--bodoni); font-style: italic; font-weight: 400; font-size: 1.8rem; margin-bottom: 0.4rem; }
+
+/* ─── Sign-off ────────────────────────────────────────── */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3.5rem;
+  border-top: 3px double var(--ink);
+}
+.signoff { font-family: var(--bodoni); font-style: italic; font-size: 1.4rem; }
+.signoff span { display: block; font-size: 2.2rem; color: var(--wine); }
+.stamp {
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--wine);
+  color: var(--wine);
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
+  rotate: -7deg;
+  opacity: 0.85;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── Lightbox ────────────────────────────────────────── */
+.lbDialog { background: #fff; color: #1a1a1d; border: 0; border-top: 4px solid #6e1423; border-radius: 0; }
+.lbImage { background: #f4f1ee; }
+.lbCaption { font-family: "Inter", sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #6e1423; }
+.lbTitle { font-family: "Bodoni Moda", serif; font-style: italic; font-weight: 400; font-size: 2.4rem; line-height: 1.05; }
+.lbNotes { font-family: "Inter", sans-serif; line-height: 1.65; color: #5e575b; }
+.lbButton {
+  padding: 0.5rem 1rem;
+  background: #1a1a1d;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.lbButton:hover { background: #6e1423; }
+
+@media (prefers-reduced-motion: reduce) {
+  .frame img { transition: none; }
+}

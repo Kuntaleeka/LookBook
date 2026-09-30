@@ -1,0 +1,604 @@
+/* Acubi: black-and-white manga pages, a photocopied poster, silver star
+   clips, a grey moodboard and a compact digital camera (from the inspo). */
+.root {
+  --paper: #f2f2f0;
+  --white: #ffffff;
+  --ink: #111111;
+  --grey: #8a8a8a;
+  --soft: #d9d9d6;
+  --poster: "Dela Gothic One", sans-serif;
+  --lcd: "DotGothic16", monospace;
+  --body: "Zen Kaku Gothic New", sans-serif;
+  --tone: radial-gradient(var(--ink) 0.9px, transparent 1.15px);
+
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: clip;
+  color: var(--ink);
+  font-family: var(--body);
+  background: var(--paper);
+  isolation: isolate;
+}
+/* soft camera grain over everything */
+.root::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.content { position: relative; z-index: 1; }
+
+/* ─── Silver star clips ───────────────────────────────── */
+.clips {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.clip {
+  position: absolute;
+  overflow: hidden;
+  will-change: transform;
+  background: linear-gradient(135deg, #fbfbfb 0%, #9b9b9e 28%, #f4f4f4 46%, #6f6f73 64%, #dededf 82%, #a9a9ac 100%);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E %3Cpath fill-rule='evenodd' fill='%23000' d='M50.0 5.0L61.2 37.6L95.7 38.2L68.1 58.9L78.2 91.8L50.0 72.0L21.8 91.8L31.9 58.9L4.3 38.2L38.8 37.6Z M50.0 23.0L56.8 43.7L78.5 43.7L60.9 56.6L67.6 77.3L50.0 64.5L32.4 77.3L39.1 56.6L21.5 43.7L43.2 43.7Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E %3Cpath fill-rule='evenodd' fill='%23000' d='M50.0 5.0L61.2 37.6L95.7 38.2L68.1 58.9L78.2 91.8L50.0 72.0L21.8 91.8L31.9 58.9L4.3 38.2L38.8 37.6Z M50.0 23.0L56.8 43.7L78.5 43.7L60.9 56.6L67.6 77.3L50.0 64.5L32.4 77.3L39.1 56.6L21.5 43.7L43.2 43.7Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+}
+.clip::after {
+  /* the glint */
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.95) 50%, transparent 60%);
+  translate: -120% 0;
+  animation: glint 7s ease-in-out infinite;
+  animation-delay: var(--glint-delay, 0s);
+}
+@media (max-width: 760px) {
+  .clip:nth-child(3n) { display: none; }
+}
+
+/* ─── Top bar ─────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 0.6rem;
+  font-family: var(--lcd);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #555;
+}
+.back { color: var(--ink); text-decoration: none; }
+.back:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* ─── Manga page ──────────────────────────────────────── */
+.page {
+  display: grid;
+  gap: 10px;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0.5rem 1.25rem 2.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "kata" "title" "camera" "memo";
+}
+@media (min-width: 960px) {
+  .page {
+    grid-template-columns: 6.5rem minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "kata title camera"
+      "kata memo  camera";
+  }
+}
+.panel {
+  position: relative;
+  border: 3px solid var(--ink);
+  background: var(--white);
+  overflow: hidden;
+}
+
+/* vertical katakana, white on black like the poster */
+.kata {
+  grid-area: kata;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.9rem;
+  background: var(--ink);
+  color: #f4f4f4;
+}
+.kataBig {
+  font-family: var(--poster);
+  font-size: clamp(2.4rem, 7vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 1px #fff;
+}
+.kataSmall {
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  opacity: 0.75;
+}
+@media (min-width: 960px) {
+  .kata { flex-direction: row-reverse; align-items: flex-start; padding: 1.4rem 0.6rem; }
+  .kataBig, .kataSmall { writing-mode: vertical-rl; }
+  .kataBig { font-size: 4.2rem; }
+}
+
+.titlePanel {
+  grid-area: title;
+  padding: 1.25rem 1.5rem 1.5rem;
+  /* halftone fading in from the corner */
+  background:
+    var(--tone) 0 0 / 7px 7px,
+    var(--white);
+}
+.titlePanel::before {
+  /* white wash so the dots only show in the top-right, like screentone */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 90% at 0% 100%, #fff 45%, rgba(255, 255, 255, 0.6) 70%, transparent 100%);
+  pointer-events: none;
+}
+.titlePanel > * { position: relative; }
+.issue {
+  font-family: var(--lcd);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555;
+}
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+.title {
+  font-family: var(--poster);
+  font-weight: 400;
+  font-size: clamp(4rem, 12vw, 8.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+}
+.burst {
+  flex: none;
+  width: clamp(2.8rem, 7vw, 4.4rem);
+  margin-top: 0.2rem;
+  color: var(--ink);
+  animation: twinkle 3.4s ease-in-out infinite;
+}
+
+/* manga speech balloon */
+.balloon {
+  position: relative;
+  max-width: min(24rem, calc(100% - 7.5rem)); /* leave room for the cat */
+  margin: 1.4rem 0 0 0.5rem;
+  padding: 1.1rem 1.6rem;
+  background: var(--white);
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-align: center;
+  text-transform: lowercase;
+}
+.balloon::after {
+  /* curved manga tail */
+  content: "";
+  position: absolute;
+  left: 20%;
+  top: calc(100% - 3px);
+  width: 30px;
+  height: 26px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='22' viewBox='0 0 26 22'%3E %3Cpath d='M1 1 C 8 6, 12 12, 24 21 C 16 13, 14 7, 13 1' fill='%23fff' stroke='%23111' stroke-width='2.2' stroke-linejoin='round'/%3E %3Crect x='0' y='0' width='26' height='2.2' fill='%23fff'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.cat {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.8rem;
+  width: clamp(4.5rem, 10vw, 6.5rem);
+  rotate: -8deg;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+}
+@media (max-width: 600px) {
+  .balloon { max-width: 100%; }
+  .cat { position: relative; right: auto; bottom: auto; display: block; margin: 1.2rem 0 0 auto; }
+}
+
+/* ─── The digital camera ──────────────────────────────── */
+.cameraPanel {
+  grid-area: camera;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem 1rem;
+  background: var(--tone) 0 0 / 6px 6px, #e7e7e5;
+}
+.camera {
+  width: min(100%, 22rem);
+  rotate: -4deg;
+  filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.35));
+}
+.camTop {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1.1rem 0.35rem;
+}
+.camKey {
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fafafa, #b9b9bc);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.3);
+  font: 700 0.55rem/1 var(--body);
+  letter-spacing: 0.08em;
+  color: #333;
+}
+.camLed { width: 6px; height: 6px; border-radius: 50%; background: #7cff9b; box-shadow: 0 0 6px #7cff9b; }
+.camBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 20px;
+  background: linear-gradient(160deg, #f4f4f4 0%, #c7c7ca 38%, #e6e6e7 55%, #a6a6aa 100%);
+  box-shadow: inset 0 1px 1px #fff, inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+}
+.lcdBezel {
+  position: relative;
+  padding: 0.55rem 0.55rem 1.6rem;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #232326, #0d0d0f);
+}
+.lcd {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 3px;
+  background: #1a1c1e;
+}
+.lcdImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  filter: grayscale(0.55) contrast(1.05) brightness(1.02);
+  animation: lcdIn 0.35s ease-out;
+}
+.lcd::after {
+  /* LCD scanlines + glass sheen */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0 1px, transparent 1px 3px),
+    linear-gradient(125deg, rgba(255, 255, 255, 0.22), transparent 40%);
+}
+.noImage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--lcd);
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: #cfd3d6;
+}
+.osdTop, .osdBottom {
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--lcd);
+  font-size: 0.75rem;
+  color: #fff;
+  text-shadow: 0 1px 1px #000;
+}
+.osdTop { top: 0.35rem; }
+.osdBottom {
+  bottom: 0.35rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+.battery {
+  width: 18px;
+  height: 9px;
+  margin-top: 2px;
+  border: 1.5px solid #fff;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #fff 70%, transparent 70%) 1px 1px / calc(100% - 2px) calc(100% - 2px) no-repeat;
+}
+.camBrand {
+  position: absolute;
+  left: 0.8rem;
+  bottom: 0.35rem;
+  font-family: var(--poster);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: #cfcfd2;
+  text-transform: uppercase;
+}
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+.smallKey {
+  min-width: 2.4rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fafafa, #b3b3b6);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.3);
+  font: 700 0.55rem/1 var(--body);
+  text-align: center;
+  color: #333;
+}
+.dpad {
+  position: relative;
+  width: 5.2rem;
+  height: 5.2rem;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #fdfdfd, #b0b0b4);
+  box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.dBtn {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.6rem;
+  color: #555;
+  border-radius: 50%;
+}
+button.dBtn { cursor: pointer; }
+button.dBtn:hover:not(:disabled) { color: var(--ink); background: rgba(0, 0, 0, 0.06); }
+button.dBtn:disabled { opacity: 0.4; cursor: default; }
+.dLeft { left: 0.15rem; top: 50%; translate: 0 -50%; }
+.dRight { right: 0.15rem; top: 50%; translate: 0 -50%; }
+.dUp { top: 0.15rem; left: 50%; translate: -50% 0; opacity: 0.5; }
+.dDown { bottom: 0.15rem; left: 50%; translate: -50% 0; opacity: 0.5; }
+.dOk {
+  position: absolute;
+  inset: 50%;
+  width: 1.9rem;
+  height: 1.9rem;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #ececee, #9d9da1);
+  box-shadow: inset 0 1px 1px #fff, 0 1px 2px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+.dOk:hover:not(:disabled) { background: linear-gradient(160deg, #fff, #b5b5b9); }
+.dOk:active:not(:disabled) { translate: -50% -48%; }
+.dBtn:focus-visible, .dOk:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.camHint {
+  margin-top: 0.7rem;
+  font-family: var(--lcd);
+  font-size: 0.72rem;
+  text-align: center;
+  color: #555;
+  rotate: 4deg;
+}
+
+/* ─── Memo pad (grid notepad from the moodboard) ──────── */
+.memo {
+  grid-area: memo;
+  padding: 1.1rem 1.4rem 1.4rem;
+  background:
+    linear-gradient(#d4d7db 1px, transparent 1px) 0 0 / 16px 16px,
+    linear-gradient(90deg, #d4d7db 1px, transparent 1px) 0 0 / 16px 16px,
+    #fbfbfa;
+}
+.memoHead {
+  font-family: var(--poster);
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+.memoList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.1rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+.memoList li { display: flex; align-items: center; gap: 0.35rem; }
+.memoStar { width: 0.95rem; height: 0.95rem; color: #6d6d71; }
+
+/* ─── Photo roll: the moodboard ───────────────────────── */
+.roll {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+.rollHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 10px;
+  padding: 0.7rem 1rem;
+  background: var(--ink);
+  color: #f4f4f4;
+}
+.rollHead h2 { font-family: var(--poster); font-weight: 400; font-size: 1.4rem; }
+.rollHead span { font-family: var(--lcd); font-size: 0.85rem; letter-spacing: 0.1em; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+@media (min-width: 760px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--soft);
+  cursor: zoom-in;
+}
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  /* the soft, washed-out grey of the moodboard */
+  filter: grayscale(0.92) contrast(0.92) brightness(1.08);
+  transition: filter 0.5s, scale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.tile:hover img, .tile:focus-visible img { filter: none; scale: 1.04; }
+.tile:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.tileLabel {
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.45rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: var(--lcd);
+  font-size: 0.75rem;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  translate: 0 4px;
+  transition: opacity 0.3s, translate 0.3s;
+}
+.tileLabel span:last-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.tile:hover .tileLabel, .tile:focus-visible .tileLabel { opacity: 1; translate: 0; }
+
+.empty {
+  padding: 3rem 1rem;
+  border: 3px solid var(--ink);
+  background: var(--white);
+  text-align: center;
+  color: #555;
+}
+.empty strong { display: block; font-family: var(--lcd); font-size: 1.6rem; color: var(--ink); letter-spacing: 0.1em; }
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem 3.5rem;
+}
+.balloonSmall {
+  position: relative;
+  padding: 0.7rem 1.4rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--white);
+  font-weight: 700;
+}
+.footerCat { width: 4.5rem; rotate: 6deg; }
+
+/* ─── Tagged items: manga speech balloons ─────────────── */
+.tagsRoot {
+  --tp-line: #111;
+  --tp-line-w: 1.4;
+  --tp-pin: #111;
+  --tp-pin-ring: #fff;
+  --tp-pin-num: #fff;
+  --tp-gap: 22px;
+}
+.tagBubble {
+  position: relative;
+  padding: 0.85rem 1.3rem;
+  margin-bottom: 1.2rem;
+  background: #fff;
+  color: #111;
+  border: 2.2px solid #111;
+  border-radius: 50% / 46%;
+  text-align: center;
+  justify-items: center;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.18);
+}
+.tagName {
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.tagLink {
+  font-family: "DotGothic16", monospace;
+  font-size: 0.85rem;
+  color: #111;
+}
+.tagSource {
+  justify-self: center;
+  width: fit-content;
+  padding: 0.1rem 0.45rem;
+  border: 1.5px solid #111;
+  border-radius: 999px;
+  background: radial-gradient(#111 0.7px, transparent 0.9px) 0 0 / 4px 4px, #fff;
+  font-family: "DotGothic16", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.tagTail {
+  position: absolute;
+  left: 26%;
+  top: calc(100% - 2px);
+  width: 22px;
+  height: 18px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='22' viewBox='0 0 26 22'%3E %3Cpath d='M1 1 C 8 6, 12 12, 24 21 C 16 13, 14 7, 13 1' fill='%23fff' stroke='%23111' stroke-width='2.2' stroke-linejoin='round'/%3E %3Crect x='0' y='0' width='26' height='2.2' fill='%23fff'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* ─── Lightbox: a clean manga panel ───────────────────── */
+.lbDialog { background: #fff; color: #111; border: 3px solid #111; border-radius: 0; }
+.lbImage { background: radial-gradient(#111 0.8px, transparent 1px) 0 0 / 6px 6px, #ececea; }
+.lbCaption { font-family: "DotGothic16", monospace; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: #555; }
+.lbTitle { font-family: "Dela Gothic One", sans-serif; font-weight: 400; font-size: 2.1rem; line-height: 1.05; text-transform: lowercase; }
+.lbNotes { font-family: "Zen Kaku Gothic New", sans-serif; line-height: 1.7; color: #444; }
+.lbButton {
+  padding: 0.4rem 0.9rem;
+  border: 2px solid #111;
+  border-radius: 999px;
+  font-family: "DotGothic16", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: #111;
+  background: #fff;
+}
+.lbButton:hover { background: #111; color: #fff; }
+
+@keyframes glint {
+  0%, 70% { translate: -120% 0; }
+  85%, 100% { translate: 120% 0; }
+}
+@keyframes twinkle {
+  0%, 100% { scale: 1; rotate: 0deg; }
+  50% { scale: 1.12; rotate: 12deg; }
+}
+@keyframes lcdIn {
+  from { opacity: 0.2; filter: grayscale(1) brightness(1.6); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .clip::after, .burst, .lcdImg { animation: none; }
+  .tile img, .tileLabel { transition: none; }
+}

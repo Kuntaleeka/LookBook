@@ -164,7 +164,8 @@ export function GrungePage({ category, outfits }: GenrePageProps) {
                 </svg>
               </h2>
               <p className={s.hint}>
-                hover to bring the color back
+                <span className={s.hintHover}>hover to bring the color back</span>
+                <span className={s.hintTouch}>tap a fit to open it</span>
                 <svg className={s.hintArrow} viewBox="0 0 44 64" aria-hidden="true">
                   <path d="M8 4C30 14 34 34 22 58" />
                   <path d="M12 50l10 9 6-12" />

@@ -58,6 +58,37 @@ body {
   /* photos keep their own colours; just soften the glare a touch */
   filter: brightness(0.94);
 }
+/* no saved choice yet: follow the device's own light/dark setting */
+@media (prefers-color-scheme: dark) {
+  [data-studio]:not([data-theme]) {
+    color-scheme: dark;
+    --color-white: #1f1c1a;
+    --color-stone-50: #141211;
+    --color-stone-100: #262220;
+    --color-stone-200: #332f2c;
+    --color-stone-300: #4a4541;
+    --color-stone-400: #7d756f;
+    --color-stone-500: #a39b94;
+    --color-stone-600: #cfc9c3;
+    --color-stone-700: #e2ddd8;
+    --color-stone-800: #f0ece8;
+    --color-stone-900: #f7f4f1;
+    /* tinted notices: dark panels with light text */
+    --color-red-50: #3a1616;
+    --color-red-200: #6b2323;
+    --color-red-700: #ff9a94;
+    --color-red-800: #ffb3ad;
+    --color-amber-50: #33270d;
+    --color-amber-400: #f2b84b;
+    --color-amber-900: #f6d99a;
+    --color-emerald-50: #0f2e24;
+    --color-emerald-300: #3f9f80;
+    --color-emerald-700: #7fdcb8;
+  }
+  [data-studio]:not([data-theme]) img {
+    filter: brightness(0.94);
+  }
+}
 
 /* ─── Page transitions (see components/page-transitions.tsx) ─────────────── */
 
@@ -150,6 +181,103 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .lb-shot {
     animation: none;
+  }
+}
+
+/* ─── Phones only ────────────────────────────────────────────────────────
+   Everything below applies to phone-sized screens (or touch input) and leaves
+   laptops and tablets exactly as they are. */
+
+/* Outfit pop-up: fills the screen, with a compact footer pinned at the bottom */
+@media (max-width: 639px) {
+  dialog.lb-dialog {
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .lb-body {
+    min-height: 100%;
+  }
+  /* the photo area takes the spare room, so the footer sits at the bottom */
+  .lb-body > :first-child {
+    flex: 1 0 auto;
+    /* a lone photo (tags hidden) sits in the middle, not stuck to the top */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .lb-foot {
+    gap: 0.5rem;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+  .lb-foot > :first-child {
+    gap: 0.25rem;
+  }
+  .lb-foot h2 {
+    font-size: clamp(1.35rem, 6.4vw, 1.8rem) !important;
+    line-height: 1.05 !important;
+  }
+  /* long descriptions: two lines, so the photo keeps most of the screen */
+  .lb-notes {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: 0.95rem !important;
+    line-height: 1.3 !important;
+  }
+  /* one row of full-height buttons that are easy to hit with a thumb */
+  .lb-actions {
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+    margin-top: 0;
+    padding-top: 0.25rem;
+  }
+  .lb-actions button {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+    margin-left: 0;
+    padding-inline: 0.25rem !important;
+    white-space: nowrap;
+    font-size: clamp(0.78rem, 3.5vw, 0.95rem) !important;
+    letter-spacing: 0 !important;
+    rotate: none;
+  }
+  /* "Show tags (5)" is the longest label */
+  .lb-actions button[aria-pressed] {
+    flex-grow: 1.5;
+  }
+}
+
+/* Touch screens: small links and buttons get a larger invisible tap area */
+@media (pointer: coarse) {
+  :not([data-studio] *) > nav a,
+  footer a,
+  button[class*="__dot"],
+  button[class*="__dBtn"],
+  button[class*="__dOk"],
+  button[class*="__arrow"] {
+    position: relative;
+  }
+  :not([data-studio] *) > nav a::after,
+  footer a::after,
+  button[class*="__dot"]::after,
+  button[class*="__dBtn"]::after,
+  button[class*="__dOk"]::after,
+  button[class*="__arrow"]::after {
+    content: "";
+    position: absolute;
+    inset: -12px -8px;
+  }
+  button[class*="__dot"]::after {
+    inset: -16px -4px;
   }
 }
 

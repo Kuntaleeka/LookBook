@@ -327,6 +327,12 @@
   color: #d9ccc7;
   rotate: -4deg;
 }
+/* touch screens can't hover: say "tap" instead */
+.hintTouch { display: none; }
+@media (hover: none) {
+  .hintHover { display: none; }
+  .hintTouch { display: inline; }
+}
 .hintArrow {
   position: absolute;
   right: 0;

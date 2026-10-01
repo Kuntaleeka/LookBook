@@ -107,6 +107,7 @@ export function Lightbox({
   // Tags always start shown; hiding them lasts until the pop-up is closed.
   const [showTags, setShowTags] = useState(true);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const swipe = useRef<{ x: number; y: number } | null>(null);
   const item = index === null ? null : items[index];
   const tagCount = item?.items?.length ?? 0;
 
@@ -179,14 +180,28 @@ export function Lightbox({
           if (e.key === "ArrowLeft") step(-1);
         }}
         aria-label={item?.title}
-        className={`m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] overflow-auto p-0 backdrop:bg-black/70 backdrop:backdrop-blur-sm ${
+        onTouchStart={(e) => {
+          const t = e.touches[0];
+          swipe.current = e.touches.length === 1 ? { x: t.clientX, y: t.clientY } : null;
+        }}
+        onTouchEnd={(e) => {
+          // phones: swipe sideways to flip between looks
+          const start = swipe.current;
+          swipe.current = null;
+          if (!start || items.length < 2) return;
+          const t = e.changedTouches[0];
+          const dx = t.clientX - start.x;
+          const dy = t.clientY - start.y;
+          if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.8) step(dx < 0 ? 1 : -1);
+        }}
+        className={`lb-dialog m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] overflow-auto p-0 backdrop:bg-black/70 backdrop:backdrop-blur-sm ${
           tagCount > 0 || hasSet ? "max-w-6xl" : "max-w-5xl"
         } ${classes.dialog}`}
       >
         {item && (tagCount > 0 || hasSet) ? (
           // Tagged: photo with pins + bubbles across the top, details below.
           // "Hide tags" fades the pins and bubbles away and leaves the photo put.
-          <div className="flex flex-col bg-inherit">
+          <div className="lb-body flex flex-col bg-inherit">
             <div className={classes.image}>
               {showSet ? (
                 <PhotoSet key={item.imageUrl} shots={shots} alt={item.title} />
@@ -205,13 +220,13 @@ export function Lightbox({
             </div>
             {/* the title and buttons stay pinned to the bottom of the pop-up while
                 the photo, tags or photo set scroll behind them */}
-            <div className="sticky bottom-0 z-10 flex flex-col gap-3 bg-inherit p-6 shadow-[0_-12px_24px_-16px_rgba(0,0,0,0.45)] md:flex-row md:items-end md:justify-between md:gap-8 md:px-8">
+            <div className="lb-foot sticky bottom-0 z-10 flex flex-col gap-3 bg-inherit p-6 shadow-[0_-12px_24px_-16px_rgba(0,0,0,0.45)] md:flex-row md:items-end md:justify-between md:gap-8 md:px-8">
               <div className="flex flex-col gap-2">
                 <p className={classes.caption}>{item.caption}</p>
                 <h2 className={classes.title}>{item.title}</h2>
-                {item.notes && <p className={`whitespace-pre-line ${classes.notes}`}>{item.notes}</p>}
+                {item.notes && <p className={`lb-notes whitespace-pre-line ${classes.notes}`}>{item.notes}</p>}
               </div>
-              <div className="flex shrink-0 flex-wrap gap-2 pt-2">
+              <div className="lb-actions flex shrink-0 flex-wrap gap-2 pt-2">
                 {tagsButton}
                 {items.length > 1 && (
                   <>
@@ -230,18 +245,18 @@ export function Lightbox({
             </div>
           </div>
         ) : item ? (
-          <div className="grid gap-0 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+          <div className="lb-body grid gap-0 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
             {/* eslint-disable-next-line @next/next/no-img-element -- already sized on upload */}
             <img
               src={item.imageUrl}
               alt={item.title}
               className={`block max-h-[70dvh] w-full object-contain md:max-h-[88dvh] ${classes.image}`}
             />
-            <div className="flex flex-col gap-4 p-6 md:p-8">
+            <div className="lb-foot flex flex-col gap-4 bg-inherit p-6 md:p-8">
               <p className={classes.caption}>{item.caption}</p>
               <h2 className={classes.title}>{item.title}</h2>
               {item.notes && <p className={`whitespace-pre-line ${classes.notes}`}>{item.notes}</p>}
-              <div className="mt-auto flex flex-wrap gap-2 pt-6">
+              <div className="lb-actions mt-auto flex flex-wrap gap-2 pt-6">
                 {tagsButton}
                 {items.length > 1 && (
                   <>

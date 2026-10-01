@@ -1,32 +1,34 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { savedMode, THEME_COOKIE, type Mode } from "./theme-mode";
 
-const KEY = "fashionops:studio-theme";
 const EVENT = "studio-theme-change";
-
-type Mode = "light" | "dark";
 
 function root() {
   return document.querySelector<HTMLElement>("[data-studio]");
 }
 function current(): Mode {
-  return root()?.dataset.theme === "dark" ? "dark" : "light";
+  const set = savedMode(root()?.dataset.theme);
+  return set ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 }
 function subscribe(onChange: () => void) {
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
   window.addEventListener(EVENT, onChange);
-  return () => window.removeEventListener(EVENT, onChange);
+  media.addEventListener("change", onChange);
+  return () => {
+    window.removeEventListener(EVENT, onChange);
+    media.removeEventListener("change", onChange);
+  };
 }
 
 /**
- * Runs before the studio paints (see layout.tsx), so the right mode is there
- * from the first frame: the saved choice, or else the device's own setting.
+ * Switches the studio between light and dark. Until it is pressed the studio
+ * follows the device's own setting; after that the choice is kept in a cookie
+ * for a year.
  */
-export const THEME_SCRIPT = `(function(){try{var s=localStorage.getItem(${JSON.stringify(KEY)});var d=s?s==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.currentScript.parentElement.dataset.theme=d?"dark":"light"}catch(e){}})()`;
-
-/** Switches the studio between light and dark, and remembers the choice. */
-export function ThemeToggle() {
-  const mode = useSyncExternalStore(subscribe, current, () => "light" as Mode);
+export function ThemeToggle({ initial }: { initial?: Mode }) {
+  const mode = useSyncExternalStore(subscribe, current, () => initial ?? "light");
   const next: Mode = mode === "dark" ? "light" : "dark";
 
   return (
@@ -35,18 +37,17 @@ export function ThemeToggle() {
       onClick={() => {
         const el = root();
         if (el) el.dataset.theme = next;
-        try {
-          localStorage.setItem(KEY, next);
-        } catch {
-          // private mode: the choice just won't be remembered
-        }
+        document.cookie = `${THEME_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
         window.dispatchEvent(new Event(EVENT));
       }}
       aria-label={`Switch to ${next} mode`}
+      suppressHydrationWarning
       className="flex items-center gap-2 rounded-lg border border-stone-300 px-3 py-1.5 text-sm text-stone-700 hover:border-stone-500"
     >
-      <span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span>
-      {mode === "dark" ? "Light mode" : "Dark mode"}
+      <span aria-hidden="true" suppressHydrationWarning>
+        {mode === "dark" ? "☀" : "☾"}
+      </span>
+      <span suppressHydrationWarning>{mode === "dark" ? "Light mode" : "Dark mode"}</span>
     </button>
   );
 }

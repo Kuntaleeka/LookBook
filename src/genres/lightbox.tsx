@@ -203,13 +203,9 @@ export function Lightbox({
                 />
               )}
             </div>
-            {/* with tags hidden, the title and buttons stay pinned to the bottom
-                of the pop-up while the photos scroll behind them */}
-            <div
-              className={`flex flex-col gap-3 bg-inherit p-6 md:flex-row md:items-end md:justify-between md:gap-8 md:px-8 ${
-                showTags ? "" : "sticky bottom-0 z-10 shadow-[0_-12px_24px_-16px_rgba(0,0,0,0.45)]"
-              }`}
-            >
+            {/* the title and buttons stay pinned to the bottom of the pop-up while
+                the photo, tags or photo set scroll behind them */}
+            <div className="sticky bottom-0 z-10 flex flex-col gap-3 bg-inherit p-6 shadow-[0_-12px_24px_-16px_rgba(0,0,0,0.45)] md:flex-row md:items-end md:justify-between md:gap-8 md:px-8">
               <div className="flex flex-col gap-2">
                 <p className={classes.caption}>{item.caption}</p>
                 <h2 className={classes.title}>{item.title}</h2>

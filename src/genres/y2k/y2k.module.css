@@ -1,0 +1,667 @@
+/* Y2K: a 2000s bedroom-wall collage. Pink zebra, rhinestones, a flip phone
+   that opens, a burned CD that spins as you scroll, paper strips, a wish list
+   and stickers. Hot pink, baby pink, silver and black. */
+.root {
+  --hot: #ff3d9a;
+  --pink: #ffb6d9;
+  --baby: #ffe1f0;
+  --ink: #2a0c1e;
+  --silver: #c9c9d2;
+  --goth: "Pirata One", "UnifrakturMaguntia", serif;
+  --hand: "Caveat", cursive;
+  --pixel: "VT323", monospace;
+  --caps: "Bebas Neue", "Archivo Narrow", sans-serif;
+  --scroll: 0;
+
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: clip;
+  color: var(--ink);
+  font-family: var(--hand);
+  background: var(--pink);
+}
+
+/* rhinestones: a tight grid of little faceted gems */
+.root {
+  --gems:
+    radial-gradient(circle at 34% 30%, #fff 0 9%, rgba(255, 255, 255, 0) 22%),
+    radial-gradient(circle at 50% 50%, #ffd1e8 0 30%, #ff7dbb 48%, #d63f8c 60%, transparent 63%);
+}
+
+/* ─── Top: the collage wall ───────────────────────────── */
+.top {
+  position: relative;
+  isolation: isolate;
+  padding-bottom: 4rem;
+}
+/* pink zebra print over real pink glitter, so the stripes sit on a sparkly,
+   rhinestoned surface (the glitter is washed out to baby pink) */
+.top::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='z' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.005 .06' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .13  0 0 0 0 .04  0 0 0 0 .11  60 0 0 0 -30.6'/%3E%3C/filter%3E%3Crect width='520' height='520' filter='url%28%23z%29'/%3E%3C/svg%3E") 0 0 / 520px 520px,
+    linear-gradient(rgba(255, 214, 234, 0.62), rgba(255, 196, 226, 0.55)),
+    url("/genres/y2k/pink-glitter.jpg") center / 900px auto,
+    #f7a8d2;
+}
+/* soft flash-photo haze, like an old digicam shot */
+.top::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 30%, rgba(255, 255, 255, 0.5), transparent 70%),
+    linear-gradient(180deg, rgba(255, 225, 240, 0.25), rgba(255, 182, 217, 0.1) 60%, var(--pink) 100%);
+}
+.sparkles {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+.spark {
+  position: absolute;
+  aspect-ratio: 1;
+  filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 9px rgba(255, 110, 180, 0.9));
+  animation: twinkle 2.6s ease-in-out infinite;
+  opacity: 0;
+}
+.topbar {
+  display: flex;
+  justify-content: center;
+  padding: 1.1rem 1rem 0;
+}
+.back {
+  padding: 0.15rem 0.9rem 0.25rem;
+  border-radius: 999px;
+  background: linear-gradient(#fff, #ffd3e8);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--hot), 0 4px 0 rgba(194, 51, 122, 0.45);
+  font-family: var(--pixel);
+  font-size: 1.15rem;
+  color: #b01a6a;
+  text-decoration: none;
+}
+.back:hover { background: #fff; }
+
+.collage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 2.5rem;
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 2rem;
+}
+@media (min-width: 900px) {
+  .collage {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.8fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 2rem 2.5rem;
+    padding: 3rem 2rem 3rem;
+  }
+  .titleBlock { grid-column: 1; grid-row: 1; justify-self: start; }
+  .phone { grid-column: 2; grid-row: 1 / span 2; }
+  .wishlist { grid-column: 3; grid-row: 1; }
+  .cd { grid-column: 1; grid-row: 2; justify-self: start; }
+  .sticky { grid-column: 3; grid-row: 2; justify-self: end; }
+}
+
+/* title: cut-out paper strips around a rhinestone blackletter name */
+.titleBlock {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+}
+.strip {
+  position: relative;
+  z-index: 2;
+  padding: 0.15rem 0.9rem 0.25rem;
+  background: #fff;
+  font-family: var(--caps);
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  color: #111;
+  box-shadow: 2px 3px 0 rgba(60, 10, 40, 0.3);
+}
+.strip1 { rotate: -3deg; }
+.strip2 { rotate: 2deg; margin-left: clamp(1rem, 8vw, 6rem); }
+.title {
+  position: relative;
+  z-index: 2;
+  font-family: var(--goth);
+  font-weight: 400;
+  font-size: clamp(4.6rem, 14vw, 10rem);
+  line-height: 0.95;
+  /* letters studded with rhinestones, outlined in silver */
+  background: var(--gems) 0 0 / 9px 9px, linear-gradient(#ff8fc6, #e23b8f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 2px #fff;
+  filter: drop-shadow(0 0 1px #8d8d9a) drop-shadow(3px 4px 0 rgba(120, 20, 80, 0.55));
+}
+.lede {
+  position: relative;
+  z-index: 2;
+  max-width: 26rem;
+  margin-top: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  background: rgba(255, 255, 255, 0.88);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  rotate: -1deg;
+  box-shadow: 2px 3px 0 rgba(60, 10, 40, 0.25);
+}
+.titleKiss {
+  position: absolute;
+  z-index: 1;
+  right: -1.5rem;
+  top: 18%;
+  width: clamp(6rem, 13vw, 9.5rem);
+  color: #e0267f;
+  rotate: 16deg;
+  opacity: 0.9;
+}
+
+/* ─── The flip phone ──────────────────────────────────── */
+.phone {
+  position: relative;
+  display: block;
+  width: min(15rem, 62vw);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  perspective: 1100px;
+  rotate: 6deg;
+  filter: drop-shadow(0 22px 22px rgba(120, 20, 80, 0.4));
+}
+.phone:focus-visible { outline: 3px solid #fff; outline-offset: 8px; border-radius: 2rem; }
+.lid, .hinge, .pad, .phoneHint { display: block; }
+.lid {
+  position: relative;
+  z-index: 3;
+  aspect-ratio: 10 / 11;
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+  /* shut: folded down over the keypad */
+  transform: rotateX(-176deg);
+  transition: transform 0.9s cubic-bezier(0.3, 1.25, 0.5, 1);
+}
+/* open: the lid swings up with a little bounce */
+.phoneOpen .lid { transform: rotateX(-12deg); }
+/* snapping shut is quicker, with no bounce */
+.phone:not(.phoneOpen) .lid { transition: transform 0.45s cubic-bezier(0.5, 0, 0.9, 0.6); }
+.lidInside,
+.lidOutside {
+  position: absolute;
+  inset: 0;
+  border-radius: 2.2rem 2.2rem 0.5rem 0.5rem;
+  backface-visibility: hidden;
+}
+/* inside of the lid: the screen */
+.lidInside {
+  display: grid;
+  place-items: center;
+  padding: 1.2rem 1rem 0.9rem;
+  background: linear-gradient(160deg, #ffd0e6, #ff9fcd 60%, #f07db6);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.55), inset 0 -8px 12px rgba(180, 40, 110, 0.35);
+}
+.screen {
+  display: grid;
+  align-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem 0.6rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 4px solid #2b2430;
+  background: linear-gradient(170deg, #dfeee6, #b9d3cb);
+  box-shadow: inset 0 0 14px rgba(40, 60, 60, 0.35);
+  font-family: var(--pixel);
+  color: #1d2a2a;
+  text-align: center;
+}
+.screen { position: relative; overflow: hidden; }
+.screenBar { position: relative; z-index: 2; font-size: 0.8rem; text-align: left; letter-spacing: 0.02em; }
+/* the fit on screen: a little low-res, like a 2000s phone camera */
+.screenPic {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  filter: contrast(1.08) saturate(1.1);
+  animation: pic-in 0.5s ease-out 0.35s backwards;
+}
+.screen:has(.screenPic) .screenBar {
+  margin: -0.5rem -0.6rem 0;
+  padding: 0.2rem 0.5rem;
+  background: rgba(20, 16, 24, 0.55);
+  color: #fff;
+}
+.screenCaption {
+  position: relative;
+  z-index: 2;
+  margin: 0 -0.6rem -0.6rem;
+  padding: 0.15rem 0.4rem 0.25rem;
+  background: rgba(20, 16, 24, 0.6);
+  font-size: 1.05rem;
+  line-height: 1;
+  color: #ffd1e8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.screenText { font-size: clamp(1.3rem, 3.4vw, 1.75rem); line-height: 1; overflow-wrap: anywhere; }
+.screenSub { font-size: 1rem; opacity: 0.75; }
+/* outside of the lid: covered in rhinestones, with a little clock window */
+.lidOutside {
+  display: grid;
+  place-items: center;
+  transform: rotateX(180deg);
+  background: var(--gems) 0 0 / 11px 11px, linear-gradient(160deg, #ff9fcd, #e85fa3);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.6);
+}
+.outerDisplay {
+  padding: 0.35rem 1.1rem;
+  border-radius: 0.4rem;
+  border: 3px solid #fff;
+  background: #1c1620;
+  font-family: var(--pixel);
+  font-size: 1.5rem;
+  color: #ffb6d9;
+}
+.hinge {
+  position: relative;
+  z-index: 2;
+  height: 0.9rem;
+  margin: -0.2rem 0.6rem;
+  border-radius: 999px;
+  background: linear-gradient(#f4f4f8, #a9a9b6 55%, #dcdce4);
+  box-shadow: 0 2px 3px rgba(80, 20, 60, 0.4);
+}
+.base {
+  aspect-ratio: 10 / 11;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.6rem;
+  padding: 0.9rem 1.1rem 1.4rem;
+  border-radius: 0.5rem 0.5rem 2.2rem 2.2rem;
+  background: var(--gems) 0 0 / 11px 11px, linear-gradient(200deg, #ff9fcd, #e85fa3);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.6);
+}
+/* the round navigation pad */
+.pad {
+  justify-self: center;
+  width: 42%;
+  aspect-ratio: 1.5;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, #fff 0 22%, #d7d7e0 23% 30%, transparent 31%),
+    linear-gradient(#fbfbfd, #b9b9c6);
+  box-shadow: 0 2px 0 #8d8d9a, inset 0 0 0 2px #fff;
+}
+.keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.3rem 0.35rem;
+  padding: 0.5rem;
+  border-radius: 0.8rem 0.8rem 1.6rem 1.6rem;
+  background: linear-gradient(#f7f7fa, #c6c6d1);
+  box-shadow: inset 0 0 0 2px #fff, 0 2px 0 #8d8d9a;
+}
+.keys span {
+  display: grid;
+  place-items: center;
+  border-radius: 0.5rem;
+  background: linear-gradient(#ffffff, #dedee6);
+  box-shadow: 0 1.5px 0 #9a9aa6;
+  font-family: var(--pixel);
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #5a4a66;
+}
+/* a heart charm on a bead chain, hanging off the hinge */
+.charm {
+  position: absolute;
+  right: -1rem;
+  top: 46%;
+  width: 1.7rem;
+  aspect-ratio: 24 / 44;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='44' viewBox='0 0 24 44'%3E%3Cg fill='%23d9d9e0' stroke='%239a9aa6' stroke-width='.5'%3E%3Ccircle cx='12' cy='2.4' r='2'/%3E%3Ccircle cx='12' cy='7.4' r='2'/%3E%3Ccircle cx='12' cy='12.4' r='2'/%3E%3Ccircle cx='12' cy='17.4' r='2'/%3E%3C/g%3E%3Cpath d='M12 42 C4 35.6 1 31.6 1 27.4 C1 23.8 3.6 21.4 6.6 21.4 C8.8 21.4 10.8 22.6 12 24.6 C13.2 22.6 15.2 21.4 17.4 21.4 C20.4 21.4 23 23.8 23 27.4 C23 31.6 20 35.6 12 42Z' fill='%23ff5fa8' stroke='%23c2337a' stroke-width='.8'/%3E%3Cpath d='M5.4 26.4 C5.6 24.8 6.8 23.8 8.4 24' stroke='%23fff' stroke-width='1.4' stroke-linecap='round' fill='none'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform-origin: 50% 0;
+  animation: swing 2.4s ease-in-out infinite alternate;
+}
+
+.phoneHint {
+  margin-top: 0.7rem;
+  font-family: var(--pixel);
+  font-size: 1.1rem;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 0 #b01a6a, 0 0 8px rgba(176, 26, 106, 0.6);
+}
+
+/* ─── Wish list, CD, stickers ─────────────────────────── */
+.wishlist {
+  position: relative;
+  width: min(100%, 17rem);
+  padding: 1rem 1.2rem 1.3rem;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 1.85rem, rgba(120, 90, 80, 0.25) 1.85rem calc(1.85rem + 1px)),
+    #f3ead9;
+  background-position: 0 0.9rem, 0 0;
+  rotate: 3deg;
+  box-shadow: 3px 4px 0 rgba(60, 10, 40, 0.28);
+  font-size: 1.6rem;
+  line-height: 1.85rem;
+}
+.wishHead { font-weight: 600; }
+.wishlist ol { margin-left: 1.4rem; list-style: decimal; }
+.listKiss {
+  position: absolute;
+  right: -1.4rem;
+  bottom: -0.9rem;
+  width: 5.2rem;
+  color: #e0267f;
+  rotate: -12deg;
+}
+
+.cd {
+  position: relative;
+  width: min(15rem, 60vw);
+  aspect-ratio: 1;
+  filter: drop-shadow(0 12px 14px rgba(120, 20, 80, 0.35));
+}
+/* the disc turns with the page */
+.disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--pink) 0 7%, #fff 7.5% 9%, rgba(255, 255, 255, 0.5) 9.5% 17%, transparent 17.5%),
+    conic-gradient(from 20deg, #f4f4f8, #c7c7d3, #ffd9ec, #f4f4f8, #b9d9ff, #e9e9f0, #ffe9a8, #c7c7d3, #f4f4f8);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 0 0 3px rgba(140, 140, 155, 0.5);
+  /* turns with the page, plus however far it has been rubbed round */
+  --rub: 0;
+  rotate: calc(var(--scroll) * 0.35deg + var(--rub) * 1deg);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.disc:active { cursor: grabbing; }
+.cdHint {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 0.4rem);
+  translate: -50% 0;
+  white-space: nowrap;
+  font-family: var(--pixel);
+  font-size: 1.1rem;
+  color: #fff;
+  text-shadow: 0 1px 0 #b01a6a, 0 0 8px rgba(176, 26, 106, 0.6);
+  pointer-events: none;
+}
+.cdText {
+  pointer-events: none;
+  position: absolute;
+  left: 12%;
+  top: 16%;
+  max-width: 62%;
+  font-size: 1.35rem;
+  line-height: 1.1;
+  color: #4a3a5a;
+  rotate: -8deg;
+}
+.heartSticker {
+  position: absolute;
+  left: clamp(0.5rem, 3vw, 2rem);
+  bottom: -1.5rem;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 7rem;
+  aspect-ratio: 1.1;
+  rotate: -10deg;
+  font-size: 1.3rem;
+  line-height: 1;
+  text-align: center;
+  color: #5a1040;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 110 100'%3E%3Cpath d='M55 96 C20 68 4 50 4 30 C4 14 16 4 30 4 C41 4 50 10 55 20 C60 10 69 4 80 4 C94 4 106 14 106 30 C106 50 90 68 55 96Z' fill='%23e79ad0' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E") center / contain no-repeat;
+  filter: drop-shadow(2px 3px 0 rgba(60, 10, 40, 0.25));
+}
+.heartSticker span { translate: 0 -0.4rem; }
+.sticky {
+  padding: 1.2rem 1.4rem 1.6rem;
+  background: linear-gradient(170deg, #ff8fc4, #ff6fb0);
+  rotate: -4deg;
+  font-size: 1.9rem;
+  line-height: 1.05;
+  color: #5a1040;
+  box-shadow: 3px 5px 0 rgba(60, 10, 40, 0.3);
+}
+
+/* ─── Gallery ─────────────────────────────────────────── */
+.gallery {
+  position: relative;
+  isolation: isolate;
+  padding: 3.5rem 1.25rem 5rem;
+  background: linear-gradient(180deg, var(--pink), #ff7dbb 30%, #ff5fa8);
+}
+/* a faint field of rhinestones, fading in */
+.gallery::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gems) 0 0 / 14px 14px;
+  opacity: 0.22;
+  -webkit-mask: linear-gradient(transparent, #000 12rem);
+  mask: linear-gradient(transparent, #000 12rem);
+}
+.galleryInner { max-width: 74rem; margin: 0 auto; }
+.sectionTitle {
+  text-align: center;
+  font-family: var(--goth);
+  font-weight: 400;
+  font-size: clamp(3.4rem, 8vw, 5.4rem);
+  line-height: 1;
+  color: #fff;
+  -webkit-text-stroke: 1.5px #b01a6a;
+  filter: drop-shadow(3px 4px 0 rgba(120, 20, 80, 0.55));
+}
+.sectionSub {
+  margin: 0.3rem 0 2.8rem;
+  text-align: center;
+  font-family: var(--pixel);
+  font-size: 1.3rem;
+  color: #fff;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.6rem 1.25rem;
+  align-items: start;
+}
+@media (min-width: 900px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3.5rem 2.5rem; } }
+.print {
+  position: relative;
+  display: block;
+  padding: 0.6rem 0.6rem 0;
+  background: #fff;
+  text-align: center;
+  color: var(--ink);
+  rotate: var(--tilt, 0deg);
+  box-shadow: 4px 6px 0 rgba(120, 20, 80, 0.35);
+  cursor: zoom-in;
+  transition: rotate 0.3s, translate 0.3s, box-shadow 0.3s;
+  will-change: transform;
+}
+.print:hover, .print:focus-visible {
+  rotate: 0deg;
+  translate: 0 -6px;
+  box-shadow: 6px 12px 0 rgba(120, 20, 80, 0.35), 0 0 0 3px #fff, 0 0 0 5px var(--hot);
+}
+.print:focus-visible { outline: none; }
+/* a rhinestone star sticker on the corner */
+.star {
+  position: absolute;
+  z-index: 2;
+  top: -1.1rem;
+  right: -0.9rem;
+  width: 2.8rem;
+  aspect-ratio: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffffff'/%3E%3Cstop offset='.5' stop-color='%23c9c9d2'/%3E%3Cstop offset='1' stop-color='%238d8d9a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M24 2 L29.6 17 L46 18 L33 28.4 L37.6 44 L24 35 L10.4 44 L15 28.4 L2 18 L18.4 17Z' fill='url%28%23g%29' stroke='%237c7c88' stroke-width='1'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='24' cy='12' r='1.6'/%3E%3Ccircle cx='18' cy='22' r='1.4'/%3E%3Ccircle cx='30' cy='22' r='1.4'/%3E%3Ccircle cx='24' cy='28' r='1.6'/%3E%3Ccircle cx='15' cy='35' r='1.2'/%3E%3Ccircle cx='33' cy='35' r='1.2'/%3E%3Ccircle cx='10' cy='20' r='1.1'/%3E%3Ccircle cx='38' cy='20' r='1.1'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  rotate: 14deg;
+  filter: drop-shadow(0 2px 2px rgba(60, 10, 40, 0.4));
+}
+.photo { display: block; overflow: hidden; background: #f3c9df; }
+.photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* a touch of early-digicam flash */
+  filter: saturate(1.08) contrast(1.05) brightness(1.03);
+}
+.printTitle {
+  display: block;
+  padding: 0.5rem 0.2rem 0.7rem;
+  font-size: clamp(1.4rem, 2.6vw, 1.8rem);
+  line-height: 1;
+}
+.empty {
+  max-width: 24rem;
+  margin: 0 auto;
+  padding: 1.6rem 1.4rem;
+  text-align: center;
+  background: #fff;
+  font-size: 1.4rem;
+  rotate: -1.5deg;
+  box-shadow: 4px 6px 0 rgba(120, 20, 80, 0.35);
+}
+.empty strong { display: block; font-family: var(--pixel); font-weight: 400; font-size: 2rem; color: #b01a6a; }
+
+.footer {
+  display: grid;
+  justify-items: center;
+  padding: 1.5rem 1rem 3rem;
+  background: #ff5fa8;
+  font-size: 2.2rem;
+  color: #fff;
+}
+.footKiss { width: 5.5rem; color: #b0115f; rotate: -8deg; }
+
+/* ─── Tagged items: text messages on a rhinestoned phone screen ─ */
+.tagsRoot {
+  --tp-line: rgba(176, 26, 106, 0.7);
+  --tp-line-w: 1.2;
+  --tp-dash: 1 4;
+  --tp-pin: #ff3d9a;
+  --tp-pin-ring: #fff;
+  --tp-pin-num: #fff;
+  --tp-gap: 40px;
+}
+.tagBubble {
+  position: relative;
+  padding: 0.55rem 0.8rem 0.65rem;
+  color: #1d2a2a;
+  /* LCD screen inside a gem-studded pink bezel */
+  border: 8px solid transparent;
+  border-radius: 16px;
+  background:
+    linear-gradient(170deg, #e4f1ea, #c2d9d1) padding-box,
+    radial-gradient(circle at 34% 30%, #fff 0 9%, rgba(255, 255, 255, 0) 22%) 0 0 / 8px 8px border-box,
+    radial-gradient(circle at 50% 50%, #ffd1e8 0 30%, #ff7dbb 48%, #d63f8c 60%, transparent 63%) 0 0 / 8px 8px border-box,
+    linear-gradient(#ff9fcd, #e85fa3) border-box;
+  box-shadow: 0 0 0 2px #fff, 3px 5px 0 rgba(120, 20, 80, 0.3);
+  margin-bottom: 2rem;
+}
+/* signal and battery, top right of the screen */
+.tagSignal {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.5rem;
+  font-family: "VT323", monospace;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: #3f5a55;
+}
+.tagSignal::before { content: "▂▄▆ ▮▮▮"; }
+/* a heart charm dangling from the corner */
+.tagCharm {
+  position: absolute;
+  left: 0.9rem;
+  top: calc(100% + 6px);
+  width: 1.15rem;
+  aspect-ratio: 24 / 44;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='44' viewBox='0 0 24 44'%3E%3Cg fill='%23d9d9e0' stroke='%239a9aa6' stroke-width='.5'%3E%3Ccircle cx='12' cy='2.4' r='2'/%3E%3Ccircle cx='12' cy='7.4' r='2'/%3E%3Ccircle cx='12' cy='12.4' r='2'/%3E%3Ccircle cx='12' cy='17.4' r='2'/%3E%3C/g%3E%3Cpath d='M12 42 C4 35.6 1 31.6 1 27.4 C1 23.8 3.6 21.4 6.6 21.4 C8.8 21.4 10.8 22.6 12 24.6 C13.2 22.6 15.2 21.4 17.4 21.4 C20.4 21.4 23 23.8 23 27.4 C23 31.6 20 35.6 12 42Z' fill='%23ff5fa8' stroke='%23c2337a' stroke-width='.8'/%3E%3Cpath d='M5.4 26.4 C5.6 24.8 6.8 23.8 8.4 24' stroke='%23fff' stroke-width='1.4' stroke-linecap='round' fill='none'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform-origin: 50% 0;
+  animation: swing 2.2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.tagBubble:nth-child(even) .tagCharm { animation-delay: -1.1s; }
+.tagName { font-family: "VT323", monospace; font-weight: 400; font-size: 1.35rem; line-height: 1; }
+.tagLink { font-family: "VT323", monospace; font-size: 1.1rem; color: #b01a6a; }
+.tagSource {
+  justify-self: start;
+  font-family: "VT323", monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4d6a64;
+}
+.tagSource::before { content: "✉ from: "; }
+
+/* ─── Lightbox ────────────────────────────────────────── */
+.lbDialog {
+  background: #fff0f7;
+  color: #2a0c1e;
+  border: 4px solid #fff;
+  border-radius: 22px;
+  box-shadow: 0 0 0 3px #ff3d9a, 0 40px 80px -30px rgba(120, 20, 80, 0.8);
+}
+.lbImage { background: linear-gradient(#ffd9ec, #ffc2df); }
+.lbCaption { font-family: "VT323", monospace; font-size: 1.15rem; color: #b01a6a; }
+.lbTitle { font-family: "Pirata One", serif; font-weight: 400; font-size: 2.8rem; line-height: 1; color: #d6247f; }
+.lbNotes { font-family: "Caveat", cursive; font-size: 1.5rem; line-height: 1.2; }
+.lbButton {
+  padding: 0.25rem 1rem 0.35rem;
+  border-radius: 999px;
+  border: 2px solid #fff;
+  background: linear-gradient(#ff8fc6, #ff3d9a);
+  box-shadow: 0 0 0 1.5px #d6247f, 0 3px 0 rgba(176, 26, 106, 0.6);
+  font-family: "VT323", monospace;
+  font-size: 1.15rem;
+  color: #fff;
+  transition: translate 0.15s, box-shadow 0.15s;
+}
+.lbButton:hover { translate: 0 2px; box-shadow: 0 0 0 1.5px #d6247f, 0 1px 0 rgba(176, 26, 106, 0.6); }
+
+@keyframes pic-in {
+  from { opacity: 0; filter: brightness(2.2) contrast(1.08) saturate(1.1); }
+}
+@keyframes swing {
+  from { rotate: -12deg; }
+  to { rotate: 12deg; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0; scale: 0.3; rotate: 0deg; }
+  50% { opacity: 1; scale: 1; rotate: 45deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lid, .phone:not(.phoneOpen) .lid { transition: none; }
+  .screenPic { animation: none; }
+  .charm, .tagCharm { animation: none; }
+  .spark { animation: none; opacity: 0.8; scale: 0.7; }
+  .print, .lbButton { transition: none; }
+}

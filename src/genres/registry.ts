@@ -4,6 +4,7 @@ import { GothPage } from "./goth/page";
 import { GrungePage } from "./grunge/page";
 import { OfficeSirenPage } from "./office-siren/page";
 import { WinterFallPage } from "./winter-fall/page";
+import { Y2KPage } from "./y2k/page";
 import type { GenreDesign } from "./types";
 
 // Keyed by category slug for now. A later migration adds a per-category
@@ -50,6 +51,13 @@ export const GENRE_DESIGNS: Record<string, GenreDesign> = {
     fonts: ["Cormorant Garamond", "Archivo Narrow", "Caveat"],
     background: "#2a1d15",
     Page: WinterFallPage,
+  },
+  y2k: {
+    id: "y2k",
+    label: "Y2K",
+    fonts: ["Pirata One", "Caveat", "VT323", "Bebas Neue"],
+    background: "#ffb6d9",
+    Page: Y2KPage,
   },
 };
 

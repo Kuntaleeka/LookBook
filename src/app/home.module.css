@@ -312,6 +312,32 @@
   background: #c4692b;
 }
 
+/* y2k: pink zebra, a rhinestone blackletter name, a white print */
+.g_y2k .bg {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='z' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.005 .06' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .13  0 0 0 0 .04  0 0 0 0 .11  60 0 0 0 -30.6'/%3E%3C/filter%3E%3Crect width='520' height='520' filter='url%28%23z%29'/%3E%3C/svg%3E") 0 0 / 420px 420px,
+    linear-gradient(160deg, #ffc4e1, #f7a8d2 55%, #e9a6de);
+}
+.g_y2k .bgWord {
+  font-family: "Pirata One", serif;
+  font-size: 9rem;
+  color: rgba(255, 255, 255, 0.7);
+  -webkit-text-stroke: 1.5px rgba(176, 26, 106, 0.6);
+}
+.g_y2k .portraitFrame {
+  border: 8px solid #fff;
+  border-bottom-width: 8px;
+  outline: 3px solid #ff3d9a;
+  rotate: 2deg;
+}
+.g_y2k .cardName {
+  font-family: "Pirata One", serif;
+  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+  color: #fff;
+  -webkit-text-stroke: 1px #b01a6a;
+  text-shadow: 2px 3px 0 rgba(120, 20, 80, 0.6);
+}
+
 .g_default .bg { background: linear-gradient(160deg, #2a2a2e, #111); }
 .g_default .bgWord { font-size: 8rem; font-weight: 700; color: rgba(255, 255, 255, 0.08); }
 

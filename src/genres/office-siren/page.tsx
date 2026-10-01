@@ -127,7 +127,7 @@ export function OfficeSirenPage({ category, outfits }: GenrePageProps) {
                 name: s.tagName,
                 link: s.tagLink,
                 source: s.tagSource,
-                extras: [s.tagHeel],
+                extras: [s.tagLegs],
               },
             }}
           >

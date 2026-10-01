@@ -373,7 +373,7 @@
   --tp-pin: #c8141c;
   --tp-pin-ring: #fff;
   --tp-pin-num: #fff;
-  --tp-gap: 64px;
+  --tp-gap: 82px;
 }
 .tagBubble {
   padding: 0.6rem 0.85rem 0.7rem;
@@ -382,50 +382,25 @@
   border-left: 3px solid #c8141c;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 12px 24px -16px rgba(0, 0, 0, 0.45);
   position: relative;
-  /* room underneath for the heel to hang */
-  margin-bottom: 3.9rem;
+  /* room underneath for the legs holding the note up */
+  margin-bottom: 5rem;
 }
-/* a burgundy patent kitten-heel slingback, hanging off each note by a
-   little silver chain, swinging gently like a bag charm */
-.tagHeel {
+/* crossed legs in black stiletto ankle boots (red soles) at the bottom-right
+   corner: one stands upside down under the note, holding it up on its heel
+   and sole, its calf bending away; the other crosses in front of it and kicks
+   up over the note, swaying a little (animated inside the SVG) */
+.tagLegs {
+  --legs-w: 5.6rem;
   position: absolute;
   z-index: 3;
-  top: 100%;
-  right: 1.6rem;
-  width: 2px;
-  height: 1.05rem;
-  background: repeating-linear-gradient(#a7a7ab 0 3px, #5d5d61 3px 3.5px, transparent 3.5px 4.5px);
-  transform-origin: 50% 0;
-  animation: dangle 2.8s ease-in-out infinite alternate;
+  right: 0.2rem;
+  /* the note's bottom edge sits 34/120 of the way down the drawing */
+  top: calc(100% - var(--legs-w) * 34 / 120);
+  width: var(--legs-w);
+  aspect-ratio: 120 / 134;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='134' viewBox='0 0 120 134'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%23d3a07e'/%3E%3Cstop offset='.42' stop-color='%23f1d0b6'/%3E%3Cstop offset='1' stop-color='%23c99473'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23050506'/%3E%3Cstop offset='.45' stop-color='%2326262a'/%3E%3Cstop offset='1' stop-color='%230b0b0c'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='.76' stop-color='%23fff'/%3E%3Cstop offset='1' stop-color='%23000'/%3E%3C/linearGradient%3E%3Cmask id='m'%3E%3Crect width='120' height='134' fill='url%28%23f%29'/%3E%3C/mask%3E%3Cstyle%3E.o%7Btransform-box:view-box%3Btransform-origin:78px 150px%3Banimation:k 2.6s ease-in-out infinite alternate%7D%40keyframes k%7Bfrom%7Btransform:rotate%28-2.5deg%29%7Dto%7Btransform:rotate%283deg%29%7D%7D%40media %28prefers-reduced-motion:reduce%29%7B.o%7Banimation:none%7D%7D%3C/style%3E%3C/defs%3E%3Cg mask='url%28%23m%29'%3E%3Cpath d='M53.6 84 C52.6 100 43 118 26 136 L48 136 C59 120 66.4 102 69.4 84Z' fill='url%28%23s%29'/%3E%3Cg transform='translate%2848 92%29 scale%281 -1%29'%3E%3Cpath d='M5 6 L22 6 C22.6 15 24 23 27.5 29.5 C33 38 43 46 52.5 51 C56.5 53.2 58.4 56 56.2 57.4 C50 58.6 42.5 58 37.5 55.8 C30 51.6 22.5 40.5 14.2 33.2 L13 31.2 C10.6 30.2 8.4 30 7 30 C5.8 22 5 14 5 6Z' fill='url%28%23b%29'/%3E%3Cpath d='M7 29.6 L13.2 31.4 C12 40 11.3 50 11.1 58 L9.3 58 C8.9 48 8.2 38 7 29.6Z' fill='%230a0a0b'/%3E%3Cpath d='M14.2 33.2 C22.5 40.5 30 51.6 37.5 55.8 C42.5 58 50 58.6 56.2 57.4' fill='none' stroke='%23c8141c' stroke-width='1.3' stroke-linecap='round'/%3E%3Cpath d='M19.4 9 C20 17 21.6 24 24.6 30 C29 37 37 43.6 46 48.6' fill='none' stroke='%23fff' stroke-opacity='.32' stroke-width='1.3' stroke-linecap='round'/%3E%3Cpath d='M5 6 L22 6' stroke='%232c2c2f' stroke-width='1.6'/%3E%3C/g%3E%3Cg class='o'%3E%3Cg transform='translate%2823.4 78.9%29 rotate%28-25%29 scale%281 -1%29'%3E%3Cpath d='M5.6 8 C3.4 -8 1.6 -40 1 -84 L25 -84 C25.4 -40 24 -8 21.4 8Z' fill='url%28%23s%29'/%3E%3Cpath d='M5 6 L22 6 C22.6 15 24 23 27.5 29.5 C33 38 43 46 52.5 51 C56.5 53.2 58.4 56 56.2 57.4 C50 58.6 42.5 58 37.5 55.8 C30 51.6 22.5 40.5 14.2 33.2 L13 31.2 C10.6 30.2 8.4 30 7 30 C5.8 22 5 14 5 6Z' fill='url%28%23b%29'/%3E%3Cpath d='M7 29.6 L13.2 31.4 C12 40 11.3 50 11.1 58 L9.3 58 C8.9 48 8.2 38 7 29.6Z' fill='%230a0a0b'/%3E%3Cpath d='M14.2 33.2 C22.5 40.5 30 51.6 37.5 55.8 C42.5 58 50 58.6 56.2 57.4' fill='none' stroke='%23c8141c' stroke-width='1.3' stroke-linecap='round'/%3E%3Cpath d='M19.4 9 C20 17 21.6 24 24.6 30 C29 37 37 43.6 46 48.6' fill='none' stroke='%23fff' stroke-opacity='.32' stroke-width='1.3' stroke-linecap='round'/%3E%3Cpath d='M5 6 L22 6' stroke='%232c2c2f' stroke-width='1.6'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E") center top / contain no-repeat;
   pointer-events: none;
 }
-/* the jump ring where the chain meets the note */
-.tagHeel::before {
-  content: "";
-  position: absolute;
-  top: -4px;
-  left: -3px;
-  width: 8px;
-  height: 8px;
-  border: 1.5px solid #a7a7ab;
-  border-radius: 50%;
-}
-/* the shoe, hung upside down by the tip of its heel, toe pointing down */
-.tagHeel::after {
-  content: "";
-  position: absolute;
-  top: calc(100% - 1.65rem);
-  left: calc(1px - 0.52rem);
-  width: 2.9rem;
-  aspect-ratio: 72 / 44;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='44' viewBox='0 0 72 44'%3E%3Cpath d='M8.6 25 L14.6 26.8 C13.6 31 13.2 36 14.2 41 L11.8 41 C10.4 36 9.4 30.6 8.6 25Z' fill='%233d0a12'/%3E%3Cpath d='M7 12 C6.4 18 7 23 9.6 26.4 C20 27.6 30 31 40 35.6 C48 39 58 40.4 66 39.6 C70 39.2 70.6 36.6 67 34.6 C60 30.8 50 26.6 42 24.4 C34 22.4 26 22.6 20 21.4 C14.4 20.2 10.6 17 7 12Z' fill='%236e1423'/%3E%3Cpath d='M8 13.4 C11 18 16 20.6 22 21.6 C16.6 22.8 11.6 21.4 8.4 18.4Z' fill='%23a83246'/%3E%3Cpath d='M9.6 26.4 C20 27.6 30 31 40 35.6 C48 39 58 40.4 66 39.6' fill='none' stroke='%232a050b' stroke-width='1.4'/%3E%3Cpath d='M7 12 C11 8.6 17.6 10.6 21.6 15' fill='none' stroke='%236e1423' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M44 27.6 C52 29.6 59 32.6 64 35.4' fill='none' stroke='%23fff' stroke-opacity='.55' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  transform-origin: 0.52rem 1.65rem;
-  rotate: 112deg;
-  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.25));
-}
-/* point at the note and it swings harder */
-.tagBubble:hover .tagHeel { animation-duration: 0.9s; }
-
 .tagName {
   font-family: "Inter Tight", sans-serif;
   font-weight: 800;
@@ -481,15 +456,10 @@
 }
 .lbButton:hover { background: #c8141c; }
 
-@keyframes dangle {
-  from { rotate: -9deg; }
-  to { rotate: 9deg; }
-}
 @keyframes ticker {
   to { transform: translateX(-50%); }
 }
 @media (prefers-reduced-motion: reduce) {
   .tickerTrack { animation: none; }
   .cutout, .cutout img, .lookTitle::after { transition: none; }
-  .tagHeel { animation: none; }
 }

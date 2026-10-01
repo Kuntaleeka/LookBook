@@ -41,8 +41,10 @@
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.14;
-  mix-blend-mode: overlay;
+  /* plain low-opacity grain: a blend mode here would re-blend the whole
+     page on every hover/animation frame */
+  opacity: 0.07;
+  transform: translateZ(0);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -193,9 +195,6 @@
   gap: 2.5rem;
   align-items: center;
 }
-@media (min-width: 1000px) {
-  .heroTop { grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); }
-}
 .notes {
   margin-top: 3.5rem;
 }
@@ -225,27 +224,6 @@
   font-size: clamp(1.05rem, 2vw, 1.3rem);
   line-height: 1.6;
 }
-
-/* cropped strips of the latest fits, like the stacked eyeliner photos */
-.strips {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-  max-width: 30rem;
-  justify-self: end;
-  rotate: 1.5deg;
-}
-.strip {
-  height: clamp(52px, 6vw, 70px);
-  background-size: cover;
-  background-repeat: no-repeat;
-  border: 2px solid #050505;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
-  filter: grayscale(1) contrast(1.35) brightness(0.92);
-  translate: var(--sx, 0) 0;
-}
-.strip:nth-child(even) { filter: grayscale(0.6) contrast(1.3) sepia(0.25) hue-rotate(-25deg) saturate(1.6); }
 
 /* red label-maker tape */
 .labels {
@@ -361,19 +339,21 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+/* a plain grid, not CSS columns: tilted, scaling cards inside column
+   fragments get clipped and repaint badly on hover */
 .grid {
-  columns: 2;
-  column-gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 12px;
+  align-items: start;
 }
-@media (min-width: 760px) { .grid { columns: 3; column-gap: 14px; } }
-@media (min-width: 1200px) { .grid { columns: 4; } }
+@media (min-width: 760px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px 16px; } }
+@media (min-width: 1200px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
 .print {
   position: relative;
   display: block;
   width: 100%;
-  margin: 0 0 14px;
-  break-inside: avoid;
   padding: 7px 7px 0;
   background: #f1efea;
   color: #111;
@@ -382,6 +362,9 @@
   box-shadow: 0 14px 24px -8px rgba(0, 0, 0, 0.85);
   transition: rotate 0.3s, scale 0.3s, box-shadow 0.3s;
   cursor: zoom-in;
+  /* keep each card on its own layer so hovering doesn't repaint the page */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 .print:hover, .print:focus-visible {
   z-index: 2;
@@ -402,6 +385,7 @@
   height: auto;
   filter: grayscale(0.9) contrast(1.35) brightness(0.88);
   transition: filter 0.45s;
+  will-change: filter;
 }
 .photo::after {
   /* dark red wash; lifts on hover */

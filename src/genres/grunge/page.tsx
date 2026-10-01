@@ -113,7 +113,6 @@ export function GrungePage({ category, outfits }: GenrePageProps) {
     width: o.width,
     height: o.height,
   }));
-  const strips = outfits.slice(0, 4);
 
   return (
     <div className={s.root}>
@@ -143,24 +142,6 @@ export function GrungePage({ category, outfits }: GenrePageProps) {
                 lines={[["are", "you", "who", "you", "want", "to", "be?"]]}
               />
             </div>
-
-            {strips.length >= 2 && (
-              <div className={s.strips} aria-hidden="true">
-                {strips.map((o, i) => (
-                  <div
-                    key={o.id}
-                    className={s.strip}
-                    style={
-                      {
-                        backgroundImage: `url("${o.imageUrl}")`,
-                        backgroundPosition: `center ${14 + i * 9}%`,
-                        "--sx": `${(jitter(i + 70) * 14).toFixed(0)}px`,
-                      } as React.CSSProperties
-                    }
-                  />
-                ))}
-              </div>
-            )}
           </div>
 
           <div className={s.notes}>

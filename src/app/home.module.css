@@ -280,6 +280,38 @@
   color: #fff;
 }
 
+/* winter / fall: frosted leaves at night, a white print, ember accents */
+.g_winter_fall .bg {
+  background:
+    radial-gradient(ellipse 35% 30% at 80% 15%, rgba(255, 222, 170, 0.25), transparent 70%),
+    linear-gradient(rgba(14, 12, 11, 0.7), rgba(20, 17, 15, 0.35) 60%, rgba(42, 29, 21, 0.85)),
+    url("/genres/winter-fall/frost-leaves.jpg") center 45% / cover,
+    #6f6a66;
+}
+.g_winter_fall .bgWord {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 9rem;
+  color: rgba(255, 255, 255, 0.28);
+}
+.g_winter_fall .portraitFrame { border: 8px solid #f7f4ef; border-bottom-width: 22px; rotate: -1.5deg; }
+.g_winter_fall .portrait { filter: saturate(0.88) contrast(1.04) sepia(0.06); }
+.g_winter_fall .cardName {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
+}
+.g_winter_fall .cardName::after {
+  content: "";
+  display: block;
+  width: 2.4rem;
+  height: 2px;
+  margin: 0.4rem auto 0;
+  background: #c4692b;
+}
+
 .g_default .bg { background: linear-gradient(160deg, #2a2a2e, #111); }
 .g_default .bgWord { font-size: 8rem; font-weight: 700; color: rgba(255, 255, 255, 0.08); }
 

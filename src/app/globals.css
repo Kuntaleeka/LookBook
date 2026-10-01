@@ -92,6 +92,27 @@ body {
   }
 }
 
+/* ─── Outfit pop-up: switching between tags shown / hidden ─────────────── */
+/* a plain fade: the current view fades out, then the other fades in */
+.lb-swap {
+  animation: lb-swap-in 380ms ease-out backwards;
+  transition: opacity 260ms ease-in;
+}
+.lb-swap.lb-swap-out {
+  opacity: 0;
+}
+@keyframes lb-swap-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb-swap {
+    animation: none;
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(*),
   ::view-transition-new(*),

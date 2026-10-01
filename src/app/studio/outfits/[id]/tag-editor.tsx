@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { SOURCE_LABELS, itemLink, type ItemRow, type ItemSource } from "@/lib/items";
 import { addItem, deleteItem, moveItem, saveItem } from "./actions";
 
@@ -44,6 +44,52 @@ export function TagEditor({
   const [moving, setMoving] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const photoRef = useRef<HTMLDivElement>(null);
+  // the pin being dragged, where the drag started, and whether it has moved yet
+  const drag = useRef<{ id: string; startX: number; startY: number; moved: boolean } | null>(null);
+
+  /** Pointer position as a 0–1 fraction of the photo, clamped to its edges. */
+  function toPhoto(clientX: number, clientY: number) {
+    const box = photoRef.current!.getBoundingClientRect();
+    return {
+      x: Math.min(1, Math.max(0, (clientX - box.left) / box.width)),
+      y: Math.min(1, Math.max(0, (clientY - box.top) / box.height)),
+    };
+  }
+
+  function savePin(id: string, x: number, y: number) {
+    startTransition(async () => {
+      const result = await moveItem(id, outfitId, x, y);
+      if (result.error) setError(result.error);
+    });
+  }
+
+  function onPinPointerDown(e: React.PointerEvent<HTMLButtonElement>, id: string) {
+    if (e.button !== 0) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    drag.current = { id, startX: e.clientX, startY: e.clientY, moved: false };
+  }
+
+  function onPinPointerMove(e: React.PointerEvent<HTMLButtonElement>) {
+    const d = drag.current;
+    if (!d) return;
+    // a few pixels of wobble is still a click, not a drag
+    if (!d.moved && Math.hypot(e.clientX - d.startX, e.clientY - d.startY) < 4) return;
+    d.moved = true;
+    const { x, y } = toPhoto(e.clientX, e.clientY);
+    setItems((all) => all.map((i) => (i.id === d.id ? { ...i, pin_x: x, pin_y: y } : i)));
+  }
+
+  function onPinPointerUp(e: React.PointerEvent<HTMLButtonElement>) {
+    const d = drag.current;
+    drag.current = null;
+    if (!d?.moved) return;
+    setError(null);
+    setMoving(null);
+    setSelected(d.id);
+    const { x, y } = toPhoto(e.clientX, e.clientY);
+    savePin(d.id, x, y);
+  }
 
   function onPhotoClick(e: React.MouseEvent<HTMLDivElement>) {
     const box = e.currentTarget.getBoundingClientRect();
@@ -55,10 +101,7 @@ export function TagEditor({
       const id = moving;
       setMoving(null);
       setItems((all) => all.map((i) => (i.id === id ? { ...i, pin_x: x, pin_y: y } : i)));
-      startTransition(async () => {
-        const result = await moveItem(id, outfitId, x, y);
-        if (result.error) setError(result.error);
-      });
+      savePin(id, x, y);
       return;
     }
 
@@ -79,9 +122,10 @@ export function TagEditor({
         <p className="mb-2 text-sm text-stone-600">
           {moving
             ? "Click where this item should go."
-            : "Click on a piece of clothing to drop a pin on it."}
+            : "Click on a piece of clothing to drop a pin on it. Drag a pin to move it."}
         </p>
         <div
+          ref={photoRef}
           onClick={onPhotoClick}
           className={`relative mx-auto w-fit overflow-hidden rounded-xl ring-1 ring-stone-200 ${
             moving ? "cursor-move ring-2 ring-amber-400" : "cursor-crosshair"
@@ -97,8 +141,12 @@ export function TagEditor({
                 e.stopPropagation();
                 setSelected(item.id);
               }}
+              onPointerDown={(e) => onPinPointerDown(e, item.id)}
+              onPointerMove={onPinPointerMove}
+              onPointerUp={onPinPointerUp}
+              onPointerCancel={() => (drag.current = null)}
               aria-label={`Item ${i + 1}: ${item.name || "untitled"}`}
-              className={`absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xs font-bold shadow-md ring-2 transition ${
+              className={`absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 touch-none cursor-grab items-center justify-center rounded-full text-xs font-bold shadow-md ring-2 transition-[scale,background-color,color] active:cursor-grabbing ${
                 selected === item.id
                   ? "scale-110 bg-stone-900 text-white ring-white"
                   : "bg-white text-stone-900 ring-stone-900/60"

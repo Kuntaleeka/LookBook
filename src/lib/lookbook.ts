@@ -4,7 +4,10 @@ import { createPublicClient } from "@/lib/supabase/public";
 import { publicImageUrl } from "@/lib/supabase/env";
 import { parseTheme, type Theme } from "@/lib/theme/theme";
 import { toLookbookItem, type ItemRow, type LookbookItem } from "@/lib/items";
-import type { Category, Outfit } from "@/lib/types";
+import type { Category, Outfit, OutfitPhoto } from "@/lib/types";
+
+/** A photo of an outfit, sized so layouts know its shape before it loads. */
+export type LookbookPhoto = { url: string; width: number | null; height: number | null };
 
 export type LookbookOutfit = {
   id: string;
@@ -16,6 +19,8 @@ export type LookbookOutfit = {
   createdAt: string;
   /** Tagged pieces, with pin positions and links. */
   items: LookbookItem[];
+  /** Extra photos of the same fit (other angles, details), in the admin's order. */
+  photos: LookbookPhoto[];
 };
 
 export type LookbookCategory = {
@@ -44,7 +49,7 @@ function toCategory(c: Category): LookbookCategory {
   };
 }
 
-function toOutfit(o: Outfit, items: LookbookItem[] = []): LookbookOutfit {
+function toOutfit(o: Outfit, items: LookbookItem[] = [], photos: LookbookPhoto[] = []): LookbookOutfit {
   return {
     id: o.id,
     title: o.title,
@@ -54,6 +59,7 @@ function toOutfit(o: Outfit, items: LookbookItem[] = []): LookbookOutfit {
     height: o.image_height,
     createdAt: o.created_at,
     items,
+    photos,
   };
 }
 
@@ -145,6 +151,24 @@ export const getGenre = cache(async (slug: string) => {
     }
   }
 
-  const outfits = rows.map((o) => toOutfit(o, itemsByOutfit.get(o.id)));
+  // Extra photos of the same fits. (If the 0004 migration hasn't been run yet
+  // this query errors and outfits simply have no extras.)
+  const photosByOutfit = new Map<string, LookbookPhoto[]>();
+  if (rows.length) {
+    const { data: photos } = await supabase
+      .from("outfit_photos")
+      .select("*")
+      .in("outfit_id", rows.map((o) => o.id))
+      .order("sort_order")
+      .order("created_at")
+      .returns<OutfitPhoto[]>();
+    for (const photo of photos ?? []) {
+      const list = photosByOutfit.get(photo.outfit_id) ?? [];
+      list.push({ url: publicImageUrl(photo.image_path), width: photo.image_width, height: photo.image_height });
+      photosByOutfit.set(photo.outfit_id, list);
+    }
+  }
+
+  const outfits = rows.map((o) => toOutfit(o, itemsByOutfit.get(o.id), photosByOutfit.get(o.id)));
   return { category: toCategory(category), outfits };
 });

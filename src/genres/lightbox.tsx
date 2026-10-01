@@ -13,7 +13,65 @@ type LightboxItem = {
   items?: LookbookItem[];
   width?: number | null;
   height?: number | null;
+  /** Extra photos of the same fit; shown all together when tags are hidden. */
+  photos?: { url: string; width: number | null; height: number | null }[];
 };
+
+type Shot = { url: string; ratio: number };
+
+/** How many photos go on each row, for a given number of photos. */
+function rowsFor<T>(shots: T[]): T[][] {
+  const n = shots.length;
+  const perRow = n <= 3 ? n : n === 4 ? 2 : 3;
+  // put the short row first (5 → 2 + 3, 7 → 1…) so the main photo gets the room
+  const first = n % perRow || perRow;
+  const rows = [shots.slice(0, first)];
+  for (let i = first; i < n; i += perRow) rows.push(shots.slice(i, i + perRow));
+  return rows;
+}
+
+/**
+ * Every photo of the fit at once, uncropped: each row is "justified", so its
+ * photos share one height whatever their shapes. Two or three sit side by
+ * side; more wrap onto further rows.
+ */
+function PhotoSet({ shots, alt }: { shots: Shot[]; alt: string }) {
+  const rows = rowsFor(shots);
+  let n = 0;
+  return (
+    <div className="lb-set flex flex-col items-center gap-2 p-3 md:gap-3 md:p-5">
+      {rows.map((row, r) => {
+        const total = row.reduce((sum, s) => sum + s.ratio, 0);
+        return (
+          <div
+            key={r}
+            className="flex w-full justify-center gap-2 md:gap-3"
+            // never taller than the screen allows: cap the row's width by its shape
+            style={{ maxWidth: `calc(${total.toFixed(4)} * ${rows.length > 1 ? "48dvh" : "70dvh"})` }}
+          >
+            {row.map((shot) => {
+              const i = n++;
+              return (
+                <div
+                  key={shot.url}
+                  className="lb-shot min-w-0 overflow-hidden"
+                  style={{ flex: `${shot.ratio.toFixed(4)} 1 0%`, aspectRatio: shot.ratio.toFixed(4), animationDelay: `${i * 70}ms` }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- already sized on upload */}
+                  <img
+                    src={shot.url}
+                    alt={i === 0 ? alt : `${alt}, photo ${i + 1} of ${shots.length}`}
+                    className="block h-full w-full object-cover"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 /** Class names a genre passes in to style the lightbox in its own voice. */
 export type LightboxClasses = {
@@ -28,24 +86,6 @@ export type LightboxClasses = {
 };
 
 const OpenContext = createContext<(index: number) => void>(() => {});
-
-// The viewer's choice to see photos with or without the tagged-item pins,
-// remembered in this browser between visits.
-const TAGS_KEY = "fashionops:show-tags";
-function readShowTags() {
-  try {
-    return typeof window === "undefined" || window.localStorage.getItem(TAGS_KEY) !== "0";
-  } catch {
-    return true;
-  }
-}
-function writeShowTags(show: boolean) {
-  try {
-    window.localStorage.setItem(TAGS_KEY, show ? "1" : "0");
-  } catch {
-    // private mode or blocked storage: the choice just won't be remembered
-  }
-}
 
 /** Opens the lightbox at an index, from anywhere inside <Lightbox>. */
 export function useOpenOutfit() {
@@ -64,30 +104,38 @@ export function Lightbox({
   children: React.ReactNode;
 }) {
   const [index, setIndex] = useState<number | null>(null);
-  const [showTags, setShowTags] = useState(readShowTags);
+  // Tags always start shown; hiding them lasts until the pop-up is closed.
+  const [showTags, setShowTags] = useState(true);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const item = index === null ? null : items[index];
   const tagCount = item?.items?.length ?? 0;
 
-  // Switching views: the current one fades out, the layout swaps while it is
-  // invisible, then the new one eases in (see .lb-swap in globals.css).
-  const [swapping, setSwapping] = useState(false);
-  const swapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => void (swapTimer.current && clearTimeout(swapTimer.current)), []);
+  // Hiding tags on a fit with several photos: the tags fade off the main photo
+  // first, then the full set of photos takes its place (and the reverse).
+  const [setOpen, setSetOpen] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => void (timer.current && clearTimeout(timer.current)), []);
+
+  const shots: Shot[] = item
+    ? [{ url: item.imageUrl, width: item.width ?? null, height: item.height ?? null }, ...(item.photos ?? [])].map(
+        (p) => ({ url: p.url, ratio: p.width && p.height ? p.width / p.height : 0.75 }),
+      )
+    : [];
+  const hasSet = shots.length > 1;
+  // untagged fits with several photos always show the set
+  const showSet = hasSet && (tagCount === 0 || setOpen);
 
   function toggleTags() {
-    if (swapping) return;
-    const flip = () =>
-      setShowTags((show) => {
-        writeShowTags(!show);
-        return !show;
-      });
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return flip();
-    setSwapping(true);
-    swapTimer.current = setTimeout(() => {
-      flip();
-      setSwapping(false);
-    }, 270);
+    if (timer.current) clearTimeout(timer.current);
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (showTags) {
+      setShowTags(false);
+      timer.current = setTimeout(() => setSetOpen(true), still ? 0 : 560);
+    } else {
+      setSetOpen(false);
+      // let the tagged photo mount with its tags still faded, then fade them in
+      timer.current = setTimeout(() => setShowTags(true), still ? 0 : 60);
+    }
   }
   // shown only on photos that have tagged items
   const tagsButton =
@@ -109,8 +157,16 @@ export function Lightbox({
     [items.length],
   );
 
+  /** Opens a look, with its tags showing. */
+  const open = useCallback((i: number) => {
+    if (timer.current) clearTimeout(timer.current);
+    setShowTags(true);
+    setSetOpen(false);
+    setIndex(i);
+  }, []);
+
   return (
-    <OpenContext.Provider value={setIndex}>
+    <OpenContext.Provider value={open}>
       {children}
       <dialog
         ref={dialogRef}
@@ -124,24 +180,36 @@ export function Lightbox({
         }}
         aria-label={item?.title}
         className={`m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] overflow-auto p-0 backdrop:bg-black/70 backdrop:backdrop-blur-sm ${
-          tagCount > 0 && showTags ? "max-w-6xl" : "max-w-5xl"
+          tagCount > 0 || hasSet ? "max-w-6xl" : "max-w-5xl"
         } ${classes.dialog}`}
       >
-        {item && item.items && tagCount > 0 && showTags ? (
+        {item && (tagCount > 0 || hasSet) ? (
           // Tagged: photo with pins + bubbles across the top, details below.
-          <div key="tagged" className={`lb-swap flex flex-col ${swapping ? "lb-swap-out" : ""}`}>
+          // "Hide tags" fades the pins and bubbles away and leaves the photo put.
+          <div className="flex flex-col bg-inherit">
             <div className={classes.image}>
-              <TaggedPhoto
-                key={item.imageUrl}
-                src={item.imageUrl}
-                alt={item.title}
-                width={item.width}
-                height={item.height}
-                items={item.items}
-                classes={classes.tags}
-              />
+              {showSet ? (
+                <PhotoSet key={item.imageUrl} shots={shots} alt={item.title} />
+              ) : (
+                <TaggedPhoto
+                  key={item.imageUrl}
+                  src={item.imageUrl}
+                  alt={item.title}
+                  width={item.width}
+                  height={item.height}
+                  items={item.items ?? []}
+                  classes={classes.tags}
+                  tagsHidden={!showTags}
+                />
+              )}
             </div>
-            <div className="flex flex-col gap-3 p-6 md:flex-row md:items-end md:justify-between md:gap-8 md:px-8">
+            {/* with tags hidden, the title and buttons stay pinned to the bottom
+                of the pop-up while the photos scroll behind them */}
+            <div
+              className={`flex flex-col gap-3 bg-inherit p-6 md:flex-row md:items-end md:justify-between md:gap-8 md:px-8 ${
+                showTags ? "" : "sticky bottom-0 z-10 shadow-[0_-12px_24px_-16px_rgba(0,0,0,0.45)]"
+              }`}
+            >
               <div className="flex flex-col gap-2">
                 <p className={classes.caption}>{item.caption}</p>
                 <h2 className={classes.title}>{item.title}</h2>
@@ -166,10 +234,7 @@ export function Lightbox({
             </div>
           </div>
         ) : item ? (
-          <div
-            key="plain"
-            className={`lb-swap grid gap-0 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] ${swapping ? "lb-swap-out" : ""}`}
-          >
+          <div className="grid gap-0 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
             {/* eslint-disable-next-line @next/next/no-img-element -- already sized on upload */}
             <img
               src={item.imageUrl}

@@ -17,6 +17,7 @@ export function AcubiPage({ category, outfits }: GenrePageProps) {
     caption: `▶ play ${pad3(i + 1)}/${pad3(outfits.length)} · ${dateFmt.format(new Date(o.createdAt))}`,
     notes: o.notes,
     items: o.items,
+    photos: o.photos,
     width: o.width,
     height: o.height,
   }));

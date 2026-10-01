@@ -31,6 +31,9 @@ export async function createOutfit(input: { path: string; width: number; height:
 export async function deleteOutfit(id: string) {
   const { supabase } = await requireAdmin();
 
+  // Extra photos are removed with the outfit (cascade); collect their files first.
+  const { data: extras } = await supabase.from("outfit_photos").select("image_path").eq("outfit_id", id);
+
   const { data: outfit, error } = await supabase
     .from("outfits")
     .delete()
@@ -39,7 +42,9 @@ export async function deleteOutfit(id: string) {
     .single();
   if (error) return { error: error.message };
 
-  await supabase.storage.from(OUTFITS_BUCKET).remove([outfit.image_path]);
+  await supabase.storage
+    .from(OUTFITS_BUCKET)
+    .remove([outfit.image_path, ...(extras ?? []).map((p) => p.image_path)]);
   revalidateLookbook();
   return { ok: true };
 }

@@ -170,3 +170,30 @@
   .pin::after { animation: none; }
   .bubble { transition: none; }
 }
+
+/* ─── Tags hidden: pins, lines and bubbles fade into the background ─
+   The photo stays exactly where it is; only the tags dissolve. */
+.pin,
+.lines,
+.col {
+  transition: opacity 0.55s ease;
+}
+.tagsHidden .pin,
+.tagsHidden .lines,
+.tagsHidden .col {
+  opacity: 0;
+  pointer-events: none;
+}
+/* narrow screens: once the list under the photo has faded, close the gap it left */
+@media (max-width: 899px) {
+  .root .list {
+    transition: opacity 0.55s ease, display 0.55s allow-discrete;
+  }
+  .root.tagsHidden .list { display: none; }
+  @starting-style {
+    .root .list { opacity: 0; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pin, .lines, .col, .root .list { transition: none; }
+}

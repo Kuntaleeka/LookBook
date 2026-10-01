@@ -110,6 +110,7 @@ export function GrungePage({ category, outfits }: GenrePageProps) {
     caption: `track ${String(i + 1).padStart(2, "0")}`,
     notes: o.notes,
     items: o.items,
+    photos: o.photos,
     width: o.width,
     height: o.height,
   }));

@@ -30,6 +30,7 @@ export function GothPage({ category, outfits }: GenrePageProps) {
     caption: `— ${toRoman(i + 1)} —`,
     notes: o.notes,
     items: o.items,
+    photos: o.photos,
     width: o.width,
     height: o.height,
   }));

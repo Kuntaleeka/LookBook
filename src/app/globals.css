@@ -92,24 +92,29 @@ body {
   }
 }
 
-/* ─── Outfit pop-up: switching between tags shown / hidden ─────────────── */
-/* a plain fade: the current view fades out, then the other fades in */
-.lb-swap {
-  animation: lb-swap-in 380ms ease-out backwards;
-  transition: opacity 260ms ease-in;
+/* ─── Outfit pop-up: all the photos of one fit ─────────────────────────── */
+/* each photo fades up into place, one after another */
+.lb-shot {
+  animation: lb-shot-in 520ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
 }
-.lb-swap.lb-swap-out {
-  opacity: 0;
-}
-@keyframes lb-swap-in {
+@keyframes lb-shot-in {
   from {
     opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+}
+/* phones: a row of three becomes two up top and one wide below */
+@media (max-width: 639px) {
+  .lb-set > div:has(> :nth-child(3)) {
+    flex-wrap: wrap;
+  }
+  .lb-set > div:has(> :nth-child(3)) > .lb-shot {
+    flex-basis: 40% !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lb-swap {
+  .lb-shot {
     animation: none;
-    transition: none;
   }
 }
 

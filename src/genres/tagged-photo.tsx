@@ -52,9 +52,12 @@ export function TaggedPhoto({
   height,
   items,
   classes = {},
+  tagsHidden = false,
 }: {
   src: string;
   alt: string;
+  /** Fade the pins, lines and bubbles away, leaving just the photo in place. */
+  tagsHidden?: boolean;
   /** Stored photo size, so the layout knows the shape before it loads. */
   width?: number | null;
   height?: number | null;
@@ -191,10 +194,12 @@ export function TaggedPhoto({
   return (
     <div
       ref={rootRef}
-      className={`${t.root} ${classes.root ?? ""} ${placed.length ? t.laidOut : ""}`}
+      className={`${t.root} ${classes.root ?? ""} ${placed.length ? t.laidOut : ""} ${tagsHidden ? t.tagsHidden : ""}`}
       style={overflow ? { marginBottom: overflow } : undefined}
     >
-      <div className={`${t.col} ${t.colLeft}`}>{left.map((i) => bubble(i))}</div>
+      <div className={`${t.col} ${t.colLeft}`} inert={tagsHidden}>
+        {left.map((i) => bubble(i))}
+      </div>
 
       <div
         className={t.photo}
@@ -226,10 +231,14 @@ export function TaggedPhoto({
         ))}
       </div>
 
-      <div className={`${t.col} ${t.colRight}`}>{right.map((i) => bubble(i))}</div>
+      <div className={`${t.col} ${t.colRight}`} inert={tagsHidden}>
+        {right.map((i) => bubble(i))}
+      </div>
 
       {/* narrow screens: one list in pin-number order */}
-      <div className={`${t.col} ${t.list}`}>{numbered.map((i) => bubble(i, false))}</div>
+      <div className={`${t.col} ${t.list}`} inert={tagsHidden}>
+        {numbered.map((i) => bubble(i, false))}
+      </div>
 
       {placed.length > 0 && (
         <svg className={t.lines} aria-hidden="true">

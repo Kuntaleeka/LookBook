@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import type { ItemRow } from "@/lib/items";
 import { publicImageUrl } from "@/lib/supabase/env";
-import type { Outfit } from "@/lib/types";
+import type { Outfit, OutfitPhoto } from "@/lib/types";
+import { ExtraPhotos } from "./extra-photos";
 import { TagEditor, type SavedPiece } from "./tag-editor";
 
 export default async function TagOutfitPage({ params }: PageProps<"/studio/outfits/[id]">) {
@@ -11,7 +12,12 @@ export default async function TagOutfitPage({ params }: PageProps<"/studio/outfi
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const { supabase } = await requireAdmin();
 
-  const [{ data: outfit }, { data: items, error: itemsError }, { data: others }] = await Promise.all([
+  const [
+    { data: outfit },
+    { data: items, error: itemsError },
+    { data: others },
+    { data: photos, error: photosError },
+  ] = await Promise.all([
     supabase.from("outfits").select("*, categories!primary_category_id(name, slug)").eq("id", id).maybeSingle<
       Outfit & { categories: { name: string; slug: string } | null }
     >(),
@@ -31,6 +37,14 @@ export default async function TagOutfitPage({ params }: PageProps<"/studio/outfi
       .order("created_at", { ascending: false })
       .limit(500)
       .returns<(ItemRow & { outfits: { categories: { name: string } | null } | null })[]>(),
+    // Other photos of this same fit.
+    supabase
+      .from("outfit_photos")
+      .select("*")
+      .eq("outfit_id", id)
+      .order("sort_order")
+      .order("created_at")
+      .returns<OutfitPhoto[]>(),
   ]);
   if (!outfit) notFound();
 
@@ -75,6 +89,15 @@ export default async function TagOutfitPage({ params }: PageProps<"/studio/outfi
           initialItems={items ?? []}
           library={library}
         />
+      )}
+
+      {photosError ? (
+        <p role="alert" className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          To add more photos of the same fit, run the <code className="font-mono">0004_outfit_photos.sql</code>{" "}
+          migration in Supabase first.
+        </p>
+      ) : (
+        <ExtraPhotos outfitId={outfit.id} initialPhotos={photos ?? []} />
       )}
     </div>
   );

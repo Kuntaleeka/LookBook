@@ -16,6 +16,7 @@ export function CoquettePage({ category, outfits }: GenrePageProps) {
     caption: `with love, look no. ${i + 1}`,
     notes: o.notes,
     items: o.items,
+    photos: o.photos,
     width: o.width,
     height: o.height,
   }));

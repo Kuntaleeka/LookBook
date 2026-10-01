@@ -19,6 +19,7 @@ export function WinterFallPage({ category, outfits }: GenrePageProps) {
     caption: `no. ${String(i + 1).padStart(2, "0")} · ${filed.format(new Date(o.createdAt))}`,
     notes: o.notes,
     items: o.items,
+    photos: o.photos,
     width: o.width,
     height: o.height,
   }));

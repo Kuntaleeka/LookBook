@@ -14,6 +14,17 @@ export type Outfit = {
   updated_at: string;
 };
 
+/** An extra photo of the same outfit (another angle, a detail). */
+export type OutfitPhoto = {
+  id: string;
+  outfit_id: string;
+  image_path: string;
+  image_width: number | null;
+  image_height: number | null;
+  sort_order: number;
+  created_at: string;
+};
+
 export type Category = {
   id: string;
   name: string;

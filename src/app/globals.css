@@ -24,6 +24,41 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
+/* ─── Studio dark mode ───────────────────────────────────────────────────
+   The studio is built from Tailwind's stone/white/red/amber/emerald colours.
+   In dark mode those same colour variables are swapped for their opposites
+   inside the studio, so every screen flips without per-element dark styles.
+   (The public lookbook pages are not affected.) */
+[data-studio][data-theme="dark"] {
+  color-scheme: dark;
+  --color-white: #1f1c1a;
+  --color-stone-50: #141211;
+  --color-stone-100: #262220;
+  --color-stone-200: #332f2c;
+  --color-stone-300: #4a4541;
+  --color-stone-400: #7d756f;
+  --color-stone-500: #a39b94;
+  --color-stone-600: #cfc9c3;
+  --color-stone-700: #e2ddd8;
+  --color-stone-800: #f0ece8;
+  --color-stone-900: #f7f4f1;
+  /* tinted notices: dark panels with light text */
+  --color-red-50: #3a1616;
+  --color-red-200: #6b2323;
+  --color-red-700: #ff9a94;
+  --color-red-800: #ffb3ad;
+  --color-amber-50: #33270d;
+  --color-amber-400: #f2b84b;
+  --color-amber-900: #f6d99a;
+  --color-emerald-50: #0f2e24;
+  --color-emerald-300: #3f9f80;
+  --color-emerald-700: #7fdcb8;
+}
+[data-studio][data-theme="dark"] img {
+  /* photos keep their own colours; just soften the glare a touch */
+  filter: brightness(0.94);
+}
+
 /* ─── Page transitions (see components/page-transitions.tsx) ─────────────── */
 
 /* A dark void behind the animating pages, and clicks pass through. */

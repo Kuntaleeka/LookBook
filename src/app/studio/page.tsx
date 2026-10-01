@@ -23,7 +23,7 @@ export default async function OutfitsPage({ searchParams }: PageProps<"/studio">
         ? outfitsQuery.eq("status", "inbox")
         : outfitsQuery.not("primary_category_id", "is", null)
       ).returns<Outfit[]>(),
-      supabase.from("categories").select("id, name").order("sort_order").order("created_at"),
+      supabase.from("categories").select("id, name, slug, is_visible").order("sort_order").order("created_at"),
       supabase.from("outfits").select("id", { count: "exact", head: true }).eq("status", "inbox"),
       supabase
         .from("outfits")
@@ -32,7 +32,28 @@ export default async function OutfitsPage({ searchParams }: PageProps<"/studio">
     ]);
 
   const outfits = data ?? [];
-  const genreOptions = genres ?? [];
+  const genreOptions = (genres ?? []).map(({ id, name }) => ({ id, name }));
+
+  // Published fits, grouped under their genre, in the order the genres appear on the site.
+  const groups =
+    tab === "published"
+      ? (genres ?? [])
+          .map((g) => ({ ...g, outfits: outfits.filter((o) => o.primary_category_id === g.id) }))
+          .filter((g) => g.outfits.length > 0)
+      : [];
+
+  const card = (o: Outfit) => (
+    <OutfitCard
+      key={o.id}
+      id={o.id}
+      imageUrl={publicImageUrl(o.image_path)}
+      width={o.image_width}
+      height={o.image_height}
+      title={o.title}
+      categoryId={o.primary_category_id}
+      genres={genreOptions}
+    />
+  );
 
   const tabs: { id: Tab; label: string; count: number }[] = [
     { id: "inbox", label: "To sort", count: inboxCount ?? 0 },
@@ -57,7 +78,7 @@ export default async function OutfitsPage({ searchParams }: PageProps<"/studio">
         </p>
       )}
 
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col gap-6">
         <nav className="flex gap-1 border-b border-stone-200" aria-label="Outfit lists">
           {tabs.map((t) => (
             <Link
@@ -91,21 +112,45 @@ export default async function OutfitsPage({ searchParams }: PageProps<"/studio">
               ? "Nothing to sort. Upload some fits above."
               : "Nothing published yet. Pick a genre on a photo in “To sort”."}
           </p>
-        ) : (
-          <div className="columns-2 gap-4 sm:columns-3 lg:columns-4">
-            {outfits.map((o) => (
-              <OutfitCard
-                key={o.id}
-                id={o.id}
-                imageUrl={publicImageUrl(o.image_path)}
-                width={o.image_width}
-                height={o.image_height}
-                title={o.title}
-                categoryId={o.primary_category_id}
-                genres={genreOptions}
-              />
+        ) : tab === "published" ? (
+          <>
+            {/* jump straight to a genre */}
+            {groups.length > 1 && (
+              <nav className="flex flex-wrap gap-2" aria-label="Jump to a genre">
+                {groups.map((g) => (
+                  <a
+                    key={g.id}
+                    href={`#genre-${g.slug}`}
+                    className="rounded-full border border-stone-300 bg-white px-3 py-1 text-sm text-stone-700 hover:border-stone-500"
+                  >
+                    {g.name} <span className="text-stone-400">({g.outfits.length})</span>
+                  </a>
+                ))}
+              </nav>
+            )}
+
+            {groups.map((g) => (
+              <section key={g.id} id={`genre-${g.slug}`} className="flex scroll-mt-6 flex-col gap-3">
+                <header className="flex flex-wrap items-baseline justify-between gap-2 border-b border-stone-200 pb-2">
+                  <h2 className="text-lg font-semibold">
+                    {g.name}{" "}
+                    <span className="text-sm font-normal text-stone-500">
+                      · {g.outfits.length} {g.outfits.length === 1 ? "fit" : "fits"}
+                      {!g.is_visible && " · hidden from visitors"}
+                    </span>
+                  </h2>
+                  {g.is_visible && (
+                    <Link href={`/${g.slug}`} target="_blank" className="text-sm text-stone-600 underline hover:text-stone-900">
+                      View page ↗
+                    </Link>
+                  )}
+                </header>
+                <div className="columns-2 gap-4 sm:columns-3 lg:columns-4">{g.outfits.map(card)}</div>
+              </section>
             ))}
-          </div>
+          </>
+        ) : (
+          <div className="columns-2 gap-4 sm:columns-3 lg:columns-4">{outfits.map(card)}</div>
         )}
       </section>
     </div>

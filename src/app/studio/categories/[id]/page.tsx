@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getDesign } from "@/genres/registry";
 import { requireAdmin } from "@/lib/auth";
 import { parseTheme } from "@/lib/theme/theme";
 import type { Category } from "@/lib/types";
@@ -51,7 +52,7 @@ export default async function EditCategoryPage({
         parentOptions={editorData.parentOptions}
         mergeOptions={editorData.mergeOptions}
         outfitCount={count ?? 0}
-        previewImages={editorData.previewImages}
+        hasPage={Boolean(getDesign(category.slug))}
         justSaved={saved === "1"}
       />
     </div>

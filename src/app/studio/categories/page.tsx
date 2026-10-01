@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { getDesign } from "@/genres/registry";
 import { requireAdmin } from "@/lib/auth";
-import { parseTheme } from "@/lib/theme/theme";
+import { publicImageUrl } from "@/lib/supabase/env";
 import type { Category } from "@/lib/types";
 import { CategoryList, type CategoryRow } from "./category-list";
 
@@ -17,6 +18,19 @@ export default async function CategoriesPage() {
     .returns<CategoryWithCount[]>();
 
   const categories = data ?? [];
+
+  // Newest outfit photo per category, for the list thumbnails.
+  const { data: outfits } = await supabase
+    .from("outfits")
+    .select("image_path, primary_category_id")
+    .not("primary_category_id", "is", null)
+    .order("created_at", { ascending: false })
+    .limit(1000);
+  const coverById = new Map<string, string>();
+  for (const o of outfits ?? []) {
+    if (!coverById.has(o.primary_category_id)) coverById.set(o.primary_category_id, publicImageUrl(o.image_path));
+  }
+
   const nameById = new Map(categories.map((c) => [c.id, c.name]));
   const rows: CategoryRow[] = categories.map((c) => ({
     id: c.id,
@@ -25,7 +39,8 @@ export default async function CategoriesPage() {
     isVisible: c.is_visible,
     outfitCount: c.outfits?.[0]?.count ?? 0,
     parentName: c.parent_id ? (nameById.get(c.parent_id) ?? null) : null,
-    theme: parseTheme(c.theme),
+    pageColor: getDesign(c.slug)?.background ?? null,
+    cover: coverById.get(c.id) ?? null,
   }));
 
   return (

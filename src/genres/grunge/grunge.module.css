@@ -474,6 +474,10 @@
     drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
     drop-shadow(1.3px 0 0 #d11a26) drop-shadow(-1.3px 0 0 #d11a26) drop-shadow(0 1.3px 0 #d11a26) drop-shadow(0 -1.3px 0 #d11a26)
     drop-shadow(5px 7px 5px rgba(0, 0, 0, 0.5));
+  /* its own layer, so the outline isn't redrawn (and doesn't flicker) while
+     the drips animate or neighbouring bubbles move */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 .tagName {
   font-family: "VT323", monospace;
@@ -509,7 +513,12 @@
   rotate: -2deg;
 }
 
-/* decorations; which ones show varies from bubble to bubble */
+/* Bubbles snap straight to their place beside the photo. (By default they
+   slide there, and sliding a sticker with this many outline layers makes it
+   shimmer and tear while it moves.) */
+.tagsRoot .tagBubble { transition: translate 0.2s; }
+
+/* decorations on every bubble; only their angles and positions vary */
 .tagTail, .tagGuitar, .tagStars, .tagDrips {
   position: absolute;
   pointer-events: none;
@@ -531,7 +540,8 @@
   height: 4.6rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='84' viewBox='0 0 40 84'%3E %3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23e2323c'/%3E%3Cstop offset='.55' stop-color='%23a8111b'/%3E%3Cstop offset='1' stop-color='%235e060c'/%3E%3C/linearGradient%3E%3C/defs%3E %3Cpath d='M16 1h9l2 9-2 3h-8z' fill='%23efe7da' stroke='%232a2a2a' stroke-width='.8'/%3E %3Crect x='17.4' y='12' width='5.2' height='38' fill='%237a4524' stroke='%232a1206' stroke-width='.6'/%3E %3Cpath d='M17.4 18h5.2M17.4 23h5.2M17.4 28h5.2M17.4 33h5.2M17.4 38h5.2M17.4 43h5.2' stroke='%23d8d0c0' stroke-width='.5'/%3E %3Cpath d='M9 46c-4 0-6 4-5 8 1 5 0 8-2 12-3 7 2 16 11 16h13c9 0 14-8 11-15-2-4-3-7-2-12 1-4-1-9-5-9-3 0-4 3-6 3h-9c-2 0-3-3-6-3z' fill='url(%23b)' stroke='%232b0306' stroke-width='1'/%3E %3Cpath d='M13 52h11l4 11-3 9h-9l-4-9z' fill='%23f5f1ea' stroke='%239c948a' stroke-width='.5'/%3E %3Crect x='15' y='55' width='9' height='2' rx='1' fill='%231b1b1b'/%3E%3Crect x='15' y='60' width='9' height='2' rx='1' fill='%231b1b1b'/%3E%3Crect x='15' y='66' width='9' height='2' rx='1' fill='%231b1b1b'/%3E %3Crect x='14' y='72' width='12' height='2.4' fill='%23c9c9c9'/%3E %3Cpath d='M18.5 4v70M20 4v70M21.5 4v70' stroke='%23f2f2f2' stroke-width='.25' opacity='.8'/%3E %3Ccircle cx='31' cy='70' r='1.4' fill='%23eee'/%3E%3Ccircle cx='32' cy='75' r='1.4' fill='%23eee'/%3E%3C/svg%3E");
   rotate: -28deg;
-  filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff);
+  /* no outline filter of its own: the bubble's sticker outline already wraps
+     it, and a filter nested inside a filter makes Safari drop the guitar */
 }
 .tagStars {
   right: -1.5rem;
@@ -541,6 +551,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E %3Cdefs%3E%3CradialGradient id='s' cx='.4' cy='.35' r='.7'%3E%3Cstop offset='0' stop-color='%23b41a2c'/%3E%3Cstop offset='1' stop-color='%235c0714'/%3E%3C/radialGradient%3E%3C/defs%3E %3Cg transform='rotate(-8 22 22)'%3E%3Cpath d='M22 2l5.6 12.4 13.4 1.3-10 9.2 2.9 13.2L22 31.4 10.1 38.1 13 24.9 3 15.7l13.4-1.3z' fill='url(%23s)' stroke='%233d020b' stroke-width='1.2' stroke-linejoin='round'/%3E %3Cpath d='M22 6.5l4.3 9.5 10.3 1-7.7 7.1 2.2 10.1L22 29 12.9 34.2l2.2-10.1-7.7-7.1 10.3-1z' fill='none' stroke='%23e05a6c' stroke-width='.8' stroke-dasharray='1.6 1.3' opacity='.85'/%3E%3C/g%3E %3Cg transform='translate(26 28) rotate(14 17 17) scale(.8)'%3E%3Cpath d='M22 2l5.6 12.4 13.4 1.3-10 9.2 2.9 13.2L22 31.4 10.1 38.1 13 24.9 3 15.7l13.4-1.3z' fill='url(%23s)' stroke='%233d020b' stroke-width='1.4' stroke-linejoin='round'/%3E %3Cpath d='M22 6.5l4.3 9.5 10.3 1-7.7 7.1 2.2 10.1L22 29 12.9 34.2l2.2-10.1-7.7-7.1 10.3-1z' fill='none' stroke='%23e05a6c' stroke-width='1' stroke-dasharray='1.8 1.4' opacity='.85'/%3E%3C/g%3E%3C/svg%3E");
 }
 .tagDrips {
+  will-change: transform;
   left: 52%;
   top: calc(100% + var(--u) * 2);
   width: 3.4rem;
@@ -553,9 +564,10 @@
 @media (max-width: 899px) {
   .tagGuitar { left: -0.9rem; }
 }
-/* vary the stickers so a photo with many items doesn't repeat */
-.tagBubble:nth-child(3n + 2) .tagGuitar { display: none; }
-.tagBubble:nth-child(3n) .tagStars { display: none; }
+/* every bubble gets the guitar and the stars; only their angle and the
+   drips' position vary, so a photo with many items doesn't look stamped */
+.tagBubble:nth-child(even) .tagGuitar { rotate: -18deg; }
+.tagBubble:nth-child(3n) .tagStars { rotate: 14deg; }
 .tagBubble:nth-child(even) .tagDrips { left: 64%; width: 2.8rem; animation-delay: 0.7s; }
 .tagBubble:nth-child(even) .tagTail { left: 30%; }
 @media (prefers-reduced-motion: reduce) {

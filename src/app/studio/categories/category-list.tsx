@@ -19,9 +19,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Motif } from "@/components/theme/motif";
-import { ThemeFonts } from "@/components/theme/theme-fonts";
-import { themeStyle, type Theme } from "@/lib/theme/theme";
 import { reorderCategories, setCategoryVisible } from "./actions";
 
 export type CategoryRow = {
@@ -31,7 +28,10 @@ export type CategoryRow = {
   isVisible: boolean;
   outfitCount: number;
   parentName: string | null;
-  theme: Theme;
+  /** Background colour of the category's hand-built page; null if it has no page yet. */
+  pageColor: string | null;
+  /** Its newest outfit photo, if it has any. */
+  cover: string | null;
 };
 
 export function CategoryList({ initialRows }: { initialRows: CategoryRow[] }) {
@@ -80,7 +80,6 @@ export function CategoryList({ initialRows }: { initialRows: CategoryRow[] }) {
 
   return (
     <>
-      <ThemeFonts families={rows.map((r) => r.theme.fontDisplay)} />
       {error && (
         <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">
           {error}
@@ -108,7 +107,6 @@ function SortableRow({
 }) {
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } =
     useSortable({ id: row.id });
-  const t = row.theme;
 
   return (
     <li
@@ -130,21 +128,23 @@ function SortableRow({
         </svg>
       </button>
 
-      {/* Theme swatch, rendered in the category's own colors and display font. */}
+      {/* The real page's colour, with the newest outfit photo over it. */}
       <Link
         href={`/studio/categories/${row.id}`}
-        style={themeStyle(t)}
-        className="flex w-28 shrink-0 flex-col justify-between bg-[var(--bg)] p-2.5 text-[var(--fg)] sm:w-40"
+        style={{ background: row.pageColor ?? "#e7e5e4" }}
+        className="relative flex w-28 shrink-0 items-end sm:w-40"
+        aria-hidden="true"
+        tabIndex={-1}
       >
-        <span className="flex items-center gap-1 text-[var(--accent)]">
-          <Motif id={t.motif} size={14} />
-        </span>
-        <span className="truncate text-lg leading-tight [font-family:var(--font-display)]">{row.name}</span>
-        <span className="flex gap-1">
-          {[t.bg, t.surface, t.fg, t.accent].map((c, i) => (
-            <span key={i} className="h-3 w-3 rounded-full ring-1 ring-black/10" style={{ background: c }} />
-          ))}
-        </span>
+        {row.cover && (
+          // eslint-disable-next-line @next/next/no-img-element -- already sized on upload
+          <img src={row.cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+        )}
+        {!row.pageColor && (
+          <span className="relative m-1.5 rounded bg-white/90 px-1.5 py-0.5 text-[10px] font-medium text-stone-600">
+            no page yet
+          </span>
+        )}
       </Link>
 
       <Link href={`/studio/categories/${row.id}`} className="flex min-w-0 flex-1 flex-col justify-center px-4 py-3 hover:bg-stone-50">

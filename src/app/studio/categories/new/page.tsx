@@ -6,7 +6,7 @@ import { loadEditorData } from "../editor-data";
 
 export default async function NewCategoryPage() {
   const { supabase } = await requireAdmin();
-  const { parentOptions, mergeOptions, previewImages } = await loadEditorData(supabase, null);
+  const { parentOptions, mergeOptions } = await loadEditorData(supabase, null);
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6">
@@ -31,7 +31,7 @@ export default async function NewCategoryPage() {
         parentOptions={parentOptions}
         mergeOptions={mergeOptions}
         outfitCount={0}
-        previewImages={previewImages}
+        hasPage={false}
         justSaved={false}
       />
     </div>

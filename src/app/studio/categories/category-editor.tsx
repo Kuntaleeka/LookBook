@@ -2,14 +2,6 @@
 
 import { useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { MOTIF_LABELS, Motif } from "@/components/theme/motif";
-import { ThemeFonts } from "@/components/theme/theme-fonts";
-import { ThemePreview } from "@/components/theme/theme-preview";
-import { checkThemeContrast } from "@/lib/theme/contrast";
-import { FONTS } from "@/lib/theme/fonts";
-import { MOTIF_IDS } from "@/lib/theme/motif-ids";
-import { PRESETS } from "@/lib/theme/presets";
-import type { Theme } from "@/lib/theme/theme";
 import {
   deleteCategory,
   duplicateCategory,
@@ -19,28 +11,20 @@ import {
 
 type Option = { id: string; name: string };
 
-const COLOR_FIELDS: { key: keyof Theme & ("bg" | "surface" | "fg" | "mutedFg" | "accent" | "accentFg"); label: string; hint: string }[] = [
-  { key: "bg", label: "Background", hint: "Page background" },
-  { key: "surface", label: "Cards", hint: "Outfit cards" },
-  { key: "fg", label: "Text", hint: "Headings and body" },
-  { key: "mutedFg", label: "Secondary text", hint: "Captions, details" },
-  { key: "accent", label: "Accent", hint: "Buttons, links, decorations" },
-  { key: "accentFg", label: "Text on accent", hint: "Button labels" },
-];
-
 export function CategoryEditor({
   initial,
   parentOptions,
   mergeOptions,
   outfitCount,
-  previewImages,
+  hasPage,
   justSaved,
 }: {
   initial: CategoryInput;
   parentOptions: Option[];
   mergeOptions: Option[];
   outfitCount: number;
-  previewImages: string[];
+  /** Whether a hand-built page exists for this category's saved URL name. */
+  hasPage: boolean;
   justSaved: boolean;
 }) {
   const isNew = !initial.id;
@@ -51,33 +35,10 @@ export function CategoryEditor({
   const [pending, startTransition] = useTransition();
   const deleteDialog = useRef<HTMLDialogElement>(null);
 
-  const theme = form.theme;
-  const contrast = checkThemeContrast(theme);
-
   function set<K extends keyof CategoryInput>(key: K, value: CategoryInput[K]) {
     setSaved(false);
     setForm((f) => ({ ...f, [key]: value }));
   }
-  function setTheme<K extends keyof Theme>(key: K, value: Theme[K]) {
-    setSaved(false);
-    setForm((f) => ({ ...f, theme: { ...f.theme, [key]: value } }));
-  }
-
-  function applyPreset(slug: string) {
-    const preset = PRESETS.find((p) => p.slug === slug);
-    if (!preset) return;
-    setSaved(false);
-    setForm((f) => ({
-      ...f,
-      theme: { ...preset.theme },
-      // For a brand-new category, also fill in the text if it's still empty.
-      ...(isNew && !f.name ? { name: preset.name } : {}),
-      ...(isNew && !slugTouched && !f.name ? { slug: preset.slug } : {}),
-      ...(isNew && !f.description ? { description: preset.description } : {}),
-      ...(isNew && f.keywords.length === 0 ? { keywords: preset.keywords } : {}),
-    }));
-  }
-
   function run(action: () => Promise<{ error?: string } | void>) {
     setError(null);
     startTransition(async () => {
@@ -88,8 +49,6 @@ export function CategoryEditor({
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-      <ThemeFonts families={FONTS.map((f) => f.family)} />
-
       {/* ── Form ─────────────────────────────────────────────────────── */}
       <form
         className="flex flex-col gap-8"
@@ -163,77 +122,7 @@ export function CategoryEditor({
           </div>
         </Section>
 
-        <Section title="Theme">
-          <Field label="Start from a preset" hint="Replaces the colors, fonts and decoration below.">
-            <select value="" onChange={(e) => applyPreset(e.target.value)} className={inputClass}>
-              <option value="" disabled>
-                Choose a preset…
-              </option>
-              {PRESETS.map((p) => (
-                <option key={p.slug} value={p.slug}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
-          </Field>
-
-          <div className="grid gap-2 2xl:grid-cols-2">
-            {COLOR_FIELDS.map(({ key, label, hint }) => (
-              <ColorField
-                key={key}
-                label={label}
-                hint={hint}
-                value={theme[key]}
-                onChange={(v) => setTheme(key, v)}
-              />
-            ))}
-          </div>
-
-          <ContrastReport checks={contrast} />
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Heading font">
-              <FontSelect value={theme.fontDisplay} onChange={(v) => setTheme("fontDisplay", v)} />
-            </Field>
-            <Field label="Body font">
-              <FontSelect value={theme.fontBody} onChange={(v) => setTheme("fontBody", v)} />
-            </Field>
-          </div>
-
-          <Field label={`Corner rounding · ${theme.radius}px`}>
-            <input
-              type="range"
-              min={0}
-              max={32}
-              value={theme.radius}
-              onChange={(e) => setTheme("radius", Number(e.target.value))}
-              className="w-full accent-stone-900"
-            />
-          </Field>
-
-          <Field label="Decoration">
-            <div className="flex flex-wrap gap-2">
-              {MOTIF_IDS.map((id) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setTheme("motif", id)}
-                  aria-pressed={theme.motif === id}
-                  className={`flex h-14 w-16 flex-col items-center justify-center gap-1 rounded-lg border text-[11px] ${
-                    theme.motif === id
-                      ? "border-stone-900 bg-stone-900 text-white"
-                      : "border-stone-300 bg-white text-stone-600 hover:border-stone-500"
-                  }`}
-                >
-                  {id === "none" ? <span className="text-base leading-none">∅</span> : <Motif id={id} size={18} />}
-                  {MOTIF_LABELS[id]}
-                </button>
-              ))}
-            </div>
-          </Field>
-        </Section>
-
-        <Section title="Keywords" hint="Pieces, colors and details that define this aesthetic. Used for search and filters.">
+        <Section title="Keywords" hint="Pieces, colors and details that define this aesthetic. Shown on its page.">
           <TagInput values={form.keywords} onChange={(v) => set("keywords", v)} placeholder="Type and press Enter" />
         </Section>
 
@@ -282,19 +171,8 @@ export function CategoryEditor({
         </div>
       </form>
 
-      {/* ── Live preview ─────────────────────────────────────────────── */}
-      <aside className="lg:sticky lg:top-8 lg:self-start">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wider text-stone-500">Live preview</p>
-        <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-stone-200">
-          <ThemePreview
-            theme={theme}
-            name={form.name}
-            description={form.description}
-            keywords={form.keywords}
-            images={previewImages}
-          />
-        </div>
-      </aside>
+      {/* ── The real page ───────────────────────────────────────────── */}
+      <PagePreview isNew={isNew} slug={initial.slug} isVisible={initial.isVisible} hasPage={hasPage} />
 
       {!isNew && (
         <DeleteDialog
@@ -311,6 +189,61 @@ export function CategoryEditor({
 }
 
 // ─── Pieces ─────────────────────────────────────────────────────────────────
+
+/**
+ * The category's actual public page, shown small. Each genre's look is built
+ * by hand from its inspo, so there are no colour or font settings here: what
+ * this form changes on the page is the name, description and keywords.
+ */
+function PagePreview({ isNew, slug, isVisible, hasPage }: { isNew: boolean; slug: string; isVisible: boolean; hasPage: boolean }) {
+  const [version, setVersion] = useState(0);
+  const note = isNew
+    ? "Create the category to see its page here."
+    : !hasPage
+      ? `There is no custom page for /${slug} yet, so visitors get “not found” there. Each genre's page is designed from your inspo: send the inspo for this one to have it built.`
+      : !isVisible
+        ? "This category is hidden, so its page can't be opened. Switch on “Visible on the public lookbook” and save to see it here."
+        : null;
+
+  return (
+    <aside className="lg:sticky lg:top-8 lg:self-start">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <p className="text-xs font-medium uppercase tracking-wider text-stone-500">Live page</p>
+        {!note && (
+          <span className="flex items-center gap-3 text-sm">
+            <button type="button" onClick={() => setVersion((v) => v + 1)} className="text-stone-600 hover:text-stone-900">
+              Reload
+            </button>
+            <a href={`/${slug}`} target="_blank" rel="noreferrer" className="font-medium text-stone-900 underline">
+              Open page ↗
+            </a>
+          </span>
+        )}
+      </div>
+      {note ? (
+        <p className="rounded-2xl border border-dashed border-stone-300 bg-white px-5 py-10 text-center text-sm text-stone-500">
+          {note}
+        </p>
+      ) : (
+        <>
+          {/* the page at desktop width, scaled down to fit the panel */}
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200">
+            <iframe
+              key={version}
+              src={`/${slug}`}
+              title="Live page"
+              loading="lazy"
+              className="absolute left-0 top-0 h-[250%] w-[250%] origin-top-left scale-[0.4] border-0"
+            />
+          </div>
+          <p className="mt-2 text-xs text-stone-500">
+            This is the real page visitors see. Changes to the name, description and keywords show here after you save.
+          </p>
+        </>
+      )}
+    </aside>
+  );
+}
 
 const inputClass =
   "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none focus:border-stone-900";
@@ -334,95 +267,6 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
       {children}
       {hint && <span className="text-xs text-stone-500">{hint}</span>}
     </label>
-  );
-}
-
-function ColorField({
-  label,
-  hint,
-  value,
-  onChange,
-}: {
-  label: string;
-  hint: string;
-  value: string;
-  onChange: (v: string) => void;
-}) {
-  const [text, setText] = useState(value);
-  const [lastValue, setLastValue] = useState(value);
-  // Keep the text box in sync when the value changes from outside (presets).
-  if (value !== lastValue) {
-    setLastValue(value);
-    setText(value);
-  }
-
-  return (
-    <div className="flex items-center gap-3 rounded-lg border border-stone-200 bg-white p-2">
-      <input
-        type="color"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label={label}
-        className="h-10 w-10 shrink-0 cursor-pointer rounded border-0 bg-transparent p-0"
-      />
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-stone-800">{label}</p>
-        <p className="truncate text-xs text-stone-500">{hint}</p>
-      </div>
-      <input
-        value={text}
-        maxLength={7}
-        spellCheck={false}
-        aria-label={`${label} hex`}
-        onChange={(e) => {
-          const v = e.target.value.startsWith("#") ? e.target.value : `#${e.target.value}`;
-          setText(v);
-          if (/^#[0-9a-fA-F]{6}$/.test(v)) onChange(v.toLowerCase());
-        }}
-        onBlur={() => setText(value)}
-        className="w-20 rounded border border-stone-200 px-1.5 py-1 font-mono text-xs outline-none focus:border-stone-900"
-      />
-    </div>
-  );
-}
-
-function ContrastReport({ checks }: { checks: ReturnType<typeof checkThemeContrast> }) {
-  const failing = checks.filter((c) => !c.ok);
-  return (
-    <div
-      className={`rounded-lg px-3 py-2.5 text-xs ${
-        failing.length ? "bg-amber-50 text-amber-900" : "bg-emerald-50 text-emerald-900"
-      }`}
-    >
-      <p className="font-medium">
-        {failing.length ? `Readability: ${failing.length} low-contrast pair${failing.length > 1 ? "s" : ""}` : "Readability: all text is easy to read ✓"}
-      </p>
-      <ul className="mt-1 grid gap-0.5 sm:grid-cols-2">
-        {checks.map((c) => (
-          <li key={c.label} className={c.ok ? "opacity-70" : "font-medium"}>
-            {c.ok ? "✓" : "⚠"} {c.label}: {c.ratio.toFixed(1)}:1
-          </li>
-        ))}
-      </ul>
-      {failing.length > 0 && <p className="mt-1 opacity-80">Aim for at least 4.5:1. You can still save.</p>}
-    </div>
-  );
-}
-
-function FontSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return (
-    <>
-      <select value={value} onChange={(e) => onChange(e.target.value)} className={inputClass}>
-        {FONTS.map((f) => (
-          <option key={f.family} value={f.family}>
-            {f.family} — {f.vibe}
-          </option>
-        ))}
-      </select>
-      <span className="truncate text-xl text-stone-800" style={{ fontFamily: `'${value}'` }}>
-        The quick brown fox
-      </span>
-    </>
   );
 }
 

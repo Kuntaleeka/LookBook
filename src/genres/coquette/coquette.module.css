@@ -1,225 +1,499 @@
+/* Coquette: a sunlit flat-lay on a rose-print bedsheet. Cream fabric, blush
+   satin, pearls, a little pink book and handwritten notes; glitter in the
+   light like a field of pink tulips. */
 .root {
-  --blush: #fff4f6;
-  --cream: #fffaf6;
-  --rose: #f2b8c6;
-  --rose-deep: #c9607f;
+  --cream: #fbf5ee;
+  --blush: #f6dfe2;
+  --rose: #eab3bf;
+  --rose-deep: #c4677f;
   --wine: #5b2b3a;
   --mauve: #8a5a69;
-  --display: "Playfair Display", serif;
+  --cocoa: #5a3220;
+  --gold: #c99a44;
+  --display: "Cormorant Garamond", "Playfair Display", serif;
+  --serif: "Playfair Display", serif;
   --script: "Pinyon Script", cursive;
+  --hand: "Caveat", cursive;
   --body: "Lora", serif;
 
+  position: relative;
   min-height: 100dvh;
+  overflow-x: clip;
   color: var(--wine);
   font-family: var(--body);
-  background-color: var(--blush);
-  /* tiny polka dots */
-  background-image: radial-gradient(#f6cdd8 1.3px, transparent 1.6px);
-  background-size: 22px 22px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cg opacity='.9'%3E%3Cg transform='translate%2828 26%29 rotate%28-15%29 scale%281%29'%3E%3Cpath d='M2 4 C3 9 1 13 -1 16' stroke='%2393a887' stroke-width='.9' fill='none'/%3E%3Cellipse cx='6.5' cy='7' rx='4.6' ry='2' transform='rotate%2835 6.5 7%29' fill='%23a3b596'/%3E%3Cellipse cx='-5.5' cy='8.5' rx='4.2' ry='1.8' transform='rotate%28-30 -5.5 8.5%29' fill='%2393a887'/%3E%3Ccircle r='5.6' fill='%23efb6c2'/%3E%3Ccircle r='3.6' cx='.3' cy='-.2' fill='%23e59cad'/%3E%3Cpath d='M-1.6 .4 a1.7 1.7 0 1 1 1.9 1.7 M-3.6 1.4 C-3 3.8 1 4.6 3.4 2' stroke='%23c86f88' stroke-width='.75' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate%28104 58%29 rotate%2820%29 scale%280.9%29'%3E%3Cpath d='M2 4 C3 9 1 13 -1 16' stroke='%2393a887' stroke-width='.9' fill='none'/%3E%3Cellipse cx='6.5' cy='7' rx='4.6' ry='2' transform='rotate%2835 6.5 7%29' fill='%23a3b596'/%3E%3Cellipse cx='-5.5' cy='8.5' rx='4.2' ry='1.8' transform='rotate%28-30 -5.5 8.5%29' fill='%2393a887'/%3E%3Ccircle r='5.6' fill='%23efb6c2'/%3E%3Ccircle r='3.6' cx='.3' cy='-.2' fill='%23e59cad'/%3E%3Cpath d='M-1.6 .4 a1.7 1.7 0 1 1 1.9 1.7 M-3.6 1.4 C-3 3.8 1 4.6 3.4 2' stroke='%23c86f88' stroke-width='.75' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate%2846 112%29 rotate%288%29 scale%281.05%29'%3E%3Cpath d='M2 4 C3 9 1 13 -1 16' stroke='%2393a887' stroke-width='.9' fill='none'/%3E%3Cellipse cx='6.5' cy='7' rx='4.6' ry='2' transform='rotate%2835 6.5 7%29' fill='%23a3b596'/%3E%3Cellipse cx='-5.5' cy='8.5' rx='4.2' ry='1.8' transform='rotate%28-30 -5.5 8.5%29' fill='%2393a887'/%3E%3Ccircle r='5.6' fill='%23efb6c2'/%3E%3Ccircle r='3.6' cx='.3' cy='-.2' fill='%23e59cad'/%3E%3Cpath d='M-1.6 .4 a1.7 1.7 0 1 1 1.9 1.7 M-3.6 1.4 C-3 3.8 1 4.6 3.4 2' stroke='%23c86f88' stroke-width='.75' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate%28128 128%29 rotate%28-25%29 scale%280.8%29'%3E%3Cpath d='M2 4 C3 9 1 13 -1 16' stroke='%2393a887' stroke-width='.9' fill='none'/%3E%3Cellipse cx='6.5' cy='7' rx='4.6' ry='2' transform='rotate%2835 6.5 7%29' fill='%23a3b596'/%3E%3Cellipse cx='-5.5' cy='8.5' rx='4.2' ry='1.8' transform='rotate%28-30 -5.5 8.5%29' fill='%2393a887'/%3E%3Ccircle r='5.6' fill='%23efb6c2'/%3E%3Ccircle r='3.6' cx='.3' cy='-.2' fill='%23e59cad'/%3E%3Cpath d='M-1.6 .4 a1.7 1.7 0 1 1 1.9 1.7 M-3.6 1.4 C-3 3.8 1 4.6 3.4 2' stroke='%23c86f88' stroke-width='.75' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate%2876 18%29 rotate%2830%29'%3E%3Cpath d='M0 2 C0 6 -1 8 -2 10' stroke='%2393a887' stroke-width='.7' fill='none'/%3E%3Cellipse cx='2.6' cy='5' rx='2.6' ry='1.1' transform='rotate%2830 2.6 5%29' fill='%23a3b596'/%3E%3Cellipse rx='2.2' ry='2.8' fill='%23f3c3cd'/%3E%3C/g%3E%3Cg transform='translate%2814 72%29 rotate%28-20%29'%3E%3Cpath d='M0 2 C0 6 -1 8 -2 10' stroke='%2393a887' stroke-width='.7' fill='none'/%3E%3Cellipse cx='2.6' cy='5' rx='2.6' ry='1.1' transform='rotate%2830 2.6 5%29' fill='%23a3b596'/%3E%3Cellipse rx='2.2' ry='2.8' fill='%23f3c3cd'/%3E%3C/g%3E%3Cg transform='translate%2892 104%29 rotate%2815%29'%3E%3Cpath d='M0 2 C0 6 -1 8 -2 10' stroke='%2393a887' stroke-width='.7' fill='none'/%3E%3Cellipse cx='2.6' cy='5' rx='2.6' ry='1.1' transform='rotate%2830 2.6 5%29' fill='%23a3b596'/%3E%3Cellipse rx='2.2' ry='2.8' fill='%23f3c3cd'/%3E%3C/g%3E%3Cg transform='translate%28132 14%29 rotate%28-35%29'%3E%3Cpath d='M0 2 C0 6 -1 8 -2 10' stroke='%2393a887' stroke-width='.7' fill='none'/%3E%3Cellipse cx='2.6' cy='5' rx='2.6' ry='1.1' transform='rotate%2830 2.6 5%29' fill='%23a3b596'/%3E%3Cellipse rx='2.2' ry='2.8' fill='%23f3c3cd'/%3E%3C/g%3E%3Cg transform='translate%2870 140%29 rotate%2840%29'%3E%3Cpath d='M0 2 C0 6 -1 8 -2 10' stroke='%2393a887' stroke-width='.7' fill='none'/%3E%3Cellipse cx='2.6' cy='5' rx='2.6' ry='1.1' transform='rotate%2830 2.6 5%29' fill='%23a3b596'/%3E%3Cellipse rx='2.2' ry='2.8' fill='%23f3c3cd'/%3E%3C/g%3E%3Cg fill='%23b9c7ad'%3E%3Ccircle cx='60' cy='60' r='1.1'/%3E%3Ccircle cx='118' cy='92' r='1'/%3E%3Ccircle cx='20' cy='140' r='1'/%3E%3Ccircle cx='86' cy='80' r='.9'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") 0 0 / 150px 150px,
+    var(--cream);
 }
+
+/* warm afternoon light pooling across the sheet */
+.light {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 160vh;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 45% at 78% 8%, rgba(255, 236, 196, 0.85), transparent 70%),
+    radial-gradient(ellipse 45% 40% at 10% 40%, rgba(255, 246, 232, 0.7), transparent 70%),
+    linear-gradient(115deg, transparent 30%, rgba(255, 240, 214, 0.45) 45%, transparent 60%);
+  mix-blend-mode: soft-light;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+.sparkles {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 150vh;
+  z-index: 3;
+  pointer-events: none;
+}
+.spark {
+  position: absolute;
+  aspect-ratio: 1;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 10px rgba(255, 214, 226, 0.9));
+  animation: twinkle 3s ease-in-out infinite;
+  opacity: 0;
+}
+
+/* the tulip field: washed out to pastel, softly blurred and hazy, fading
+   into the rose-print sheet below */
+.top {
+  position: relative;
+}
+.top::before,
+.top::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 55%, transparent 98%);
+  mask: linear-gradient(#000 55%, transparent 98%);
+}
+.top::before {
+  background: url("/genres/coquette/tulips.jpg") center 62% / cover no-repeat;
+  filter: blur(1.5px) brightness(1.12) saturate(0.62) contrast(0.86) sepia(0.12);
+}
+/* pink-white haze and a glow where the light comes in */
+.top::after {
+  background:
+    radial-gradient(ellipse 60% 50% at 75% 10%, rgba(255, 246, 228, 0.75), transparent 70%),
+    linear-gradient(rgba(255, 240, 244, 0.42), rgba(255, 244, 240, 0.5));
+}
+.top > * { position: relative; z-index: 1; }
 
 /* ─── Top bar ─────────────────────────────────────────── */
 .topbar {
+  position: relative;
+  z-index: 4;
   display: flex;
   justify-content: center;
   padding: 1.25rem 1rem 0;
-  font-family: var(--display);
+  font-family: var(--serif);
   font-style: italic;
   font-size: 0.95rem;
 }
 .back {
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 250, 246, 0.8);
   color: var(--mauve);
   text-decoration: none;
-  border-bottom: 1px dotted var(--rose-deep);
-  transition: color 0.2s;
+  box-shadow: 0 0 0 1px rgba(234, 179, 191, 0.7);
 }
 .back:hover { color: var(--wine); }
 
-/* ─── Hero ────────────────────────────────────────────── */
-.hero {
-  padding: 3rem 1.25rem 4rem;
+/* ─── Flat-lay ────────────────────────────────────────── */
+.flatlay {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 3.5rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 5rem;
+}
+@media (min-width: 900px) {
+  .flatlay {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+    padding: 4rem 2rem 6rem;
+  }
+}
+.cornerBow {
+  position: absolute;
+  top: 0.5rem;
+  right: clamp(0.5rem, 5vw, 4rem);
+  width: clamp(5rem, 11vw, 8.5rem);
+  rotate: 14deg;
+  filter: drop-shadow(0 10px 10px rgba(150, 80, 95, 0.22));
+}
+
+/* the little pink book */
+.bookWrap {
+  position: relative;
+  width: min(100%, 26rem);
+}
+.book {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  padding: 1.4rem;
+  border-radius: 3px 8px 8px 3px;
+  rotate: -3.5deg;
+  background:
+    /* linen grain */
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(120, 50, 70, 0.04) 0 1px, transparent 1px 3px),
+    linear-gradient(135deg, #f3c4c9, #eab0b8 55%, #e3a3ad);
+  box-shadow:
+    inset 10px 0 12px -8px rgba(120, 50, 70, 0.35),
+    /* page edges peeking out */
+    4px 4px 0 -1px #fbf3ea,
+    7px 7px 0 -2px #efe4d8,
+    0 30px 50px -20px rgba(120, 60, 70, 0.45);
+}
+.bookFrame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2.4rem 1.6rem;
   text-align: center;
+  color: #6a3a44;
+  border: 1px solid rgba(106, 58, 68, 0.45);
+  outline: 3px double rgba(106, 58, 68, 0.35);
+  outline-offset: -9px;
+  border-radius: 46% 46% 6px 6px / 22% 22% 6px 6px;
 }
-.heroBow {
-  display: block;
-  width: clamp(64px, 12vw, 104px);
-  margin: 0 auto 0.25rem;
-  color: var(--rose);
-  filter: drop-shadow(0 4px 6px rgba(201, 96, 127, 0.25));
-  transform-origin: 50% 30%;
-  animation: sway 5s ease-in-out infinite;
+.frameBow {
+  position: absolute;
+  top: -0.9rem;
+  width: 3.2rem;
 }
-.kicker {
-  font-family: var(--script);
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  color: var(--rose-deep);
-  line-height: 1;
+.frameBowSmall {
+  position: absolute;
+  bottom: 1.2rem;
+  width: 2.2rem;
+  opacity: 0.85;
 }
-.title {
-  margin: 0.25rem 0 0;
+.bookPre {
   font-family: var(--display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(3.4rem, 12vw, 8.5rem);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.bookTitle {
+  margin-top: 0.5rem;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
   line-height: 0.95;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   text-wrap: balance;
 }
-.lede {
-  max-width: 34rem;
-  margin: 1.5rem auto 0;
-  font-size: 1.05rem;
-  line-height: 1.75;
-  color: var(--mauve);
-}
-.keywords {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.3rem 0.6rem;
-  max-width: 40rem;
-  margin: 1.75rem auto 0;
+.bookSub {
+  max-width: 15rem;
+  margin-top: 1rem;
   font-family: var(--display);
   font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.3;
 }
-.keywords li + li::before {
-  content: "♡";
-  margin-right: 0.6rem;
-  color: var(--rose-deep);
-  font-style: normal;
-  font-size: 0.8em;
-}
-
-/* pearl strand */
 .pearls {
-  display: flex;
-  justify-content: center;
-  gap: 7px;
-  margin: 2.25rem auto 0;
+  position: absolute;
+  z-index: 2;
+  top: -6%;
+  left: 18%;
+  width: 92%;
+  filter: drop-shadow(0 3px 3px rgba(110, 70, 60, 0.28));
+  pointer-events: none;
 }
-.pearls span {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff 0 25%, #f8e7ea 45%, #e4c3cb 100%);
-  box-shadow: 0 1px 2px rgba(91, 43, 58, 0.18);
-}
-.pearls span:nth-child(odd) { transform: translateY(3px); }
 
-/* ─── Lace edge + gallery ─────────────────────────────── */
-.lace {
-  height: 18px;
-  background: radial-gradient(circle at 12px 0, transparent 11px, var(--cream) 12px) 0 0 / 24px 18px repeat-x;
+/* the open notebook with handwritten notes */
+.notebook {
+  position: relative;
+  width: min(100%, 24rem);
+  min-height: 22rem;
+  padding: 2.2rem 1.8rem 2.5rem 3.2rem;
+  rotate: 2.5deg;
+  background:
+    linear-gradient(90deg, transparent 2.3rem, rgba(234, 140, 160, 0.45) 2.3rem 2.4rem, transparent 2.4rem),
+    repeating-linear-gradient(180deg, transparent 0 2.15rem, rgba(196, 160, 170, 0.35) 2.15rem calc(2.15rem + 1px)),
+    linear-gradient(160deg, #fffaf2, #f8eee3);
+  background-position: 0 0, 0 1.6rem, 0 0;
+  border-radius: 2px 6px 6px 2px;
+  box-shadow: inset 12px 0 16px -12px rgba(120, 80, 70, 0.3), 0 26px 40px -22px rgba(120, 70, 70, 0.45);
 }
-.laceHoles {
-  height: 12px;
-  background: var(--cream) radial-gradient(circle, var(--rose) 1.8px, transparent 2.2px) 0 0 / 24px 12px repeat-x;
+.notesHead {
+  font-family: var(--script);
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--rose-deep);
 }
+.notesList {
+  margin-top: 0.7rem;
+  list-style: none;
+  font-family: var(--hand);
+  font-size: 1.75rem;
+  line-height: 2.15rem;
+  color: #d0708a;
+}
+.notesList li { translate: var(--nudge, 0) 0; }
+.doodleHeart { margin-left: 0.5rem; font-size: 1.1rem; color: #e48ca2; }
+.bigHeart {
+  position: absolute;
+  right: 2.2rem;
+  bottom: 2rem;
+  font-family: var(--hand);
+  font-size: 3rem;
+  line-height: 1;
+  color: #e48ca2;
+  rotate: -10deg;
+}
+/* a pink pen with a little gold bow on the clip */
+.pen {
+  position: absolute;
+  right: -0.8rem;
+  top: 2.5rem;
+  width: 0.7rem;
+  height: 13rem;
+  border-radius: 999px 999px 40% 40%;
+  rotate: 12deg;
+  background:
+    linear-gradient(180deg, #d9a54a 0 1.5rem, transparent 1.5rem),
+    linear-gradient(90deg, #d58b9c, #f6c9d2 40%, #e7a5b3 70%, #c97a8d);
+  box-shadow: 0 10px 12px -6px rgba(110, 60, 70, 0.45);
+}
+/* the gold bow on the pen's cap */
+.penBow {
+  position: absolute;
+  z-index: 2;
+  right: -1.55rem;
+  top: 1.7rem;
+  width: 2rem;
+  rotate: 12deg;
+  filter: sepia(1) saturate(2.4) hue-rotate(-14deg) brightness(0.98) drop-shadow(0 2px 2px rgba(110, 70, 30, 0.35));
+}
+.pen::after {
+  content: "";
+  position: absolute;
+  bottom: -0.55rem;
+  left: 50%;
+  translate: -50% 0;
+  border: 0.35rem solid transparent;
+  border-top: 0.6rem solid #d9a54a;
+  border-bottom: 0;
+}
+
+/* ─── Gallery: printed photos tied with bows, in the tulip field ─ */
 .gallery {
-  background: var(--cream);
-  padding: 2rem 1.25rem 5rem;
+  position: relative;
+  z-index: 2;
+  padding: 4.5rem 1.25rem 5rem;
 }
+/* the same washed-out tulip field as the top, fading in from the sheet */
+.gallery::before,
+.gallery::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(transparent, #000 14rem);
+  mask: linear-gradient(transparent, #000 14rem);
+}
+.gallery::before {
+  background: url("/genres/coquette/tulips.jpg") center 40% / cover no-repeat;
+  filter: blur(1.5px) brightness(1.12) saturate(0.62) contrast(0.86) sepia(0.12);
+}
+.gallery::after {
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 30%, rgba(255, 246, 228, 0.6), transparent 70%),
+    linear-gradient(rgba(255, 240, 244, 0.48), rgba(255, 244, 240, 0.55));
+}
+.gallery > * { position: relative; z-index: 1; }
 .galleryInner {
   max-width: 72rem;
   margin: 0 auto;
 }
 .sectionTitle {
+  margin-bottom: 3rem;
   text-align: center;
   font-family: var(--script);
   font-weight: 400;
-  font-size: 2.6rem;
+  font-size: clamp(3rem, 7vw, 4.4rem);
+  line-height: 1;
   color: var(--rose-deep);
-  margin-bottom: 3rem;
+  text-shadow: 0 2px 0 #fff, 0 0 18px rgba(255, 250, 246, 0.95);
 }
 .grid {
-  columns: 2;
-  column-gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3rem 1.25rem;
+  align-items: start;
 }
-@media (min-width: 900px) {
-  .grid { columns: 3; column-gap: 2.75rem; }
-}
-
-.polaroid {
+@media (min-width: 900px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4rem 2.75rem; } }
+.print {
   position: relative;
   display: block;
-  width: 100%;
-  margin: 0 0 2.75rem;
-  break-inside: avoid;
-  padding: 12px 12px 0;
-  background: #fff;
-  text-align: center;
-  box-shadow: 0 1px 2px rgba(91, 43, 58, 0.08), 0 12px 28px -12px rgba(91, 43, 58, 0.28);
-  transform: rotate(var(--tilt, 0deg));
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
+  padding: 0.7rem 0.7rem 0;
+  background: #fffdf9;
+  box-shadow: 0 1px 2px rgba(110, 60, 70, 0.12), 0 22px 34px -18px rgba(110, 60, 70, 0.45);
+  rotate: var(--tilt, 0deg);
   cursor: zoom-in;
+  transition: rotate 0.4s, translate 0.4s, box-shadow 0.4s;
 }
-.polaroid:hover,
-.polaroid:focus-visible {
-  transform: rotate(0deg) translateY(-6px) scale(1.02);
-  box-shadow: 0 2px 4px rgba(91, 43, 58, 0.08), 0 22px 40px -14px rgba(91, 43, 58, 0.38);
-  outline: none;
+.print:hover, .print:focus-visible {
+  rotate: 0deg;
+  translate: 0 -6px;
+  box-shadow: 0 1px 2px rgba(110, 60, 70, 0.12), 0 30px 44px -18px rgba(196, 103, 127, 0.5);
 }
-.polaroid:focus-visible { box-shadow: 0 0 0 3px var(--rose), 0 22px 40px -14px rgba(91, 43, 58, 0.38); }
-.polaroid img {
+.print:focus-visible { outline: 2px solid var(--rose); outline-offset: 4px; }
+.printBow {
+  position: absolute;
+  z-index: 2;
+  top: -1.4rem;
+  left: 50%;
+  width: 4.2rem;
+  translate: -50% 0;
+  filter: drop-shadow(0 6px 6px rgba(150, 80, 95, 0.28));
+}
+.printPhoto {
+  display: block;
+  overflow: hidden;
+  outline: 1px solid rgba(201, 154, 68, 0.35);
+}
+.printPhoto img {
   display: block;
   width: 100%;
-  height: auto;
-  filter: saturate(0.92);
-}
-.pin {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  width: 48px;
-  translate: -50% 0;
-  rotate: var(--pin-tilt, 0deg);
-  color: var(--rose);
-  filter: drop-shadow(0 2px 2px rgba(91, 43, 58, 0.2));
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) sepia(0.08) brightness(1.03);
 }
 .caption {
   display: block;
-  padding: 0.6rem 0.25rem 0.9rem;
-  font-family: var(--script);
-  font-size: 1.65rem;
-  line-height: 1.1;
-}
-
-.empty {
-  max-width: 26rem;
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
+  padding: 0.7rem 0.2rem 0.9rem;
   text-align: center;
-  border: 1.5px dashed var(--rose);
-  border-radius: 28px;
-  font-family: var(--display);
+  font-family: var(--script);
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  line-height: 1.1;
+  color: var(--wine);
+}
+.empty {
+  max-width: 24rem;
+  margin: 0 auto;
+  padding: 2.2rem 1.5rem;
+  text-align: center;
+  font-family: var(--serif);
   font-style: italic;
   color: var(--mauve);
+  background: #fffdf9;
+  border: 1.5px dashed var(--rose);
+  border-radius: 18px;
 }
 .empty strong {
   display: block;
   font-family: var(--script);
   font-weight: 400;
-  font-size: 2.4rem;
+  font-size: 2.6rem;
   color: var(--rose-deep);
 }
 
+/* ─── Footer ──────────────────────────────────────────── */
 .footer {
-  padding: 1rem 1rem 3rem;
-  text-align: center;
-  font-family: var(--script);
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 2.5rem 1rem 3rem;
+  font-family: var(--hand);
   font-size: 1.8rem;
-  color: var(--rose-deep);
-  background: var(--cream);
+  color: #d0708a;
+  background: #fffaf8;
+}
+.footer span { font-size: 1.6rem; }
+
+/* ─── Tagged items: pink suede notes with a lace edge and a satin bow ─ */
+.tagsRoot {
+  --tp-line: rgba(201, 96, 127, 0.55);
+  --tp-line-w: 1;
+  --tp-dash: 3 3;
+  --tp-pin: #f2b8c6;
+  --tp-pin-ring: #fff;
+  --tp-pin-num: #5b2b3a;
+  --tp-gap: 30px;
+}
+.tagBubble {
+  position: relative;
+  padding: 0.85rem 1.9rem 0.9rem 1.05rem;
+  color: #5b2b3a;
+  /* the lace-trimmed card is one 9-slice image; the scallops sit just outside */
+  border: 1px solid transparent;
+  border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='%23fbf6f7' stroke='%23e7d2d9' stroke-width='.7'%3E%3Ccircle cx='6' cy='25' r='6'/%3E%3Ccircle cx='6' cy='35' r='6'/%3E%3Ccircle cx='6' cy='45' r='6'/%3E%3Ccircle cx='6' cy='55' r='6'/%3E%3Ccircle cx='6' cy='65' r='6'/%3E%3Ccircle cx='8.25' cy='15.29' r='6'/%3E%3Ccircle cx='8.25' cy='74.71' r='6'/%3E%3Ccircle cx='15.29' cy='8.25' r='6'/%3E%3Ccircle cx='15.29' cy='81.75' r='6'/%3E%3Ccircle cx='25' cy='6' r='6'/%3E%3Ccircle cx='25' cy='84' r='6'/%3E%3Ccircle cx='35' cy='6' r='6'/%3E%3Ccircle cx='35' cy='84' r='6'/%3E%3Ccircle cx='45' cy='6' r='6'/%3E%3Ccircle cx='45' cy='84' r='6'/%3E%3Ccircle cx='55' cy='6' r='6'/%3E%3Ccircle cx='55' cy='84' r='6'/%3E%3Ccircle cx='65' cy='6' r='6'/%3E%3Ccircle cx='65' cy='84' r='6'/%3E%3Ccircle cx='74.71' cy='8.25' r='6'/%3E%3Ccircle cx='74.71' cy='81.75' r='6'/%3E%3Ccircle cx='81.75' cy='15.29' r='6'/%3E%3Ccircle cx='81.75' cy='74.71' r='6'/%3E%3Ccircle cx='84' cy='25' r='6'/%3E%3Ccircle cx='84' cy='35' r='6'/%3E%3Ccircle cx='84' cy='45' r='6'/%3E%3Ccircle cx='84' cy='55' r='6'/%3E%3Ccircle cx='84' cy='65' r='6'/%3E%3C/g%3E%3Cg fill='none' stroke='%23e2c9d1' stroke-width='1.1' stroke-dasharray='.1 1.9' stroke-linecap='round'%3E%3Ccircle cx='6' cy='25' r='3.6'/%3E%3Ccircle cx='6' cy='35' r='3.6'/%3E%3Ccircle cx='6' cy='45' r='3.6'/%3E%3Ccircle cx='6' cy='55' r='3.6'/%3E%3Ccircle cx='6' cy='65' r='3.6'/%3E%3Ccircle cx='8.25' cy='15.29' r='3.6'/%3E%3Ccircle cx='8.25' cy='74.71' r='3.6'/%3E%3Ccircle cx='15.29' cy='8.25' r='3.6'/%3E%3Ccircle cx='15.29' cy='81.75' r='3.6'/%3E%3Ccircle cx='25' cy='6' r='3.6'/%3E%3Ccircle cx='25' cy='84' r='3.6'/%3E%3Ccircle cx='35' cy='6' r='3.6'/%3E%3Ccircle cx='35' cy='84' r='3.6'/%3E%3Ccircle cx='45' cy='6' r='3.6'/%3E%3Ccircle cx='45' cy='84' r='3.6'/%3E%3Ccircle cx='55' cy='6' r='3.6'/%3E%3Ccircle cx='55' cy='84' r='3.6'/%3E%3Ccircle cx='65' cy='6' r='3.6'/%3E%3Ccircle cx='65' cy='84' r='3.6'/%3E%3Ccircle cx='74.71' cy='8.25' r='3.6'/%3E%3Ccircle cx='74.71' cy='81.75' r='3.6'/%3E%3Ccircle cx='81.75' cy='15.29' r='3.6'/%3E%3Ccircle cx='81.75' cy='74.71' r='3.6'/%3E%3Ccircle cx='84' cy='25' r='3.6'/%3E%3Ccircle cx='84' cy='35' r='3.6'/%3E%3Ccircle cx='84' cy='45' r='3.6'/%3E%3Ccircle cx='84' cy='55' r='3.6'/%3E%3Ccircle cx='84' cy='65' r='3.6'/%3E%3C/g%3E%3Crect x='6' y='6' width='78' height='78' rx='18' fill='%23f4ebee' stroke='%23ecdde2' stroke-width='.8'/%3E%3Crect x='9.5' y='9.5' width='71' height='71' rx='15' fill='none' stroke='%23fbf6f7' stroke-width='.6'/%3E%3C/svg%3E") 30 / 30px / 6px round;
+  background: #f4ebee;
+  border-radius: 14px;
+  filter: drop-shadow(0 6px 10px rgba(201, 96, 127, 0.16));
+  margin-bottom: 0.9rem;
+}
+/* stitching just inside the edge */
+.tagBubble::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1.2px dashed rgba(201, 150, 166, 0.55);
+  border-radius: 13px;
+  pointer-events: none;
+}
+/* a little satin bow in the top-right corner */
+.tagBow {
+  position: absolute;
+  top: -0.35rem;
+  right: 0.15rem;
+  width: 2.1rem;
+  aspect-ratio: 64 / 44;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='44' viewBox='0 0 64 44'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='1' stop-color='%23f1e3e8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url%28%23s%29' stroke='%235a3220' stroke-width='.9' stroke-linejoin='round'%3E%3Cpath d='M29 21 21 41l6-2 3 4 2-20Z'/%3E%3Cpath d='M35 21l8 20-6-2-3 4-2-20Z'/%3E%3Cpath d='M31 17C24 7 11 1 5 4S1 22 10 24c7 1.6 15-2 21-5Z'/%3E%3Cpath d='M33 17c7-10 20-16 26-13s4 18-5 20c-7 1.6-15-2-21-5Z'/%3E%3C/g%3E%3Cg fill='none' stroke='%237a4a33' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M28 18C21 13 13 10 8 12'/%3E%3Cpath d='M36 18c7-5 15-8 20-6'/%3E%3C/g%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.3' stroke-linecap='round'%3E%3Cpath d='M27 15C21 9 13 6 9 7'/%3E%3Cpath d='M37 15c6-6 14-9 18-8'/%3E%3C/g%3E%3Cellipse cx='32' cy='18.5' rx='4.6' ry='5.2' fill='%23fbf6f7' stroke='%235a3220' stroke-width='.9'/%3E%3C/svg%3E") center / contain no-repeat;
+  rotate: 8deg;
+  pointer-events: none;
+}
+/* the speech-bubble tail, bottom left */
+.tagTail {
+  position: absolute;
+  left: 0.9rem;
+  top: calc(100% - 3px);
+  width: 1.5rem;
+  aspect-ratio: 30 / 26;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='26' viewBox='0 0 30 26'%3E%3Cpath d='M8 0 H26 C20 7 12 15 1 24 C5 15 8 8 8 0Z' fill='%23fbf6f7' stroke='%23e7d2d9' stroke-width='.8'/%3E%3Cpath d='M11 0 H22 C17 6 11 12 5 18 C8 12 11 7 11 0Z' fill='%23f4ebee'/%3E%3Cpath d='M25 1.5 C19.5 8 12 15.5 2.5 23' fill='none' stroke='%23e2c9d1' stroke-width='1.1' stroke-dasharray='.1 1.9' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  pointer-events: none;
+}
+.tagName { font-family: "Playfair Display", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; line-height: 1.2; }
+.tagLink { font-family: "Lora", serif; font-style: italic; font-size: 0.8rem; color: #c9607f; }
+.tagSource {
+  justify-self: start;
+  font-family: "Pinyon Script", cursive;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: #c9607f;
 }
 
 /* ─── Lightbox ────────────────────────────────────────── */
 .lbDialog {
-  background: #fffaf6;
+  background: #fff;
   color: #5b2b3a;
   border: 1.5px dashed #f2b8c6;
   border-radius: 28px;
 }
-.lbImage { background: #fff4f6; }
+/* tiny chocolate polka dots behind the photo; the title area stays plain white */
+.lbImage {
+  background:
+    radial-gradient(circle, rgba(90, 50, 32, 0.55) 1.6px, transparent 2.1px) 0 0 / 26px 26px,
+    radial-gradient(circle, rgba(90, 50, 32, 0.55) 1.6px, transparent 2.1px) 13px 13px / 26px 26px,
+    #fff;
+}
 .lbCaption {
   font-family: "Pinyon Script", cursive;
   font-size: 1.8rem;
@@ -245,11 +519,16 @@
 }
 .lbButton:hover { background: #f9dde5; }
 
-@keyframes sway {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(3deg); }
+@keyframes twinkle {
+  0%, 100% { opacity: 0; scale: 0.3; rotate: 0deg; }
+  50% { opacity: 1; scale: 1; rotate: 45deg; }
+}
+@keyframes drift {
+  from { translate: -2% 0; opacity: 0.85; }
+  to { translate: 2% 1%; opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .heroBow { animation: none; }
-  .polaroid { transition: none; }
+  .spark { animation: none; opacity: 0.8; scale: 0.7; }
+  .light { animation: none; }
+  .print { transition: none; }
 }

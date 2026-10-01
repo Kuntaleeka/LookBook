@@ -11,8 +11,8 @@ export const GENRE_DESIGNS: Record<string, GenreDesign> = {
   coquette: {
     id: "coquette",
     label: "Soft / Coquette",
-    fonts: ["Playfair Display", "Pinyon Script", "Lora"],
-    background: "#fff4f6",
+    fonts: ["Cormorant Garamond", "Playfair Display", "Pinyon Script", "Caveat", "Lora"],
+    background: "#fbf5ee",
     Page: CoquettePage,
   },
   grunge: {
@@ -39,8 +39,8 @@ export const GENRE_DESIGNS: Record<string, GenreDesign> = {
   "office-siren": {
     id: "office-siren",
     label: "Office Siren",
-    fonts: ["Bodoni Moda", "Inter"],
-    background: "#f4f1ee",
+    fonts: ["Inter Tight"],
+    background: "#efeeeb",
     Page: OfficeSirenPage,
   },
 };

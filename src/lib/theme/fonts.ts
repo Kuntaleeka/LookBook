@@ -41,6 +41,7 @@ export const FONTS: FontOption[] = [
   { family: "Space Mono", fallback: "monospace", weights: [400, 700], vibe: "Retro mono" },
   // Sans
   { family: "Inter", fallback: "sans-serif", weights: [400, 500, 600, 700], vibe: "Neutral sans" },
+  { family: "Inter Tight", fallback: "sans-serif", italic: true, weights: [400, 500, 700, 800, 900], vibe: "Tight magazine sans" },
   { family: "DM Sans", fallback: "sans-serif", weights: [400, 500, 700], vibe: "Friendly sans" },
   { family: "Space Grotesk", fallback: "sans-serif", weights: [300, 400, 500, 700], vibe: "Techy sans" },
   { family: "Syne", fallback: "sans-serif", weights: [400, 600, 700], vibe: "Arty sans" },

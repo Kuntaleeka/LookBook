@@ -214,32 +214,71 @@
 }
 .g_acubi .cardName::after { content: "  アクビ"; font-size: 0.55em; letter-spacing: 0.1em; }
 
+/* coquette: the dreamy tulip field from the genre page, a cream print tied
+   with a satin bow, and the "little book" lettering */
 .g_coquette .bg {
   background:
-    radial-gradient(#f2b6c5 1.6px, transparent 2px) 0 0 / 22px 22px,
-    #fff4f6;
+    radial-gradient(ellipse 60% 45% at 70% 12%, rgba(255, 246, 228, 0.7), transparent 70%),
+    linear-gradient(rgba(255, 240, 244, 0.45), rgba(255, 244, 240, 0.55)),
+    url("/genres/coquette/tulips.jpg") center 62% / cover;
+  filter: blur(1px) brightness(1.1) saturate(0.65) contrast(0.88) sepia(0.1);
 }
 .g_coquette .bgWord {
   font-family: "Pinyon Script", cursive;
   font-size: 9rem;
-  color: rgba(201, 96, 127, 0.3);
+  color: rgba(255, 255, 255, 0.55);
+  text-shadow: 0 0 18px rgba(255, 214, 226, 0.8);
 }
-.g_coquette .portraitFrame { border: 10px solid #fff; border-bottom-width: 26px; rotate: 2deg; }
-.g_coquette .cardName { font-family: "Playfair Display", serif; font-style: italic; color: #5b2b3a; }
+.g_coquette .portraitFrame {
+  border: 9px solid #fffdf9;
+  border-bottom-width: 9px;
+  outline: 1px solid rgba(201, 154, 68, 0.45);
+  outline-offset: -5px;
+  rotate: 1.5deg;
+}
+.g_coquette .portrait { filter: saturate(0.92) sepia(0.08) brightness(1.03); }
+.g_coquette .cardName {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2.1vw, 1.6rem);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: #6a3a44;
+  text-shadow: 0 0 12px rgba(255, 250, 246, 0.95), 0 1px 0 #fff;
+}
+/* a satin bow tied above the name */
+.g_coquette .cardName::before {
+  content: "";
+  display: block;
+  width: 2.8rem;
+  aspect-ratio: 64 / 48;
+  margin: 0 auto 0.15rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='48' viewBox='0 0 64 48'%3E%3Cdefs%3E%3ClinearGradient id='l' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fbe1e6'/%3E%3Cstop offset='.45' stop-color='%23efb3c0'/%3E%3Cstop offset='1' stop-color='%23d98d9f'/%3E%3C/linearGradient%3E%3ClinearGradient id='t' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23e9a3b3'/%3E%3Cstop offset='.5' stop-color='%23f8d3db'/%3E%3Cstop offset='1' stop-color='%23d58799'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M29 21 C25 30 21 38 16 46 L22 44 L25 47.5 C28 39 30 30 31.5 22Z' fill='url%28%23t%29'/%3E%3Cpath d='M35 21 C39 30 43 38 48 46 L42 44 L39 47.5 C36 39 34 30 32.5 22Z' fill='url%28%23t%29'/%3E%3Cpath d='M31 18C24 7 11 1 5 4S1 22 10 24c7 1.6 15-2 21-5Z' fill='url%28%23l%29'/%3E%3Cpath d='M33 18c7-11 20-17 26-14s4 18-5 20c-7 1.6-15-2-21-5Z' fill='url%28%23l%29'/%3E%3Cpath d='M26 13C20 8 13 5.5 8.5 6.5M38 13c6-5 13-7.5 17.5-6.5' fill='none' stroke='%23fff' stroke-opacity='.85' stroke-width='1.6' stroke-linecap='round'/%3E%3Cellipse cx='32' cy='19' rx='4.8' ry='5.6' fill='%23e7a2b2'/%3E%3C/svg%3E") center / contain no-repeat;
+  filter: drop-shadow(0 4px 4px rgba(150, 80, 95, 0.3));
+}
 
 .g_office_siren .bg {
   background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 14px),
-    #1f1f23;
+    repeating-linear-gradient(90deg, transparent 0 11px, rgba(255, 255, 255, 0.16) 11px 12px),
+    #1b1b1f;
 }
 .g_office_siren .bgWord {
-  font-family: "Bodoni Moda", serif;
-  font-style: italic;
+  font-family: "Inter Tight", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  text-transform: lowercase;
   font-size: 8rem;
-  color: rgba(217, 138, 152, 0.25);
+  color: rgba(200, 20, 28, 0.55);
 }
-.g_office_siren .portraitFrame { border-bottom: 3px solid #6e1423; }
-.g_office_siren .cardName { font-family: "Bodoni Moda", serif; color: #f4f1ee; }
+.g_office_siren .portraitFrame { border: 8px solid #efeeeb; border-bottom-width: 8px; }
+.g_office_siren .cardName {
+  font-family: "Inter Tight", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  text-transform: lowercase;
+  color: #fff;
+}
 
 .g_default .bg { background: linear-gradient(160deg, #2a2a2e, #111); }
 .g_default .bgWord { font-size: 8rem; font-weight: 700; color: rgba(255, 255, 255, 0.08); }

@@ -224,6 +224,49 @@
   .glasses { top: auto; bottom: -1.5rem; right: 1rem; width: 9.5rem; }
 }
 
+/* ─── Phones: headline on the left, palette card on the right with the
+   glasses resting on it, so the outfits start on the first screen ──────── */
+@media (max-width: 639px) {
+  .spread {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    align-items: start;
+    gap: 0.9rem;
+    padding: 1.8rem 0.9rem 1.6rem;
+  }
+  .headBlock { align-self: start; }
+  .headline { font-size: clamp(2rem, 9.8vw, 2.7rem); line-height: 0.88; }
+  .standfirst { margin-top: 0.7rem; font-size: 0.82rem; line-height: 1.15; }
+  .byline { margin-top: 0.35rem; font-size: 0.6rem; }
+  .heroKiss { right: -6%; top: -1.4rem; width: 4.8rem; }
+
+  .paletteCard {
+    align-self: start;
+    margin-top: 1.6rem; /* room above for the glasses */
+    padding: 0.45rem;
+    rotate: 1.5deg;
+  }
+  .swatches { gap: 0.3rem; }
+  .swatches li { height: 1.45rem; }
+  .swatches span { display: none; } /* colour names are too small to read here */
+  .paletteCard .label { margin-top: 0.5rem; font-size: 0.98rem; }
+  .patterns { gap: 0.3rem; margin-top: 0.4rem; }
+  .patterns span { height: 2.1rem; padding: 0.2rem 0.25rem; font-size: 0.55rem; }
+
+  /* the glasses sit on the top edge of the card, and slip less as you scroll */
+  .glasses {
+    top: 1.5rem;
+    bottom: auto;
+    right: 0.6rem;
+    width: 6.4rem;
+    transform:
+      translateY(calc(var(--slip) * 2.2rem))
+      rotate(calc(-8deg + var(--slip) * 12deg));
+  }
+
+  .gallery { padding-top: 0.8rem; }
+  .galleryHead { margin-bottom: 1.6rem; padding-bottom: 0.7rem; }
+}
+
 /* ─── Gallery ─────────────────────────────────────────── */
 .gallery {
   max-width: 78rem;

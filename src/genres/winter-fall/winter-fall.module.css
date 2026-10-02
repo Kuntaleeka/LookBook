@@ -231,6 +231,37 @@
   box-shadow: 0 3px 6px rgba(60, 40, 25, 0.35);
 }
 
+/* ─── Phones: the words and the print sit side by side, and the knit band
+   is slimmer, so the fits start sooner ─────────────────────────────────── */
+@media (max-width: 639px) {
+  .hero { min-height: 0; }
+  .heroInner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+    justify-items: start;
+    gap: 0.9rem;
+    padding: 1.6rem 0.9rem 2.6rem;
+  }
+  .kicker { font-size: 0.56rem; letter-spacing: 0.24em; }
+  .title { margin-top: 0.4rem; font-size: clamp(2.3rem, 11.5vw, 3.2rem); overflow-wrap: anywhere; }
+  .lede { margin-top: 0.7rem; font-size: 0.92rem; line-height: 1.35; }
+  .still {
+    width: 100%;
+    margin: 0;
+    padding: 0.4rem 0.4rem 0;
+  }
+  .stillCaption { padding: 0.4rem 0.1rem 0.5rem; font-size: 1rem; }
+
+  .knit { padding: 1.9rem 0.6rem; }
+  .labels { gap: 0.45rem 0.45rem; }
+  .labels li {
+    padding: 0.28rem 0.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    outline-width: 1px;
+    outline-offset: -3px;
+  }
+}
+
 /* ─── The table: dark walnut by candlelight ───────────── */
 .table {
   position: relative;

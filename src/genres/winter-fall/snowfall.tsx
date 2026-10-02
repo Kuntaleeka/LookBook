@@ -39,14 +39,27 @@ export function Snowfall({ className }: { className?: string }) {
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.min(170, Math.round((w * h) / 8500));
+      const count = Math.min(170, Math.round((w * h) / (phone ? 11000 : 8500)));
       flakes = Array.from({ length: count }, () => spawn(true));
+    };
+
+    // Phones: redrawing the whole screen while it is also scrolling makes the
+    // page stutter, so the snow holds still for a moment whenever you scroll.
+    const phone = window.matchMedia("(max-width: 639px)").matches;
+    let scrolledAt = -Infinity;
+    const onScroll = () => {
+      scrolledAt = performance.now();
     };
 
     let frame = 0;
     let last = performance.now();
     let t = 0;
     const draw = (now: number) => {
+      if (phone && now - scrolledAt < 180) {
+        last = now;
+        frame = requestAnimationFrame(draw);
+        return;
+      }
       const dt = Math.min(50, now - last) / 16.67;
       last = now;
       t += dt;
@@ -89,10 +102,12 @@ export function Snowfall({ className }: { className?: string }) {
     resize();
     frame = requestAnimationFrame(draw);
     window.addEventListener("resize", resize);
+    if (phone) window.addEventListener("scroll", onScroll, { passive: true });
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);

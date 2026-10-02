@@ -270,6 +270,49 @@
   .pendant { margin-inline: auto; }
 }
 
+/* phones only: the words sit to the left of the cat and the skull, like the
+   laptop layout, instead of underneath them */
+@media (max-width: 639px) {
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    /* empty rows above and below keep the words together, centred beside the scene */
+    grid-template-rows: 1fr auto auto auto auto 1fr auto;
+    column-gap: 0.4rem;
+    padding: 1rem 0 3rem 1.1rem;
+  }
+  /* the text block's children are placed straight onto the grid */
+  .heroText { display: contents; }
+  .scene {
+    grid-column: 2;
+    grid-row: 1 / 7;
+    align-self: center;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+  .kicker { grid-column: 1; grid-row: 2; font-size: 0.56rem; letter-spacing: 0.22em; }
+  .title { grid-column: 1; grid-row: 3; margin-top: 0.1rem; font-size: clamp(3.2rem, 17vw, 4.4rem); }
+  .lede { grid-column: 1; grid-row: 4; margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.35; }
+  .keywords {
+    grid-column: 1;
+    grid-row: 5;
+    gap: 0.2rem 0.45rem;
+    margin-top: 0.7rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+  }
+  .keywords li + li::before { margin-right: 0.45rem; }
+  .kicker, .title, .lede, .keywords { position: relative; z-index: 2; }
+  .pendant {
+    grid-column: 1 / -1;
+    grid-row: 7;
+    justify-self: center;
+    width: 11rem;
+    margin: 1.5rem 0 0;
+  }
+}
+
 /* ─── Gallery ─────────────────────────────────────────── */
 .gallery {
   position: relative;

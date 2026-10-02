@@ -252,6 +252,9 @@
   .stillCaption { padding: 0.4rem 0.1rem 0.5rem; font-size: 1rem; }
 
   .knit { padding: 1.9rem 0.6rem; }
+  /* "the fits" sits closer under the knit band */
+  .root .table { padding-top: 1.6rem; }
+  .root .sectionTitle { margin-bottom: 2.2rem; }
   .labels { gap: 0.45rem 0.45rem; }
   .labels li {
     padding: 0.28rem 0.5rem;

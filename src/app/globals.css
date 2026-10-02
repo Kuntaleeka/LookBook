@@ -258,11 +258,11 @@ body {
 
 /* Touch screens: small links and buttons get a larger invisible tap area */
 @media (pointer: coarse) {
+  /* (the Acubi camera's buttons are already positioned, so they are not
+     listed here: changing their position would move them) */
   :not([data-studio] *) > nav a,
   footer a,
   button[class*="__dot"],
-  button[class*="__dBtn"],
-  button[class*="__dOk"],
   button[class*="__arrow"] {
     position: relative;
   }

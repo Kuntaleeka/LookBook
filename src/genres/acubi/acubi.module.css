@@ -598,6 +598,54 @@ button.dBtn:disabled { opacity: 0.4; cursor: default; }
 @keyframes lcdIn {
   from { opacity: 0.2; filter: grayscale(1) brightness(1.6); }
 }
+/* ─── Phones: the title panel (with its speech balloon) on the left and the
+   camera on the right, then the memo across the full width underneath. ─── */
+@media (max-width: 639px) {
+  .page {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    grid-template-areas:
+      "kata  kata"
+      "title camera"
+      "memo  memo";
+    gap: 8px;
+    padding: 0.4rem 0.8rem 1.6rem;
+  }
+
+  .titlePanel { padding: 0.7rem 0.7rem 0.6rem; }
+  .issue { font-size: 0.62rem; }
+  .title { font-size: clamp(2.05rem, 9.8vw, 2.6rem); }
+  .burst { width: 1.5rem; margin-top: 0.1rem; }
+  .balloon {
+    max-width: 100%;
+    margin: 0.6rem 0 0;
+    padding: 0.75rem 0.7rem;
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+  .balloon::after { width: 22px; height: 19px; }
+  /* the cat sits under the balloon, in the corner */
+  .cat {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    display: block;
+    width: 3.4rem;
+    margin: 0.9rem 0 0 auto;
+  }
+
+  /* the whole camera, buttons and all, scaled down to fit its panel */
+  .cameraPanel { padding: 0.6rem 0.2rem; overflow: hidden; }
+  .camera { width: 22rem; zoom: 0.4; }
+  /* its small buttons keep a thumb-sized tap area */
+  .dBtn::after, .dOk::after { content: ""; position: absolute; inset: -22px; }
+
+  .memo { padding: 0.8rem 1rem 1rem; }
+  .memoHead { margin-bottom: 0.4rem; font-size: 1.15rem; }
+  .memoList { gap: 0.35rem 0.9rem; font-size: 0.85rem; }
+
+  .roll { padding: 0 0.8rem 3rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .clip::after, .burst, .lcdImg { animation: none; }
   .tile img, .tileLabel { transition: none; }

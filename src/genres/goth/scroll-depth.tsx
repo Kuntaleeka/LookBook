@@ -5,7 +5,8 @@ import { useEffect, useRef } from "react";
 /**
  * Publishes the scroll position as a CSS variable (--scroll, in px) on its
  * wrapper, so layers can drift at different speeds for depth. Nothing moves
- * for people who prefer reduced motion.
+ * for people who prefer reduced motion, or on phones (where it costs smooth
+ * scrolling).
  */
 export function ScrollDepth({ className, children }: { className?: string; children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -13,6 +14,9 @@ export function ScrollDepth({ className, children }: { className?: string; child
   useEffect(() => {
     const el = ref.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Phones skip the scroll-drift: updating a variable on the whole page every
+    // frame makes a phone redo the page's styles while it is trying to scroll.
+    if (window.matchMedia("(max-width: 639px)").matches) return;
     let frame = 0;
     const update = () => {
       frame = 0;

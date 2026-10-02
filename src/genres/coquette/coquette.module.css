@@ -293,6 +293,10 @@
 /* ─── Phones: the book and the notebook stay side by side ─
    (same flat-lay as on a laptop, just scaled down to fit) */
 @media (max-width: 639px) {
+  /* the drifting sunlight is a big blended layer; hold it still on phones so
+     scrolling stays smooth */
+  .light { animation: none; }
+
   .flatlay {
     grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
     align-items: center;

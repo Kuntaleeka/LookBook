@@ -308,9 +308,25 @@
     grid-column: 1 / -1;
     grid-row: 7;
     justify-self: center;
-    width: 11rem;
-    margin: 1.5rem 0 0;
+    width: 8rem;
+    margin: 1.25rem 0 0;
+    /* drawn once and kept, instead of re-filtered as it scrolls back into view */
+    transform: translateZ(0);
   }
+
+  /* Smooth scrolling on phones. The drifting fog was two full-screen layers
+     blended over the page and repainted every frame; here it is one still,
+     unblended veil. The backdrop and the scene are kept as ready-made layers. */
+  .fog {
+    animation: none;
+    mix-blend-mode: normal;
+    opacity: 0.16;
+    transform: translateZ(0);
+  }
+  .fogSlow { display: none; }
+  .backdrop { transform: scale(1.06) translateZ(0); }
+  .windowGlow, .roseWindow, .skull { transform: translateZ(0); }
+  .candlePhoto { transform: translateZ(0); }
 }
 
 /* ─── Gallery ─────────────────────────────────────────── */

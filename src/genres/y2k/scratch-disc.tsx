@@ -67,6 +67,7 @@ export function ScratchDisc({ className, children }: { className?: string; child
       <div
         ref={discRef}
         className={s.disc}
+        data-spin
         role="img"
         aria-label="A burned CD. Rub it to scratch."
         onPointerDown={(e) => {

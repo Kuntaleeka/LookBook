@@ -99,6 +99,9 @@ function StuddedBelt() {
   return (
     <div className={s.belt} aria-hidden="true">
       <div className={s.studs} />
+      {/* phones only: a buckle and punched holes, so it reads as a belt */}
+      <span className={s.buckle} />
+      <span className={s.holes} />
     </div>
   );
 }

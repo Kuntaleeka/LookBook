@@ -619,3 +619,86 @@
   .drip { animation: none; }
   .print, .photo img, .photo::after { transition: none; }
 }
+
+/* the belt's buckle and holes only exist on phones (see below) */
+.buckle, .holes { display: none; }
+
+/* ─── Phones: the title, its swinging chain and the dripping blood own the
+   top of the screen; the liner notes are a small card; and the studded belt
+   is slung across at an angle with a buckle, so it reads as a belt and not a
+   border. ───────────────────────────────────────────────────────────────── */
+@media (max-width: 639px) {
+  .topbar { padding: 0.9rem 0.9rem 0.6rem; font-size: 0.78rem; }
+  .hero { padding: 1.2rem 0.9rem 1.6rem; }
+  .heroTop { gap: 0; }
+  .issue { font-size: 0.62rem; letter-spacing: 0.18em; }
+
+  /* bigger title, with longer, heavier drips */
+  .title { font-size: clamp(5.4rem, 27vw, 7.2rem); }
+  .drip {
+    width: calc(var(--dw, 3px) * 1.5);
+    height: calc(var(--dl, 60px) * 1.5);
+  }
+  .drip::after { width: calc(var(--dw, 3px) * 3.4); }
+  .ransom { margin-top: 3.2rem; font-size: 0.95rem; }
+
+  /* the chain is drawn larger, so its links and crosses read from a phone */
+  .chainBehind { top: 4.6rem; height: 270px; }
+  .chainLayer { height: 270px; filter: none; }
+
+  /* liner notes: a small card */
+  .notes { margin-top: 1.5rem; }
+  .lede { max-width: 15.5rem; padding: 0.85rem 0.8rem 0.6rem; }
+  .ledeLabel { left: 0.6rem; font-size: 0.52rem; letter-spacing: 0.16em; }
+  .quote { font-size: 0.8rem; line-height: 1.45; }
+
+  /* the belt: slung at an angle, ending in a rounded tip, with a silver
+     buckle and punched holes */
+  .belt {
+    width: 104%;
+    height: 40px;
+    margin: 0.6rem 0 1.4rem -9%;
+    rotate: -3.5deg;
+    border: 1px solid #000;
+    border-radius: 0 22px 22px 0;
+    box-shadow: 0 12px 18px rgba(0, 0, 0, 0.7);
+  }
+  .belt::before, .belt::after { right: 16px; }
+  .studs { right: 46%; top: 10px; }
+  .buckle {
+    display: block;
+    position: absolute;
+    left: 57%;
+    top: -9px;
+    width: 44px;
+    height: 56px;
+    border: 6px solid;
+    border-image: linear-gradient(135deg, #f4f4f6, #8e8e94 45%, #e2e2e6 70%, #6f6f75) 1;
+    filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.7));
+  }
+  /* the prong */
+  .buckle::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    right: -10px;
+    top: 50%;
+    height: 5px;
+    translate: 0 -50%;
+    border-radius: 3px;
+    background: linear-gradient(#f4f4f6, #7c7c82);
+  }
+  .holes {
+    display: block;
+    position: absolute;
+    left: calc(57% + 66px);
+    right: 26px;
+    top: 50%;
+    height: 10px;
+    translate: 0 -50%;
+    background: radial-gradient(circle, #000 2.6px, #6b6b70 3.1px 4px, transparent 4.5px) 0 0 / 22px 10px repeat-x;
+  }
+
+  .wall { padding: 1.6rem 0.9rem 4rem; }
+  .fitsHead { gap: 0.6rem 1.5rem; margin-bottom: 2rem; }
+}

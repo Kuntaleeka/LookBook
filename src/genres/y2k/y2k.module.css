@@ -451,6 +451,44 @@
   box-shadow: 3px 5px 0 rgba(60, 10, 40, 0.3);
 }
 
+/* ─── Phones: heading first, then the wish list and CD on the left with the
+   flip phone on the right. The sticky note and heart sticker are left out. */
+@media (max-width: 639px) {
+  .collage {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-items: center;
+    gap: 1.4rem 0.9rem;
+    padding: 1.6rem 0.9rem 2.4rem;
+  }
+  .titleBlock { grid-column: 1 / -1; grid-row: 1; justify-self: start; }
+  .wishlist { grid-column: 1; grid-row: 2; align-self: end; }
+  .cd { grid-column: 1; grid-row: 3; align-self: start; justify-self: center; }
+  .phone { grid-column: 2; grid-row: 2 / span 2; justify-self: center; }
+  .heartSticker, .sticky { display: none; }
+
+  /* the whole phone, keypad and all, scaled down to fit its column */
+  .phone { width: 15rem; zoom: 0.66; rotate: 4deg; }
+
+  .wishlist {
+    width: 100%;
+    padding: 0.7rem 0.8rem 1.1rem;
+    rotate: -2deg;
+    font-size: 1.22rem;
+    line-height: 1.5rem;
+    background:
+      repeating-linear-gradient(180deg, transparent 0 1.5rem, rgba(120, 90, 80, 0.25) 1.5rem calc(1.5rem + 1px)),
+      #f3ead9;
+    background-position: 0 0.6rem, 0 0;
+  }
+  .wishlist ol { margin-left: 1.15rem; }
+  .listKiss { right: -0.6rem; bottom: -0.9rem; width: 3.4rem; }
+
+  .cd { width: min(100%, 9.5rem); margin-bottom: 1.4rem; }
+  .cdText { font-size: 0.95rem; }
+  .cdHint { font-size: 0.95rem; }
+}
+
 /* ─── Gallery ─────────────────────────────────────────── */
 .gallery {
   position: relative;

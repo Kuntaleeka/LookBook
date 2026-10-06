@@ -338,6 +338,31 @@
   text-shadow: 2px 3px 0 rgba(120, 20, 80, 0.6);
 }
 
+/* basic everyday fits: white linen in morning light, journal lettering */
+.g_basic_everyday_fits .bg {
+  background:
+    repeating-linear-gradient(112deg, transparent 0 3rem, rgba(255, 244, 214, 0.55) 3rem 5rem, transparent 5rem 8rem),
+    linear-gradient(rgba(246, 242, 234, 0.45), rgba(246, 242, 234, 0.3)),
+    url("/genres/everyday/linen.jpg?v=1") center / cover,
+    linear-gradient(135deg, #fbf8f2, #e6dece);
+}
+.g_basic_everyday_fits .bgWord {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  text-transform: lowercase;
+  font-size: 8rem;
+  color: rgba(154, 123, 79, 0.28);
+}
+.g_basic_everyday_fits .portraitFrame { border: 8px solid #fffefb; border-bottom-width: 20px; rotate: -1.5deg; }
+.g_basic_everyday_fits .cardName {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.3vw, 1.75rem);
+  text-transform: lowercase;
+  color: #7c6238;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
 .g_default .bg { background: linear-gradient(160deg, #2a2a2e, #111); }
 .g_default .bgWord { font-size: 8rem; font-weight: 700; color: rgba(255, 255, 255, 0.08); }
 

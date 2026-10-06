@@ -1,5 +1,6 @@
 import { AcubiPage } from "./acubi/page";
 import { CoquettePage } from "./coquette/page";
+import { EverydayPage } from "./everyday/page";
 import { GothPage } from "./goth/page";
 import { GrungePage } from "./grunge/page";
 import { OfficeSirenPage } from "./office-siren/page";
@@ -51,6 +52,13 @@ export const GENRE_DESIGNS: Record<string, GenreDesign> = {
     fonts: ["Cormorant Garamond", "Archivo Narrow", "Caveat"],
     background: "#2a1d15",
     Page: WinterFallPage,
+  },
+  "basic-everyday-fits": {
+    id: "everyday",
+    label: "Basic Everyday Fits",
+    fonts: ["Cormorant Garamond", "Inter", "Caveat", "IBM Plex Mono"],
+    background: "#f6f2ea",
+    Page: EverydayPage,
   },
   y2k: {
     id: "y2k",
